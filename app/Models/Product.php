@@ -7,9 +7,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
+    protected $fillable = ['name', 'description', 'price', 'category_id'];
+
     public function category()
     : BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function registerMediaCollections()
+    : void
+    {
+        $this->addMediaCollection('main_image')->useFallbackPath(public_path('/images/no_image_placeholder.jpg'))->singleFile();
+        $this->addMediaCollection('gallery_images')->useFallbackPath(public_path('/images/no_image_placeholder.jpg'));
     }
 }
