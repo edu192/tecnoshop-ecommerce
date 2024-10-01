@@ -32,7 +32,6 @@ return [
         Spatie\TypeScriptTransformer\Transformers\EnumTransformer::class,
         Spatie\TypeScriptTransformer\Transformers\SpatieEnumTransformer::class,
         Spatie\LaravelTypeScriptTransformer\Transformers\DtoTransformer::class,
-        \Spatie\LaravelData\Transformers\EnumTransformer::class
     ],
 
     /*
