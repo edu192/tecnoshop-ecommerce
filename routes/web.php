@@ -14,7 +14,7 @@ use Inertia\Inertia;
 //    ]);
 //});
 Route::get('/home', function () {
-    return Inertia::render('Frontend/Home');
+    return Inertia::render('Frontend/Home',['categories'=>\App\Data\CategoryData::collect(\App\Models\Category::all())]);
 })->name('home');
 
 Route::get('/dashboard', function () {
