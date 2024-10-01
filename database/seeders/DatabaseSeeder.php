@@ -3,39 +3,53 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
      */
-    public function run(): void
+    //Poblar la base de datos
+    public function run()
+    : void
     {
-        // User::factory(10)->create();
-        //Poblar la tabla de usuarios con un usuario administrador
-        User::factory()->create([
+        //Poblar la tabla usuarios con un usuario admin
+        User::firstOrCreate([
             'name' => 'admin',
             'email' => 'admin@gmail.com',
+            'password' => bcrypt('password'),
         ]);
-        //Poblar la tabla de categorias
-        Category::create([
-            'name' => 'Smartphones',
-            'description' => 'Los mejores smartphones del mundo',
-        ]);
-        Category::create([
-            'name' => 'Laptops',
-            'description' => 'Las mejores laptops del mundo',
-        ]);
-        Category::create([
-            'name' => 'Televisores',
-            'description' => 'Los mejores televisores del mundo',
-        ]);
-        Category::create([
-            'name' => 'Camaras',
-            'description' => 'Los mejores camaras del mundo',
-        ]);
+        //Poblar la tabla productos y categorias con los datos de los archivos JSON
+        if (File::exists(database_path('data'))) {
+            $json = File::get(database_path('/data/products.json'));
+            $products = json_decode($json, true);
+
+            foreach ($products as $productData) {
+                $product = Product::create($productData);
+                $mainImagePath = database_path('/data/images/main/' . $productData['image']);
+                if (File::exists($mainImagePath)) {
+                    $product->addMedia($mainImagePath)->toMediaCollection('main_image');
+                }
+            }
+
+            $json = File::get(database_path('/data/categories.json'));
+            $categories = json_decode($json, true);
+            foreach ($categories as $categoryData) {
+                $categoryDataWithoutImage = Arr::except($categoryData, ['image']);
+                $category = Category::create($categoryDataWithoutImage);
+                $mainImagePath = database_path('/data/images/main/' . $categoryData['image']);
+                if (File::exists($mainImagePath)) {
+                    $category->addMedia($mainImagePath)->toMediaCollection('main_image');
+                }
+            }
+        }
+
     }
 }
