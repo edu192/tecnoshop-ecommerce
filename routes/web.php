@@ -16,7 +16,7 @@ use Inertia\Inertia;
 Route::get('/home', function () {
     return Inertia::render('Frontend/Home',['categories'=>\App\Data\CategoryData::collect(\App\Models\Category::all())]);
 })->name('home');
-
+Route::get('/categories/{category}',[\App\Http\Controllers\Frontend\CategoryController::class,'index'])->name('category.index');
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
