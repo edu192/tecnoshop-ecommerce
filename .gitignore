@@ -5,7 +5,7 @@
 /public/storage
 /storage/*.key
 /database/data/*
-/resources/types/*
+/resources/js/types/generated.d.ts
 /vendor
 .env
 .env.backup
