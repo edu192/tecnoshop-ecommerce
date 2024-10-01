@@ -1,33 +1,75 @@
 import React from 'react';
 import FrontendLayout from "@/Layouts/FrontendLayout";
 import {Button} from "@/shadcn-ui/button";
-import CategoryData = App.Data.CategoryData;
 import {Disclosure, DisclosureButton, DisclosurePanel} from "@headlessui/react";
 import {ChevronDown} from "lucide-react";
 import {Checkbox} from "@/shadcn-ui/checkbox";
+import {useCartStore} from "@/store/store";
+import CategoryData = App.Data.CategoryData;
+import ProductData = App.Data.ProductData;
+import {router} from "@inertiajs/react";
 
-function ProductCard({name, image, link, price}: { name: string, image: string, link: string, price: number }) {
+function ProductCard({product}: { product: ProductData }) {
+    const addProductToCart = useCartStore(state => state.addProduct);
+    const removeProductFromCart = useCartStore(state => state.removeProduct);
+    const items = useCartStore(state => state.items);
+    const isInCart = items.some(item => item.id === product.id);
+    const quantity = items.find(item => item.id === product.id)?.quantity;
+    const clearProduct = useCartStore(state => state.clearProduct);
     return (
-        <div className='bg-gray-100 shadow'>
-            <img src={image} alt=""
-                 className='aspect-square  border-2 border-gray-500'/>
+        <div className='bg-gray-100 shadow hover:cursor-pointer group' onClick={() => router.visit(route('home'))}>
+            <div className='aspect-square border-2 border-gray-500 overflow-hidden'>
+                <img src={product.image as string} alt=""
+                     className=' group-hover:scale-110 ease-in transition duration-75'/>
+            </div>
             <div className='text-center p-2'>
-                <h3 className='text-sm font-semibold'>{name}</h3>
-                <p className='text-sm'>S/{price}</p>
+                <h3 className='text-sm font-semibold'>{product.name}</h3>
+                <p className='text-sm'>S/{product.price}</p>
                 <div>
                     ⭐⭐⭐⭐⭐
                 </div>
             </div>
             <div className="flex justify-center my-2">
-                <Button variant='outline'>
-                    Ver producto
-                </Button>
+                {isInCart ? (
+                    <div className="flex space-x-2 items-center">
+                        <Button variant='outline' onClick={(e) => {
+                            e.stopPropagation();
+                            removeProductFromCart(product);
+                        }}>
+                            -
+                        </Button>
+                        <span>{quantity}</span>
+                        <Button variant='outline' onClick={(e) => {
+                            e.stopPropagation();
+                            addProductToCart(product);
+                        }}>
+                            +
+                        </Button>
+                    </div>
+                ) : (
+                    <Button variant='outline' onClick={(e) => {
+                        e.stopPropagation();
+                        addProductToCart(product);
+                    }}>
+                        Agregar al carrito
+                    </Button>
+                )}
             </div>
+            {isInCart && (
+                <Button variant='destructive' className='w-full' onClick={(e) => {
+                    e.stopPropagation();
+                    clearProduct(product.id);
+                }}>
+                    Eliminar del carrito
+                </Button>
+            )}
         </div>
     )
 }
 
 function Product({products, category}: { products: any[], category: CategoryData }) {
+    const addProductToCart = useCartStore(state => state.addProduct);
+    const removeProductFromCart = useCartStore(state => state.removeProduct);
     return (
         <FrontendLayout>
             <div className="mt-8">
@@ -41,7 +83,7 @@ function Product({products, category}: { products: any[], category: CategoryData
                                     <DisclosureButton className='w-full border-b-2 data-[open]:border-b-0'>
                                         <div className='flex justify-between py-2 px-6'>
                                             <span className=''>Marca</span>
-                                            <span><ChevronDown /></span>
+                                            <span><ChevronDown/></span>
                                         </div>
                                     </DisclosureButton>
                                     <DisclosurePanel>
@@ -80,7 +122,7 @@ function Product({products, category}: { products: any[], category: CategoryData
                                     <DisclosureButton className='w-full border-b-2 data-[open]:border-b-0'>
                                         <div className='flex justify-between py-2 px-6'>
                                             <span className=''>Precio</span>
-                                            <span><ChevronDown /></span>
+                                            <span><ChevronDown/></span>
                                         </div>
                                     </DisclosureButton>
                                     <DisclosurePanel>
@@ -119,8 +161,7 @@ function Product({products, category}: { products: any[], category: CategoryData
                         </div>
                         <div className='w-3/4 grid grid-cols-4 gap-4'>
                             {products.map((product, index) => (
-                                <ProductCard name={product.name} image={product.image as string}
-                                             link={route('home')} price={product.price}/>
+                                <ProductCard product={product}/>
                             ))}
                         </div>
                     </div>

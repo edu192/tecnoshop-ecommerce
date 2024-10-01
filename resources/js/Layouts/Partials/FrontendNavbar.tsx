@@ -1,18 +1,20 @@
 import React, {useState} from 'react';
 import {Link, router, usePage} from "@inertiajs/react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import NavLink from "@/Components/NavLink";
 import Dropdown from "@/Components/Dropdown";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import {User} from "@/types";
 import {Button} from "@/shadcn-ui/button";
 import {Input} from "@/shadcn-ui/input";
-import {Search} from "lucide-react";
+import {Search, ShoppingCart, X} from "lucide-react";
+import {Popover, PopoverContent, PopoverTrigger} from "@/shadcn-ui/popover";
+import {useCartStore} from "@/store/store";
 
 function FrontendNavbar() {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
     const user: User | null = usePage().props.auth.user ?? null;
+    const cartItems = useCartStore(state => state.items);
     console.log(user?.name);
     const AuthDropdown = <div className="hidden sm:ms-6 sm:flex sm:items-center">
         <div className="relative ms-3">
@@ -57,14 +59,67 @@ function FrontendNavbar() {
             </Dropdown>
         </div>
     </div>
-    const AuthButtons= <div className="hidden sm:ms-6 sm:flex sm:items-center">
-        <div className="relative ms-3 space-x-2">
-            <Button onClick={()=>router.visit(route('login'))}>
+    const AuthButtons = <div className="hidden sm:ms-6 sm:flex sm:items-center">
+        <div className="relative ms-3 space-x-2 flex items-center">
+            <Button onClick={() => router.visit(route('login'))}>
                 Iniciar sesión
             </Button>
-            <Button onClick={()=>router.visit(route('register'))}>
+            <Button onClick={() => router.visit(route('register'))}>
                 Registrarse
             </Button>
+            <Popover>
+                <PopoverTrigger className='bg-black p-2 rounded-md relative'>
+
+                    <ShoppingCart className='text-white'/>
+                    {useCartStore.getState().quantity > 0 &&
+                        <span
+                            className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center p-3 justify-center text-xs'>
+                        {useCartStore.getState().quantity}
+                    </span>
+                    }
+
+                </PopoverTrigger>
+                <PopoverContent>
+                    <div className='flex flex-col space-y-2 p-2'>
+                        {
+                            cartItems.length > 0 && cartItems.map(item => (
+                                <div key={item.id} className='flex justify-between items-center'>
+                                    <img src={item.image as string} alt="" className='w-16 h-16'/>
+                                    <div className='flex flex-col'>
+                                        <span>{item.name}</span>
+                                        <span>{item.price}</span>
+                                    </div>
+                                    <div className='flex items-center space-x-2'>
+                                        <button className='p-1 bg-gray-100 hover:bg-gray-300 rounded-md'
+                                                onClick={() => useCartStore.getState().removeProduct(item)}>
+                                            -
+                                        </button>
+                                        <span>{item.quantity}</span>
+                                        <button className='p-1 bg-gray-100 hover:bg-gray-300 rounded-md'
+                                                onClick={() => useCartStore.getState().addProduct(item)}>
+                                            +
+                                        </button>
+                                        <button className='p-1 bg-gray-100 hover:bg-gray-300 rounded-md'
+                                                onClick={() => useCartStore.getState().clearProduct(item.id)}>
+                                            <X className='text-gray-400 hover:text-gray-800'/>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                        {
+                            cartItems.length === 0 && <span>No hay productos en el carrito</span>
+                        }
+                        <div className='flex justify-between'>
+                            <span>Total</span>
+                            <span>S/. {useCartStore().total.toFixed(2)}</span>
+                        </div>
+                        <Button variant='outline' onClick={() => router.visit(route('cart.index'))}>
+                            Checkout
+                        </Button>
+                    </div>
+                </PopoverContent>
+            </Popover>
         </div>
     </div>
     return (
@@ -78,7 +133,8 @@ function FrontendNavbar() {
                             </Link>
                         </div>
 
-                        <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex sm:justify-center items-center w-3/4">
+                        <div
+                            className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex sm:justify-center items-center w-3/4">
                             {/*<NavLink*/}
                             {/*    href={route('dashboard')}*/}
                             {/*    active={route().current('dashboard')}*/}
@@ -87,7 +143,8 @@ function FrontendNavbar() {
                             {/*</NavLink>*/}
                             <div className='relative w-full'>
                                 <Input placeholder="Buscar productos" className='w-full'/>
-                                <Search size={16} className='absolute bottom-1/2 right-4 translate-y-1/2 text-gray-500 ' />
+                                <Search size={16}
+                                        className='absolute bottom-1/2 right-4 translate-y-1/2 text-gray-500 '/>
                             </div>
                         </div>
                     </div>

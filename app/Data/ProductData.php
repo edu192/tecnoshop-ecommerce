@@ -17,11 +17,13 @@ class ProductData extends Data
         public string       $updated_at,
         public CategoryData $category,
         public ?string      $image = null,
+        public ?int         $quantity = 0,
     )
     {
     }
 
-    public static function fromModel(Product $product): self
+    public static function fromModel(Product $product)
+    : self
     {
         $image = $product->getFirstMediaUrl('main_image') ?: null;
 
@@ -30,11 +32,12 @@ class ProductData extends Data
             $product->name,
             $product->description,
             $product->price,
-            $product->category_id, // Ensure this is an int
+            $product->category_id,
             $product->created_at->toDateTimeString(),
             $product->updated_at->toDateTimeString(),
             CategoryData::from($product->category),
             $image,
+            0,
         );
     }
 }
