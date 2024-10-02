@@ -17,7 +17,7 @@ function ProductCard({product}: { product: ProductData }) {
     const quantity = items.find(item => item.id === product.id)?.quantity;
     const clearProduct = useCartStore(state => state.clearProduct);
     return (
-        <div className='bg-gray-100 shadow hover:cursor-pointer group' onClick={() => router.visit(route('home'))}>
+        <div className='bg-gray-100 shadow hover:cursor-pointer group' onClick={() => router.visit(route('product.show',product.id))}>
             <div className='aspect-square border-2 border-gray-500 overflow-hidden'>
                 <img src={product.image as string} alt=""
                      className=' group-hover:scale-110 ease-in transition duration-75'/>
