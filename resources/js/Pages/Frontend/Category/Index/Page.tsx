@@ -8,8 +8,9 @@ import {useCartStore} from "@/store/store";
 import CategoryData = App.Data.CategoryData;
 import ProductData = App.Data.ProductData;
 import {router} from "@inertiajs/react";
+import BrandData = App.Data.BrandData;
 
-function ProductCard({product}: { product: ProductData }) {
+function ProductCard({product}: { product: ProductData}) {
     const addProductToCart = useCartStore(state => state.addProduct);
     const removeProductFromCart = useCartStore(state => state.removeProduct);
     const items = useCartStore(state => state.items);
@@ -17,7 +18,7 @@ function ProductCard({product}: { product: ProductData }) {
     const quantity = items.find(item => item.id === product.id)?.quantity;
     const clearProduct = useCartStore(state => state.clearProduct);
     return (
-        <div className='bg-gray-100 shadow hover:cursor-pointer group' onClick={() => router.visit(route('product.show',product.id))}>
+        <div className='bg-gray-100 shadow hover:cursor-pointer group h-fit' onClick={() => router.visit(route('product.show',product.id))}>
             <div className='aspect-square border-2 border-gray-500 overflow-hidden'>
                 <img src={product.image as string} alt=""
                      className=' group-hover:scale-110 ease-in transition duration-75'/>
@@ -67,7 +68,7 @@ function ProductCard({product}: { product: ProductData }) {
     )
 }
 
-function Product({products, category}: { products: ProductData[], category: CategoryData }) {
+function Product({products, category,brands}: { products: ProductData[], category: CategoryData ,brands:BrandData[] }) {
     const selectedBrand = useCartStore(state => state.selectedBrand);
     const setSelectedBrand = useCartStore(state => state.setSelectedBrand);
 
@@ -96,46 +97,36 @@ function Product({products, category}: { products: ProductData[], category: Cate
                                     </DisclosureButton>
                                     <DisclosurePanel>
                                         <div className='space-y-2 py-2 px-6 border-b-2'>
-                                            <div className="flex items-center space-x-2">
-                                                <Checkbox
-                                                    id="apple"
-                                                    checked={selectedBrand === 'apple'}
-                                                    onCheckedChange={() => handleCheckboxChange('apple')}
-                                                />
-                                                <label
-                                                    htmlFor="apple"
-                                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >
-                                                    Apple
-                                                </label>
+                                            {/*<div className="flex items-center space-x-2">*/}
+                                            {/*    <Checkbox*/}
+                                            {/*        id="apple"*/}
+                                            {/*        checked={selectedBrand === 'apple'}*/}
+                                            {/*        onCheckedChange={() => handleCheckboxChange('apple')}*/}
+                                            {/*    />*/}
+                                            {/*    <label*/}
+                                            {/*        htmlFor="apple"*/}
+                                            {/*        className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"*/}
+                                            {/*    >*/}
+                                            {/*        Apple*/}
+                                            {/*    </label>*/}
+                                            {/*</div>*/}
+                                            {brands.map(brand => (
+                                                <div className="flex items-center space-x-2">
+                                                    <Checkbox
+                                                        id={brand.name}
+                                                        checked={selectedBrand === brand.name}
+                                                        onCheckedChange={() => handleCheckboxChange(brand.name)}
+                                                    />
+                                                    <label
+                                                        htmlFor={brand.name}
+                                                        className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    >
+                                                        {brand.name}
+                                                    </label>
+                                                </div>
+                                            ))}
+
                                             </div>
-                                            <div className="flex items-center space-x-2">
-                                                <Checkbox
-                                                    id="samsung"
-                                                    checked={selectedBrand === 'samsung'}
-                                                    onCheckedChange={() => handleCheckboxChange('samsung')}
-                                                />
-                                                <label
-                                                    htmlFor="samsung"
-                                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >
-                                                    Samsung
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <Checkbox
-                                                    id="xiaomi"
-                                                    checked={selectedBrand === 'xiaomi'}
-                                                    onCheckedChange={() => handleCheckboxChange('xiaomi')}
-                                                />
-                                                <label
-                                                    htmlFor="xiaomi"
-                                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >
-                                                    Xiaomi
-                                                </label>
-                                            </div>
-                                        </div>
                                     </DisclosurePanel>
                                 </Disclosure>
                             </div>
