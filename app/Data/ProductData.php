@@ -10,6 +10,7 @@ class ProductData extends Data
     public function __construct(
         public int          $id,
         public string       $name,
+        public string $brand,
         public string       $description,
         public float        $price,
         public int          $category_id,
@@ -30,6 +31,7 @@ class ProductData extends Data
         return new self(
             $product->id,
             $product->name,
+            $product->brand,
             $product->description,
             $product->price,
             $product->category_id,

@@ -30,7 +30,7 @@ function Page({product}: { product: App.Data.ProductData }) {
                             <div className='w-2/3'>
                                 <div className='w-2/3 mx-auto'>
                                     <header>
-                                        <p className='font-bold text-sm mb-2'>Apple</p>
+                                        <p className='font-bold text-sm mb-2'>{product.brand}</p>
                                         <h3 className='text-2xl mb-2'>{product.name}</h3>
                                         <div className='mb-2'>
                                             ⭐⭐⭐⭐⭐ (5)
