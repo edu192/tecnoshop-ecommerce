@@ -5,6 +5,7 @@ import SmartphonesImage from "../../../img/falabella-home-smartphones.png";
 import LaptopsImage from "../../../img/falabella-home-laptops.png";
 import {Button} from "@/shadcn-ui/button";
 import CategoryData = App.Data.CategoryData;
+import {router} from "@inertiajs/react";
 
 function CarouselSection() {
     return <div className="">
@@ -25,14 +26,14 @@ function CarouselSection() {
     </div>
 }
 
-function CategoryCard({name, image, link}: { name: string, image: string, link: string }) {
+function CategoryCard({name, image, id}: { name: string, image: string, id:number}) {
     return <div className='bg-gray-100 shadow'>
         <div className='text-center p-2'>
             <h3 className='text-lg font-semibold'>{name}</h3>
         </div>
         <img src={image} alt="" className='aspect-square  border-2 border-gray-500'/>
         <div className="flex justify-center my-2">
-            <Button>
+            <Button onClick={()=>router.visit(route('category.index',id))}>
                 Ver productos
             </Button>
         </div>
@@ -50,8 +51,8 @@ function Home({categories}: { categories: CategoryData[] }) {
                     <div className='grid grid-cols-4 gap-4'>
                         {categories.map((category, index) => (
 
-                            <CategoryCard name={category.name} image={category.image as string}
-                                          link={route('home')}/>
+                            <CategoryCard id={category.id} name={category.name} image={category.image as string}
+                                           />
                         ))}
                     </div>
                 </div>
