@@ -67,7 +67,7 @@ function ProductCard({product}: { product: ProductData }) {
     )
 }
 
-function Product({products, category}: { products: any[], category: CategoryData }) {
+function Product({products, category}: { products: ProductData[], category: CategoryData }) {
     const addProductToCart = useCartStore(state => state.addProduct);
     const removeProductFromCart = useCartStore(state => state.removeProduct);
     return (
