@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import FrontendLayout from "@/Layouts/FrontendLayout";
 import {Button} from "@/shadcn-ui/button";
 import {Disclosure, DisclosureButton, DisclosurePanel} from "@headlessui/react";
@@ -68,8 +68,16 @@ function ProductCard({product}: { product: ProductData }) {
 }
 
 function Product({products, category}: { products: ProductData[], category: CategoryData }) {
-    const addProductToCart = useCartStore(state => state.addProduct);
-    const removeProductFromCart = useCartStore(state => state.removeProduct);
+    const selectedBrand = useCartStore(state => state.selectedBrand);
+    const setSelectedBrand = useCartStore(state => state.setSelectedBrand);
+
+    const handleCheckboxChange = (brand: string) => {
+        if (selectedBrand === brand) {
+            setSelectedBrand(null);
+        } else {
+            setSelectedBrand(brand);
+        }
+    };
     return (
         <FrontendLayout>
             <div className="mt-8">
@@ -89,28 +97,40 @@ function Product({products, category}: { products: ProductData[], category: Cate
                                     <DisclosurePanel>
                                         <div className='space-y-2 py-2 px-6 border-b-2'>
                                             <div className="flex items-center space-x-2">
-                                                <Checkbox id="brand1"/>
+                                                <Checkbox
+                                                    id="apple"
+                                                    checked={selectedBrand === 'apple'}
+                                                    onCheckedChange={() => handleCheckboxChange('apple')}
+                                                />
                                                 <label
-                                                    htmlFor="brand1"
-                                                    className="text-sm  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    htmlFor="apple"
+                                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                 >
                                                     Apple
                                                 </label>
                                             </div>
                                             <div className="flex items-center space-x-2">
-                                                <Checkbox id="brand2"/>
+                                                <Checkbox
+                                                    id="samsung"
+                                                    checked={selectedBrand === 'samsung'}
+                                                    onCheckedChange={() => handleCheckboxChange('samsung')}
+                                                />
                                                 <label
-                                                    htmlFor="brand2"
-                                                    className="text-sm  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    htmlFor="samsung"
+                                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                 >
                                                     Samsung
                                                 </label>
                                             </div>
                                             <div className="flex items-center space-x-2">
-                                                <Checkbox id="brand3"/>
+                                                <Checkbox
+                                                    id="xiaomi"
+                                                    checked={selectedBrand === 'xiaomi'}
+                                                    onCheckedChange={() => handleCheckboxChange('xiaomi')}
+                                                />
                                                 <label
-                                                    htmlFor="brand3"
-                                                    className="text-sm  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    htmlFor="xiaomi"
+                                                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                 >
                                                     Xiaomi
                                                 </label>

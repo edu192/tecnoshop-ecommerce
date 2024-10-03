@@ -15,7 +15,9 @@ function FrontendNavbar() {
         useState(false);
     const user: User | null = usePage().props.auth.user ?? null;
     const cartItems = useCartStore(state => state.items);
-    console.log(user?.name);
+    const searchInput=useCartStore.getState().searchInput;
+    const setSearchInput=useCartStore.getState().setSearchInput;
+
     const AuthDropdown = <div className="hidden sm:ms-6 sm:flex sm:items-center">
         <div className="relative ms-3">
             <Dropdown>
@@ -122,6 +124,12 @@ function FrontendNavbar() {
             </Popover>
         </div>
     </div>
+    const submitSearch = () => {
+        router.post(route('product.search', {
+            search: searchInput,
+            brand: useCartStore.getState().selectedBrand,
+        }));
+    }
     return (
         <nav className="border-b border-gray-100 bg-white">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -135,14 +143,15 @@ function FrontendNavbar() {
 
                         <div
                             className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex sm:justify-center items-center w-3/4">
-                            {/*<NavLink*/}
-                            {/*    href={route('dashboard')}*/}
-                            {/*    active={route().current('dashboard')}*/}
-                            {/*>*/}
-                            {/*    Dashboard*/}
-                            {/*</NavLink>*/}
                             <div className='relative w-full'>
-                                <Input placeholder="Buscar productos" className='w-full'/>
+                                <Input placeholder="Buscar productos" className='w-full'
+                                       value={searchInput}
+                                       onChange={(e)=>setSearchInput(e.target.value)}
+                                       onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            submitSearch();
+                                        }
+                                }} />
                                 <Search size={16}
                                         className='absolute bottom-1/2 right-4 translate-y-1/2 text-gray-500 '/>
                             </div>
