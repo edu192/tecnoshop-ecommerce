@@ -12,6 +12,21 @@ class CategoryController extends Controller
 {
     public function index(Category $category)
     {
-        return Inertia::render('Frontend/Category/Index/Page', ['category' => CategoryData::from($category), 'products' => ProductData::collect($category->products()->get())]);
+        $name = request('name');
+        $priceRange = request('price_range');
+        $productsQuery = $category->products();
+        if ($name) {
+            $productsQuery->where('name', 'like', '%' . $name . '%');
+        }
+        if ($priceRange) {
+            [$minPrice, $maxPrice] = explode('-', $priceRange);
+            $productsQuery->whereBetween('price', [(float)$minPrice, (float)$maxPrice]);
+        }
+        $products = $productsQuery->get();
+
+        return Inertia::render('Frontend/Category/Index/Page', [
+            'category' => CategoryData::from($category),
+            'products' => ProductData::collect($products)
+        ]);
     }
 }
