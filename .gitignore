@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /database/data/*
+/lang/*
 /resources/js/types/generated.d.ts
 /vendor
 .env
