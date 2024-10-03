@@ -138,45 +138,6 @@ function Product({products, category}: { products: ProductData[], category: Cate
                                         </div>
                                     </DisclosurePanel>
                                 </Disclosure>
-                                <Disclosure>
-                                    <DisclosureButton className='w-full border-b-2 data-[open]:border-b-0'>
-                                        <div className='flex justify-between py-2 px-6'>
-                                            <span className=''>Precio</span>
-                                            <span><ChevronDown/></span>
-                                        </div>
-                                    </DisclosureButton>
-                                    <DisclosurePanel>
-                                        <div className='space-y-2 py-2 px-6 border-b-2'>
-                                            <div className="flex items-center space-x-2">
-                                                <Checkbox id="price1"/>
-                                                <label
-                                                    htmlFor="price1"
-                                                    className="text-sm  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >
-                                                    S/ 1000 - S/ 2000
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <Checkbox id="price2"/>
-                                                <label
-                                                    htmlFor="price2"
-                                                    className="text-sm  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >
-                                                    S/ 2000 - S/ 4000
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <Checkbox id="price3"/>
-                                                <label
-                                                    htmlFor="price3"
-                                                    className="text-sm  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >
-                                                    S/ Mas de 4000
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </DisclosurePanel>
-                                </Disclosure>
                             </div>
                         </div>
                         <div className='w-3/4 grid grid-cols-4 gap-4'>
