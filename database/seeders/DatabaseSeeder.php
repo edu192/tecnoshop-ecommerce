@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
@@ -48,6 +49,12 @@ class DatabaseSeeder extends Seeder
                 if (File::exists($mainImagePath)) {
                     $category->addMedia($mainImagePath)->toMediaCollection('main_image');
                 }
+            }
+
+            $json = File::get(database_path('/data/brands.json'));
+            $brands = json_decode($json, true);
+            foreach ($brands as $brandData) {
+                $brand = Brand::create($brandData);
             }
         }
 
