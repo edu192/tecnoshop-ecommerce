@@ -5,17 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-//Route::get('/', function () {
-//    return Inertia::render('Welcome', [
-//        'canLogin' => Route::has('login'),
-//        'canRegister' => Route::has('register'),
-//        'laravelVersion' => Application::VERSION,
-//        'phpVersion' => PHP_VERSION,
-//    ]);
-//});
-Route::get('/home', function () {
-    return Inertia::render('Frontend/Home',['categories'=>\App\Data\CategoryData::collect(\App\Models\Category::all())]);
-})->name('home');
+Route::get('/', \App\Http\Controllers\Frontend\HomeController::class)->name('home');
 Route::get('/categories/{category}',[\App\Http\Controllers\Frontend\CategoryController::class,'index'])->name('category.index');
 Route::get('/products/{product}',[\App\Http\Controllers\Frontend\ProductController::class,'show'])->name('product.show');
 Route::get('/dashboard', function () {
