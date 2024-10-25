@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.9",
         "spatie/laravel-data": "^4.9",
         "spatie/laravel-medialibrary": "^11.9",
+        "spatie/laravel-query-builder": "^6.2",
         "spatie/laravel-typescript-transformer": "^2.4",
         "spatie/typescript-transformer": "^2.3",
         "tightenco/ziggy": "^2.0"
