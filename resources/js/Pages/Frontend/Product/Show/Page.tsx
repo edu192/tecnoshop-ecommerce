@@ -48,6 +48,8 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
     const {addProduct, removeProduct, clearProduct, items: cartItems} = useCartStore();
     const [formReview, setFormReview] = useState('')
     const [formStars, setFormStars] = useState(0)
+    const {errors}=usePage().props
+    console.log(errors)
 
     const renderStars = (rating: number, interactive: boolean = false) => {
         return interactive ? (
@@ -159,29 +161,29 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                         </div>
                     </div>
                 </div>
-                <div className="mt-12">
-                    <h2 className="text-2xl font-bold mb-4">Especificaciones del Producto</h2>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-1/3">Especificación</TableHead>
-                                <TableHead>Valor</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {/*{product.specifications.map((spec, index) => (*/}
-                            {/*    <TableRow key={index}>*/}
-                            {/*        <TableCell className="font-medium">{spec.name}</TableCell>*/}
-                            {/*        <TableCell>{spec.value}</TableCell>*/}
-                            {/*    </TableRow>*/}
-                            {/*))}*/}
-                            <TableRow>
-                                <TableCell className="font-medium">Color</TableCell>
-                                <TableCell>Rojo</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </div>
+                {/*<div className="mt-12">*/}
+                {/*    <h2 className="text-2xl font-bold mb-4">Especificaciones del Producto</h2>*/}
+                {/*    <Table>*/}
+                {/*        <TableHeader>*/}
+                {/*            <TableRow>*/}
+                {/*                <TableHead className="w-1/3">Especificación</TableHead>*/}
+                {/*                <TableHead>Valor</TableHead>*/}
+                {/*            </TableRow>*/}
+                {/*        </TableHeader>*/}
+                {/*        <TableBody>*/}
+                {/*            /!*{product.specifications.map((spec, index) => (*!/*/}
+                {/*            /!*    <TableRow key={index}>*!/*/}
+                {/*            /!*        <TableCell className="font-medium">{spec.name}</TableCell>*!/*/}
+                {/*            /!*        <TableCell>{spec.value}</TableCell>*!/*/}
+                {/*            /!*    </TableRow>*!/*/}
+                {/*            /!*))}*!/*/}
+                {/*            <TableRow>*/}
+                {/*                <TableCell className="font-medium">Color</TableCell>*/}
+                {/*                <TableCell>Rojo</TableCell>*/}
+                {/*            </TableRow>*/}
+                {/*        </TableBody>*/}
+                {/*    </Table>*/}
+                {/*</div>*/}
                 <div className="mt-12">
                     <h2 className="text-2xl font-bold mb-4">Reseñas de Clientes</h2>
                     <Card className="mb-8">
@@ -193,6 +195,7 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                             </div>
                             <Textarea value={formReview} onChange={(e) => setFormReview(e.target.value)}
                                       placeholder="Escribe tu reseña aquí..." className="mb-4"/>
+                            {errors.comment && <p className='text-red-500'>{errors.comment}</p>}
                             <Button onClick={submitReview}>Enviar Reseña</Button>
                         </CardContent>
                     </Card>
