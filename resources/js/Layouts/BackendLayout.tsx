@@ -85,35 +85,6 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
                             </SheetContent>
                         </Sheet>
                         <div className="flex items-center space-x-4 ml-auto">
-                            {/*<DropdownMenu>*/}
-                            {/*    <DropdownMenuTrigger asChild>*/}
-                            {/*        <Button variant="ghost" size="icon">*/}
-                            {/*            <Bell size={20}/>*/}
-                            {/*        </Button>*/}
-                            {/*    </DropdownMenuTrigger>*/}
-                            {/*    <DropdownMenuContent align="end" className="w-64">*/}
-                            {/*        <DropdownMenuLabel>Notifications</DropdownMenuLabel>*/}
-                            {/*        <DropdownMenuSeparator/>*/}
-                            {/*        <DropdownMenuItem>*/}
-                            {/*            <span className="font-medium">New user registered</span>*/}
-                            {/*            <span className="text-xs text-gray-500 ml-auto">2m ago</span>*/}
-                            {/*        </DropdownMenuItem>*/}
-                            {/*        <DropdownMenuItem>*/}
-                            {/*            <span className="font-medium">New memorial created</span>*/}
-                            {/*            <span className="text-xs text-gray-500 ml-auto">1h ago</span>*/}
-                            {/*        </DropdownMenuItem>*/}
-                            {/*        <DropdownMenuItem>*/}
-                            {/*            <span className="font-medium">System update completed</span>*/}
-                            {/*            <span className="text-xs text-gray-500 ml-auto">2h ago</span>*/}
-                            {/*        </DropdownMenuItem>*/}
-                            {/*        <DropdownMenuSeparator/>*/}
-                            {/*        <DropdownMenuItem className="text-center">*/}
-                            {/*            <Link href={route('dashboard')} className="text-blue-500 hover:text-blue-700">*/}
-                            {/*                View all notifications*/}
-                            {/*            </Link>*/}
-                            {/*        </DropdownMenuItem>*/}
-                            {/*    </DropdownMenuContent>*/}
-                            {/*</DropdownMenu>*/}
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -139,14 +110,6 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
                                         <User className="mr-2 h-4 w-4"/>
                                         <span>Profile</span>
                                     </DropdownMenuItem>
-                                    {/*<DropdownMenuItem>*/}
-                                    {/*    <Settings className="mr-2 h-4 w-4"/>*/}
-                                    {/*    <span>Settings</span>*/}
-                                    {/*</DropdownMenuItem>*/}
-                                    {/*<DropdownMenuItem>*/}
-                                    {/*    <HelpCircle className="mr-2 h-4 w-4"/>*/}
-                                    {/*    <span>Help</span>*/}
-                                    {/*</DropdownMenuItem>*/}
                                     <DropdownMenuSeparator/>
                                     <DropdownMenuItem onClick={() => router.post(route('logout'))}>
                                         <LogOut className="mr-2 h-4 w-4"/>
