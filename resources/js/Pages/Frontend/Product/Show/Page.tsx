@@ -204,13 +204,13 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                             <Button>Enviar Reseña</Button>
                         </CardContent>
                     </Card>
-                    {comments.map((comment) => (
+                    {product.reviews.map((comment) => (
                         <Card key={comment.id} className="mb-4">
                             <CardContent className="pt-6">
                                 <div className="flex items-center mb-2">
-                                    <span className="font-semibold mr-2">{comment.user}</span>
+                                    <span className="font-semibold mr-2">{comment.user_name}</span>
                                     <div className="flex">
-                                        {renderStars(comment.rating)}
+                                        {renderStars(comment.stars)}
                                     </div>
                                 </div>
                                 <p>{comment.comment}</p>

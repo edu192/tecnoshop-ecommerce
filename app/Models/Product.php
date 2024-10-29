@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -24,5 +25,11 @@ class Product extends Model implements HasMedia
     {
         $this->addMediaCollection('main_image')->useFallbackPath(public_path('/images/no_image_placeholder.jpg'))->singleFile();
         $this->addMediaCollection('gallery_images')->useFallbackPath(public_path('/images/no_image_placeholder.jpg'));
+    }
+
+    public function reviews()
+    : HasMany
+    {
+        return $this->hasMany(Review::class);
     }
 }
