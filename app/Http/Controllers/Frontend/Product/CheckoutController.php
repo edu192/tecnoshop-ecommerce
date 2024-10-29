@@ -19,18 +19,18 @@ class CheckoutController extends Controller
             $request->validate([
                 'address' => 'required|string',
                 'city' => 'required|string',
-                'country' => 'required|string',
-                'postalCode' => 'required|string',
+                'department' => 'required|string',
+                'postal_code' => 'required|string',
                 'payment_method' => 'required|string',
                 'cartItems' => 'required|array',
             ]);
 
             $order = auth()->user()->orders()->create([
-//                'address' => $request->address,
-//                'city' => $request->city,
-//                'country' => $request->country,
-//                'postal_code' => $request->postalCode,
-//                'payment_method' => $request->payment_method,
+                'address' => $request->address,
+                'city' => $request->city,
+                'department' => $request->department,
+                'postal_code' => $request->postal_code,
+                'payment_method' => $request->payment_method,
                 'state' => 'pending',
                 'total' => 0
             ]);

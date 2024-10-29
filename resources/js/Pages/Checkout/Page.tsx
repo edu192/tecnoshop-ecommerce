@@ -15,8 +15,8 @@ export default function CheckoutPage() {
     const [shippingInfo, setShippingInfo] = useState({
         address: '',
         city: '',
-        country: '',
-        postalCode: '',
+        department: '',
+        postal_code: '',
     })
     const [paymentMethod, setPaymentMethod] = useState('credit_card')
     const {clearCart} = useCartStore()
@@ -30,7 +30,6 @@ export default function CheckoutPage() {
         console.log('Pedido enviado', {shippingInfo, paymentMethod, cartItems})
         router.post(route('checkout.store'), {
                 ...shippingInfo,
-                paymentMethod: paymentMethod,
                 cartItems: cartItems,
                 payment_method: paymentMethod,
             },
@@ -76,27 +75,28 @@ export default function CheckoutPage() {
                                         />
                                     </div>
                                     <div>
-                                        <Label htmlFor="country">País</Label>
+                                        <Label htmlFor="country">Departamento</Label>
                                         <Select name="country" onValueChange={(value) => setShippingInfo({
                                             ...shippingInfo,
-                                            country: value
+                                            department: value
                                         })}>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Seleccionar país"/>
+                                                <SelectValue placeholder="Seleccionar departamento"/>
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="US">Estados Unidos</SelectItem>
-                                                <SelectItem value="PE">Peru</SelectItem>
-                                                {/* Agregar más países según sea necesario */}
+                                                <SelectItem value="Lima">Lima</SelectItem>
+                                                <SelectItem value="Arequipa">Arequipa</SelectItem>
+                                                <SelectItem value="Cusco">Cusco</SelectItem>
+                                                <SelectItem value="Puno">Puno</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
                                     <div>
-                                        <Label htmlFor="postalCode">Código Postal</Label>
+                                        <Label htmlFor="postal_code">Código Postal</Label>
                                         <Input
-                                            id="postalCode"
-                                            name="postalCode"
-                                            value={shippingInfo.postalCode}
+                                            id="postal_code"
+                                            name="postal_code"
+                                            value={shippingInfo.postal_code}
                                             onChange={handleShippingInfoChange}
                                         />
                                     </div>
