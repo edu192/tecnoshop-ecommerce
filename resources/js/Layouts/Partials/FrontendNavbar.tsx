@@ -118,7 +118,7 @@ function FrontendNavbar() {
                                                 <p className="text-sm text-gray-500">${item.price.toFixed(2)} x {item.quantity}</p>
                                             </div>
                                             <div className="flex items-center">
-                                                <Button variant="ghost" size="icon" onClick={() => removeProduct(item)}>
+                                                <Button variant="ghost" size="icon" onClick={() => clearProduct(item.id)}>
                                                     <Trash2 className="h-4 w-4"/>
                                                 </Button>
                                             </div>
