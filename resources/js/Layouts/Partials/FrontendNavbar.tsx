@@ -170,7 +170,7 @@ function FrontendNavbar() {
                                         onClick={() => router.visit(route('dashboard'))}>Dashboard</DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={() => router.visit(route('profile.edit'))}>Perfil</DropdownMenuItem>
-                                    <DropdownMenuItem>Pedidos</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={()=>router.visit(route('profile.orders'))}>Pedidos</DropdownMenuItem>
                                     <DropdownMenuSeparator/>
                                     <DropdownMenuItem onClick={() => router.post(route('logout'))}>Cerrar sesión</DropdownMenuItem>
                                 </DropdownMenuContent>

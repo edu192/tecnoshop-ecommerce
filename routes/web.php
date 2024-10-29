@@ -11,6 +11,8 @@ Route::post('/search_product',[\App\Http\Controllers\Frontend\CategoryController
 Route::get('/products/{product}',[\App\Http\Controllers\Frontend\ProductController::class,'show'])->name('product.show');
 Route::get('/checkout',[\App\Http\Controllers\Frontend\Product\CheckoutController::class,'index'])->name('checkout')->middleware('auth');
 Route::post('/checkout',[\App\Http\Controllers\Frontend\Product\CheckoutController::class,'store'])->name('checkout.store');
+Route::get('/profile/orders',[\App\Http\Controllers\Frontend\OrderController::class,'index'])->name('profile.orders')->middleware('auth');
+
 Route::post('/products/{product}/reviews',[\App\Http\Controllers\Frontend\Product\ReviewController::class,'store'])->name('product.reviews.store');
 Route::delete('/products/{product}/reviews/{review}',[\App\Http\Controllers\Frontend\Product\ReviewController::class,'destroy'])->name('product.reviews.destroy');
 Route::get('/dashboard', function () {
