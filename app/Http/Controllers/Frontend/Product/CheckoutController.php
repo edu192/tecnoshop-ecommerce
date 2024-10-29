@@ -47,7 +47,7 @@ class CheckoutController extends Controller
                 'state' => 'completed'
             ]);
 
-            return redirect()->route('home')->with('success', 'Order placed successfully.');
+            return redirect()->route('home')->with('success', 'Orden creada con éxito.');
         } catch (\Exception $e) {
             return dd($e->getMessage());
         }

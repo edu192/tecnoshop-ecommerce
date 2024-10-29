@@ -17,7 +17,7 @@ class ReviewController extends Controller
     public function store(Product $product, Request $request)
     {
         if ($product->reviews()->where('user_id', $request->user()->id)->exists()) {
-            return redirect()->back()->with('error', 'You have already submitted a review.');
+            return redirect()->back()->with('error', 'Ya has enviado una reseña para este producto.');
         }
         $request->validate([
             'stars' => 'required|numeric|min:1|max:5',
@@ -30,17 +30,17 @@ class ReviewController extends Controller
             'comment' => $request->comment,
         ]);
 
-        return redirect()->back()->with('success', 'Review submitted successfully.');
+        return redirect()->back()->with('success', 'Reseña enviada con éxito.');
     }
 
     public function destroy(Product $product, Review $review, Request $request)
     {
         if ($review->user_id !== $request->user()->id) {
-            return redirect()->back()->with('error', 'You are not authorized to perform this action.');
+            return redirect()->back()->with('error', 'No estas autorizado para eliminar esta reseña.');
         }
 
         $review->delete();
 
-        return redirect()->back()->with('success', 'Review deleted successfully.');
+        return redirect()->back()->with('success', 'Reseña eliminada con éxito.');
     }
 }
