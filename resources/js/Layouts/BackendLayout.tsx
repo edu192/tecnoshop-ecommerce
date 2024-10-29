@@ -1,0 +1,170 @@
+import {ReactNode, useState} from 'react'
+import {Button} from "@/shadcn-ui/button"
+import {Avatar, AvatarFallback, AvatarImage} from "@/shadcn-ui/avatar"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/shadcn-ui/dropdown-menu"
+import {Sheet, SheetContent, SheetTrigger} from "@/shadcn-ui/sheet"
+import {BarChart, FileText, LayoutGrid, LogOut, Menu, User} from 'lucide-react'
+import {Link, router, usePage} from '@inertiajs/react'
+
+export default function BackendLayout({children, pageName = 'Page'}: { children: ReactNode, pageName?: string }) {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const {props: {user}} = usePage()
+
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
+
+    const SidebarContent = () => <nav>
+        <Link href="/" className="text-2xl font-bold mb-8 block">Alma Eterna Backend</Link>
+        <ul className="space-y-2 border-none">
+            <li>
+                <Link href={route('mantenimiento.dashboard')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <BarChart size={20}/>
+                    <span>Dashboard</span>
+                </Link>
+            </li>
+            <li>
+                <Link href={route('mantenimiento.orders.index')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <FileText size={20}/>
+                    <span>Ordenes</span>
+                </Link>
+            </li>
+            <li>
+                <Link href={route('mantenimiento.dashboard')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <FileText size={20}/>
+                    <span>Productos</span>
+                </Link>
+            </li>
+            <li>
+                <Link href={route('mantenimiento.dashboard')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <FileText size={20}/>
+                    <span>Categorias</span>
+
+                </Link>
+            </li>
+            <li>
+            <Link href={route('mantenimiento.dashboard')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <FileText size={20}/>
+                    <span>Usuarios</span>
+
+                </Link>
+            </li>
+        </ul>
+    </nav>
+
+    return (
+        <div className="flex h-screen bg-gray-100">
+            {/* Sidebar for larger screens */}
+            <aside className="bg-[#1A2D37] text-white w-64 min-h-screen p-4 hidden md:block">
+                <SidebarContent/>
+            </aside>
+
+            {/* Main Content */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+                {/* Top Navigation */}
+                <header className="bg-white shadow-md p-4">
+                    <div className="flex items-center justify-between">
+                        <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
+                            <SheetTrigger asChild>
+                                <Button variant="ghost" size="icon" className="md:hidden">
+                                    <Menu size={24}/>
+                                </Button>
+                            </SheetTrigger>
+                            <SheetContent side="left" className="w-64 bg-[#1A2D37] text-white p-4">
+                                <SidebarContent/>
+                            </SheetContent>
+                        </Sheet>
+                        <div className="flex items-center space-x-4 ml-auto">
+                            {/*<DropdownMenu>*/}
+                            {/*    <DropdownMenuTrigger asChild>*/}
+                            {/*        <Button variant="ghost" size="icon">*/}
+                            {/*            <Bell size={20}/>*/}
+                            {/*        </Button>*/}
+                            {/*    </DropdownMenuTrigger>*/}
+                            {/*    <DropdownMenuContent align="end" className="w-64">*/}
+                            {/*        <DropdownMenuLabel>Notifications</DropdownMenuLabel>*/}
+                            {/*        <DropdownMenuSeparator/>*/}
+                            {/*        <DropdownMenuItem>*/}
+                            {/*            <span className="font-medium">New user registered</span>*/}
+                            {/*            <span className="text-xs text-gray-500 ml-auto">2m ago</span>*/}
+                            {/*        </DropdownMenuItem>*/}
+                            {/*        <DropdownMenuItem>*/}
+                            {/*            <span className="font-medium">New memorial created</span>*/}
+                            {/*            <span className="text-xs text-gray-500 ml-auto">1h ago</span>*/}
+                            {/*        </DropdownMenuItem>*/}
+                            {/*        <DropdownMenuItem>*/}
+                            {/*            <span className="font-medium">System update completed</span>*/}
+                            {/*            <span className="text-xs text-gray-500 ml-auto">2h ago</span>*/}
+                            {/*        </DropdownMenuItem>*/}
+                            {/*        <DropdownMenuSeparator/>*/}
+                            {/*        <DropdownMenuItem className="text-center">*/}
+                            {/*            <Link href={route('dashboard')} className="text-blue-500 hover:text-blue-700">*/}
+                            {/*                View all notifications*/}
+                            {/*            </Link>*/}
+                            {/*        </DropdownMenuItem>*/}
+                            {/*    </DropdownMenuContent>*/}
+                            {/*</DropdownMenu>*/}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                                        <Avatar className="h-8 w-8">
+                                            <AvatarImage src="" alt="User Avatar"/>
+                                            <AvatarFallback>{user?.name[0]}</AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-56" align="end" forceMount>
+                                    <DropdownMenuLabel className="font-normal">
+                                        <div className="flex flex-col space-y-1">
+                                            <p className="text-sm font-medium leading-none">{user?.name}</p>
+                                            <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator/>
+                                    <DropdownMenuItem onClick={() => router.visit(route('backend.dashboard'))}>
+                                        <LayoutGrid className="mr-2 h-4 w-4"/>
+                                        <span>Dashboard</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => router.visit(route('profile.edit'))}>
+                                        <User className="mr-2 h-4 w-4"/>
+                                        <span>Profile</span>
+                                    </DropdownMenuItem>
+                                    {/*<DropdownMenuItem>*/}
+                                    {/*    <Settings className="mr-2 h-4 w-4"/>*/}
+                                    {/*    <span>Settings</span>*/}
+                                    {/*</DropdownMenuItem>*/}
+                                    {/*<DropdownMenuItem>*/}
+                                    {/*    <HelpCircle className="mr-2 h-4 w-4"/>*/}
+                                    {/*    <span>Help</span>*/}
+                                    {/*</DropdownMenuItem>*/}
+                                    <DropdownMenuSeparator/>
+                                    <DropdownMenuItem onClick={() => router.post(route('logout'))}>
+                                        <LogOut className="mr-2 h-4 w-4"/>
+                                        <span>Log out</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+                    </div>
+                </header>
+
+                {/* Page Content */}
+                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                    <h1 className="text-3xl font-semibold mb-6">{pageName}</h1>
+
+                    {children}
+                </main>
+            </div>
+        </div>
+    )
+}
