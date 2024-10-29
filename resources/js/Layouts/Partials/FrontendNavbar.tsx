@@ -132,7 +132,7 @@ function FrontendNavbar() {
                                         </div>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
-                                        <Button className="w-full">Pagar</Button>
+                                        <Button className="w-full" onClick={()=>router.visit(route('checkout'))}>Pagar</Button>
                                     </DropdownMenuItem>
                                 </>
                             ) : (

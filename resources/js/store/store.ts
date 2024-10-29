@@ -14,6 +14,7 @@ interface CartState {
     setSelectedBrand: (brand: string|null) => void;
     setSearchInput: (searchInput: string) => void;
     setCurrentRouteCategoryId: (categoryId: number) => void;
+    clearCart: () => void;
 }
 
 export const useCartStore = create<CartState>((set, get) => ({
@@ -59,5 +60,6 @@ export const useCartStore = create<CartState>((set, get) => ({
     }),
     setSelectedBrand: (brand: string | null) => set({selectedBrand: brand}),
     setSearchInput: (searchInput: string) => set({searchInput: searchInput}),
-    setCurrentRouteCategoryId: (categoryId: number) => set({currentRouteCategoryId: categoryId})
+    setCurrentRouteCategoryId: (categoryId: number) => set({currentRouteCategoryId: categoryId}),
+    clearCart: () => set({items: [], total: 0, quantity: 0})
 }));

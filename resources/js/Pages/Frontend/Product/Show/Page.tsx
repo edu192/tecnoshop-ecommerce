@@ -41,42 +41,6 @@ const StarRating = ({rating, setRating}: {
         </div>
     );
 };
-
-// Datos de producto de ejemplo
-const product = {
-    brand: "TechGear",
-    name: "Televisor Inteligente Ultra HD",
-    code: "TG-TV-55UHD",
-    realPrice: 999.99,
-    discountedPrice: 799.99,
-    description: "Experimenta una impresionante resolución 4K y funciones inteligentes con nuestro último televisor inteligente Ultra HD. Perfecto para noches de cine y sesiones de juego.",
-    rating: 4.5,
-    images: [
-        "/placeholder.svg?height=400&width=400",
-        "/placeholder.svg?height=100&width=100",
-        "/placeholder.svg?height=100&width=100",
-        "/placeholder.svg?height=100&width=100",
-    ],
-    specifications: [
-        {name: "Tamaño de Pantalla", value: "55 pulgadas"},
-        {name: "Resolución", value: "3840 x 2160 (4K)"},
-        {name: "HDR", value: "Sí, HDR10+"},
-        {name: "Televisor Inteligente", value: "Sí, con Wi-Fi integrado"},
-        {name: "Frecuencia de Actualización", value: "120Hz"},
-        {name: "Puertos HDMI", value: "4"},
-        {name: "Puertos USB", value: "3"},
-    ],
-
-};
-const comments = [
-    {id: 1, user: "John D.", rating: 5, comment: "¡Excelente calidad de imagen y fácil de configurar!"},
-    {
-        id: 2,
-        user: "Sarah M.",
-        rating: 4,
-        comment: "Gran televisor, pero las funciones inteligentes podrían ser más intuitivas."
-    },
-]
 export default function ProductPage({product}: { product: App.Data.ProductData }) {
     const user: User | null = usePage().props.auth.user ?? null;
     const [mainImage, setMainImage] = useState(product.image);
