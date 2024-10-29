@@ -1,14 +1,18 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Button} from "@/shadcn-ui/button";
 import {Card, CardContent} from "@/shadcn-ui/card";
 import {Textarea} from "@/shadcn-ui/textarea";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
-import {Minus, Plus, Star} from 'lucide-react';
+import {Minus, Plus, Star, X} from 'lucide-react';
 import FrontendLayout from "@/Layouts/FrontendLayout";
 import {useCartStore} from "@/store/store";
+import {router, usePage} from "@inertiajs/react";
+import {User} from "@/types";
 
-const StarRating = () => {
-    const [rating, setRating] = useState(0);
+const StarRating = ({rating, setRating}: {
+    rating: number,
+    setRating: React.Dispatch<React.SetStateAction<number>>
+}) => {
     const [hover, setHover] = useState(0);
 
     return (
@@ -74,13 +78,16 @@ const comments = [
     },
 ]
 export default function ProductPage({product}: { product: App.Data.ProductData }) {
+    const user: User | null = usePage().props.auth.user ?? null;
     const [mainImage, setMainImage] = useState(product.image);
-    const quantity=useCartStore().items.find(item => item.id === product.id)?.quantity;
+    const quantity = useCartStore().items.find(item => item.id === product.id)?.quantity;
     const {addProduct, removeProduct, clearProduct, items: cartItems} = useCartStore();
+    const [formReview, setFormReview] = useState('')
+    const [formStars, setFormStars] = useState(0)
 
     const renderStars = (rating: number, interactive: boolean = false) => {
         return interactive ? (
-            <StarRating/>
+            <StarRating rating={formStars} setRating={setFormStars}/>
         ) : (
             <div className="flex">
                 {Array(5).fill(0).map((_, i) => (
@@ -91,6 +98,26 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
         );
     };
 
+    const submitReview = () => {
+        router.post(route('product.reviews.store', {product: product.id}), {
+            comment: formReview,
+            stars: formStars
+        }, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setFormReview('')
+                setFormStars(0)
+            }
+        })
+    }
+    const deleteReview = (e: React.MouseEvent<HTMLButtonElement>, review_id: number) => {
+        router.delete(route('product.reviews.destroy',
+            {product: product.id, review: review_id}),{
+            preserveScroll:true,
+        })
+
+    }
+
     const handleAddToCart = () => {
         addProduct(product);
     };
@@ -100,7 +127,7 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
     };
 
     const handleDecreaseQuantity = () => {
-            removeProduct(product);
+        removeProduct(product);
     };
 
     const handleRemoveFromCart = () => {
@@ -184,7 +211,7 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                             {/*        <TableCell>{spec.value}</TableCell>*/}
                             {/*    </TableRow>*/}
                             {/*))}*/}
-                            <TableRow >
+                            <TableRow>
                                 <TableCell className="font-medium">Color</TableCell>
                                 <TableCell>Rojo</TableCell>
                             </TableRow>
@@ -200,13 +227,17 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                                 <span className="mr-2">Tu Calificación:</span>
                                 {renderStars(0, true)}
                             </div>
-                            <Textarea placeholder="Escribe tu reseña aquí..." className="mb-4"/>
-                            <Button>Enviar Reseña</Button>
+                            <Textarea value={formReview} onChange={(e) => setFormReview(e.target.value)}
+                                      placeholder="Escribe tu reseña aquí..." className="mb-4"/>
+                            <Button onClick={submitReview}>Enviar Reseña</Button>
                         </CardContent>
                     </Card>
-                    {product.reviews.map((comment) => (
-                        <Card key={comment.id} className="mb-4">
+                    {product.reviews.length > 0 ? product.reviews.map((comment) => (
+                        <Card key={comment.id} className="mb-4 relative">
+                            {comment.user_id === user?.id &&
+                                <Button onClick={(e)=>deleteReview(e,comment.id)} variant='destructive' className='absolute top-0 right-0'><X/></Button>}
                             <CardContent className="pt-6">
+
                                 <div className="flex items-center mb-2">
                                     <span className="font-semibold mr-2">{comment.user_name}</span>
                                     <div className="flex">
@@ -216,9 +247,10 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                                 <p>{comment.comment}</p>
                             </CardContent>
                         </Card>
-                    ))}
+                    )) : <p className='text-gray-500'>No hay reseñas para este producto</p>}
                 </div>
             </div>
         </FrontendLayout>
-    );
+    )
+        ;
 }
