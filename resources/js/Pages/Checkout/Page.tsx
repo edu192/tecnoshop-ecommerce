@@ -7,17 +7,24 @@ import {RadioGroup, RadioGroupItem} from "@/shadcn-ui/radio-group"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/shadcn-ui/select"
 import {Separator} from "@/shadcn-ui/separator"
 import {useCartStore} from "@/store/store"
-import {router} from "@inertiajs/react";
+import {router, usePage} from "@inertiajs/react";
 import FrontendLayout from "@/Layouts/FrontendLayout";
+import {Alert, AlertDescription, AlertTitle} from "@/shadcn-ui/alert";
+import {AlertCircle} from "lucide-react";
 
 export default function CheckoutPage() {
     const cartItems = useCartStore(state => state.items)
+    const {errors}=usePage().props
     const [shippingInfo, setShippingInfo] = useState({
         address: '',
         city: '',
         department: '',
         postal_code: '',
+        credit_card: '',
+        expiry_date: '',
+        cvv: ''
     })
+    console.log(errors)
     const [paymentMethod, setPaymentMethod] = useState('credit_card')
     const {clearCart} = useCartStore()
 
@@ -50,6 +57,15 @@ export default function CheckoutPage() {
                 <h1 className="text-3xl font-bold mb-8">Finalizar Compra</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
+                        {errors.cartItems&&
+                            <Alert variant="destructive">
+                                <AlertCircle className="h-4 w-4" />
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>
+                                   El carrito esta vacio
+                                </AlertDescription>
+                            </Alert>
+                        }
                         <Card className="mb-8">
                             <CardHeader>
                                 <CardTitle>Información de Envío</CardTitle>
@@ -64,6 +80,7 @@ export default function CheckoutPage() {
                                             value={shippingInfo.address}
                                             onChange={handleShippingInfoChange}
                                         />
+                                        {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
                                     </div>
                                     <div>
                                         <Label htmlFor="city">Ciudad</Label>
@@ -73,6 +90,7 @@ export default function CheckoutPage() {
                                             value={shippingInfo.city}
                                             onChange={handleShippingInfoChange}
                                         />
+                                        {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
                                     </div>
                                     <div>
                                         <Label htmlFor="country">Departamento</Label>
@@ -99,6 +117,7 @@ export default function CheckoutPage() {
                                             value={shippingInfo.postal_code}
                                             onChange={handleShippingInfoChange}
                                         />
+                                        {errors.postal_code && <p className="text-red-500 text-sm">{errors.postal_code}</p>}
                                     </div>
                                 </form>
                             </CardContent>
@@ -121,17 +140,20 @@ export default function CheckoutPage() {
                                 {paymentMethod === 'credit_card' && (
                                     <div className="mt-4 space-y-4">
                                         <div>
-                                            <Label htmlFor="cardNumber">Número de Tarjeta</Label>
-                                            <Input id="cardNumber" name="cardNumber"/>
+                                            <Label htmlFor="credit_card">Número de Tarjeta</Label>
+                                            <Input id="credit_card" name="credit_card" onChange={handleShippingInfoChange} value={shippingInfo.credit_card}/>
+                                            {errors.credit_card && <p className="text-red-500 text-sm">{errors.credit_card}</p>}
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <Label htmlFor="expiryDate">Fecha de Expiración</Label>
-                                                <Input id="expiryDate" name="expiryDate"/>
+                                                <Label htmlFor="expiry_date">Fecha de Expiración</Label>
+                                                <Input id="expiry_date" name="expiry_date" onChange={handleShippingInfoChange} value={shippingInfo.expiry_date}/>
+                                                {errors.expiry_date  && <p className="text-red-500 text-sm">{errors.expiry_date}</p>}
                                             </div>
                                             <div>
                                                 <Label htmlFor="cvv">CVV</Label>
-                                                <Input id="cvv" name="cvv" type='number'/>
+                                                <Input id="cvv" name="cvv" type='number'  onChange={handleShippingInfoChange} value={shippingInfo.cvv}/>
+                                                {errors.cvv && <p className="text-red-500 text-sm">{errors.cvv}</p>}
                                             </div>
                                         </div>
                                     </div>

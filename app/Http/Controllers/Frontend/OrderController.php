@@ -11,7 +11,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = auth()->user()->orders->map(function (Order $order) {
+        $orders = auth()->user()->orders()->orderBy('created_at', 'desc')->get()->map(function (Order $order) {
             return OrderData::from($order);
         });
 

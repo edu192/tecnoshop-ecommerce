@@ -15,41 +15,49 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'address' => 'required|string',
-                'city' => 'required|string',
-                'department' => 'required|string',
-                'postal_code' => 'required|string',
-                'payment_method' => 'required|string',
-                'cartItems' => 'required|array',
-            ]);
+        $request->validate([
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'department' => 'required|string',
+            'postal_code' => 'required|string',
+            'payment_method' => 'required|string',
+            'cartItems' => 'required|array',
+            'credit_card' => [
+                'required',
+                'regex:/^\d{16}$/'
+            ],
+            'expiry_date' => [
+                'required',
+                'regex:/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/'
+            ],
+            'cvv' => [
+                'required',
+                'regex:/^[0-9]{3,4}$/'
+            ],
+        ]);
 
-            $order = auth()->user()->orders()->create([
-                'address' => $request->address,
-                'city' => $request->city,
-                'department' => $request->department,
-                'postal_code' => $request->postal_code,
-                'payment_method' => $request->payment_method,
-                'state' => 'pending',
-                'total' => 0
-            ]);
+        $order = auth()->user()->orders()->create([
+            'address' => $request->address,
+            'city' => $request->city,
+            'department' => $request->department,
+            'postal_code' => $request->postal_code,
+            'payment_method' => $request->payment_method,
+            'state' => 'pending',
+            'total' => 0
+        ]);
 
-            foreach ($request->cartItems as $item) {
-                $order->order_details()->create([
-                    'product_id' => $item['id'],
-                    'quantity' => $item['quantity'],
-                    'unit_price' => $item['price'],
-                ]);
-            }
-            $order->update([
-                'total' => $order->order_details->sum('unit_price'),
-                'state' => 'en proceso'
+        foreach ($request->cartItems as $item) {
+            $order->order_details()->create([
+                'product_id' => $item['id'],
+                'quantity' => $item['quantity'],
+                'unit_price' => $item['price'],
             ]);
-
-            return redirect()->route('home')->with('success', 'Orden creada con éxito.');
-        } catch (\Exception $e) {
-            return dd($e->getMessage());
         }
+        $order->update([
+            'total' => $order->order_details->sum('unit_price'),
+            'state' => 'en proceso'
+        ]);
+
+        return redirect()->route('home')->with('success', 'Orden creada con éxito.');
     }
 }
