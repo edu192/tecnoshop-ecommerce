@@ -44,7 +44,7 @@ class CheckoutController extends Controller
             }
             $order->update([
                 'total' => $order->order_details->sum('unit_price'),
-                'state' => 'completed'
+                'state' => 'en proceso'
             ]);
 
             return redirect()->route('home')->with('success', 'Orden creada con éxito.');

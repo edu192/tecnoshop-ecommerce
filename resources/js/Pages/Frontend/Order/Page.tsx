@@ -27,9 +27,6 @@ export default function UserManagementPage({orders}:{orders:OrderData[]}) {
                             <Tabs defaultValue="all" className="w-full">
                                 <TabsList>
                                     <TabsTrigger value="all">Todos los Pedidos</TabsTrigger>
-                                    <TabsTrigger value="processing">En Proceso</TabsTrigger>
-                                    <TabsTrigger value="shipped">Enviado</TabsTrigger>
-                                    <TabsTrigger value="delivered">Entregado</TabsTrigger>
                                 </TabsList>
                                 <TabsContent value="all">
                                     <Table>

@@ -21,6 +21,7 @@ Route::get('/dashboard', function () {
 Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.','middleware' => 'auth'], function () {
     Route::get('/dashboard', [\App\Http\Controllers\Backend\DashboardController::class,'index'])->name('dashboard');
     Route::get('/orders', [\App\Http\Controllers\Backend\OrderController::class,'index'])->name('orders.index');
+    Route::post('/orders/{order}', [\App\Http\Controllers\Backend\OrderController::class,'update'])->name('orders.update');
 });
 
 Route::middleware('auth')->group(function () {
