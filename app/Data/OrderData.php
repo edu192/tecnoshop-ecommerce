@@ -19,6 +19,11 @@ class OrderData extends Data
         public string     $created_at,
         public string     $updated_at,
         public Collection $details,
+        public string     $address,
+        public string     $city,
+        public string     $department,
+        public string     $postal_code,
+        public string     $payment_method,
     )
     {
     }
@@ -34,6 +39,11 @@ class OrderData extends Data
             created_at: $order->created_at,
             updated_at: $order->updated_at,
             details: $order->order_details->map(fn($detail) => OrderDetailsData::from($detail)),
+            address: $order->address,
+            city: $order->city,
+            department: $order->department,
+            postal_code: $order->postal_code,
+            payment_method: $order->payment_method,
         );
     }
 }

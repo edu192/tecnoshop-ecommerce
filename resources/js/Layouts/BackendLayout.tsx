@@ -20,7 +20,7 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
     const SidebarContent = () => <nav>
-        <Link href="/" className="text-2xl font-bold mb-8 block">Alma Eterna Backend</Link>
+        <Link href="/" className="text-2xl font-bold mb-8 block">Tecnoshop Backend</Link>
         <ul className="space-y-2 border-none">
             <li>
                 <Link href={route('mantenimiento.dashboard')}

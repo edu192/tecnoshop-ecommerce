@@ -1,6 +1,6 @@
 'use client'
 
-import {useState} from 'react'
+import React, {useState} from 'react'
 import {Button} from "@/shadcn-ui/button"
 import {Card, CardContent, CardDescription,  CardHeader, CardTitle} from "@/shadcn-ui/card"
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shadcn-ui/tabs"
@@ -65,6 +65,28 @@ export default function UserManagementPage({orders}:{orders:OrderData[]}) {
                                                                         Pedido el {selectedOrder?.created_at}
                                                                     </DialogDescription>
                                                                 </DialogHeader>
+                                                                <div>
+                                                                    <p>
+                                                                        <span
+                                                                            className="font-semibold">Ciudad:</span> {selectedOrder?.city}
+                                                                    </p>
+                                                                    <p>
+                                                                        <span
+                                                                            className="font-semibold">Dirección:</span> {selectedOrder?.address}
+                                                                    </p>
+                                                                    <p>
+                                                                        <span
+                                                                            className="font-semibold">Departamento:</span> {selectedOrder?.department}
+                                                                    </p>
+                                                                    <p>
+                                                                        <span
+                                                                            className="font-semibold">Código Postal:</span> {selectedOrder?.postal_code}
+                                                                    </p>
+                                                                    <p>
+                                                                        <span
+                                                                            className="font-semibold">Metodo de pago:</span> {selectedOrder?.payment_method=='credit_card'?'Tarjeta de Crédito':'Paypal'}
+                                                                    </p>
+                                                                </div>
                                                                 <div className="py-4">
                                                                     <h4 className="font-semibold mb-2">Artículos:</h4>
                                                                     {selectedOrder?.details.map((detail) => (
