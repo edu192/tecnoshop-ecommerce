@@ -43,7 +43,7 @@ class CheckoutController extends Controller
                 ]);
             }
             $order->update([
-                'total' => $order->order_details->sum('price'),
+                'total' => $order->order_details->sum('unit_price'),
                 'state' => 'completed'
             ]);
 
