@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import OrderData = App.Data.OrderData;
 import { Pen } from "lucide-react";
 import { router } from "@inertiajs/react";
+import {Input} from "@/shadcn-ui/input";
 
 const Page = ({ orders }: { orders: OrderData[] }) => {
     const [detailsDialog, setDetailsDialog] = useState<{ order: OrderData | null, isOpen: boolean }>({
@@ -47,7 +48,7 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
         <BackendLayout pageName='Ordenes'>
             <div className="p-6 bg-white rounded-lg shadow">
                 <Dialog open={detailsDialog.isOpen}
-                        onOpenChange={val => setDetailsDialog({ order: null, isOpen: val })}>
+                        onOpenChange={val => setDetailsDialog({order: null, isOpen: val})}>
                     <DialogTrigger asChild></DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
@@ -57,9 +58,13 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                         <div>
                             <p><span className="font-semibold">Ciudad:</span> {detailsDialog.order?.city}</p>
                             <p><span className="font-semibold">Dirección:</span> {detailsDialog.order?.address}</p>
-                            <p><span className="font-semibold">Departamento:</span> {detailsDialog.order?.department}</p>
-                            <p><span className="font-semibold">Código Postal:</span> {detailsDialog.order?.postal_code}</p>
-                            <p><span className="font-semibold">Metodo de pago:</span> {detailsDialog.order?.payment_method === 'credit_card' ? 'Tarjeta de Crédito' : 'Paypal'}</p>
+                            <p><span className="font-semibold">Departamento:</span> {detailsDialog.order?.department}
+                            </p>
+                            <p><span className="font-semibold">Código Postal:</span> {detailsDialog.order?.postal_code}
+                            </p>
+                            <p><span
+                                className="font-semibold">Metodo de pago:</span> {detailsDialog.order?.payment_method === 'credit_card' ? 'Tarjeta de Crédito' : 'Paypal'}
+                            </p>
                         </div>
                         <div className="py-4">
                             <h4 className="font-semibold mb-2">Artículos:</h4>
@@ -77,7 +82,7 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                     </DialogContent>
                 </Dialog>
                 <Dialog open={updateDialog.isOpen}
-                        onOpenChange={val => setUpdateDialog({ order: null, isOpen: val })}>
+                        onOpenChange={val => setUpdateDialog({order: null, isOpen: val})}>
                     <DialogTrigger asChild></DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
@@ -85,7 +90,8 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                             <DialogDescription>Pedido el {updateDialog.order?.created_at}</DialogDescription>
                         </DialogHeader>
                         <div>
-                            <select name="state" id="state" className="w-full" value={selectedState} onChange={handleStateChange}>
+                            <select name="state" id="state" className="w-full" value={selectedState}
+                                    onChange={handleStateChange}>
                                 <option value="en_proceso">En proceso</option>
                                 <option value="completado">Completado</option>
                             </select>
@@ -94,7 +100,10 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                         <div className="py-4"></div>
                     </DialogContent>
                 </Dialog>
-                <div className='flex justify-start pb-6'></div>
+                <div className='flex justify-start pb-6 '>
+                    <Input placeholder='Buscar id' className='w-1/6'/>
+                    <Button>Buscar</Button>
+                </div>
                 <div>
                     <Table>
                         <TableCaption>Lista de todas las ordenes del sistema.</TableCaption>
@@ -116,8 +125,10 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                                     <TableCell className="text-right">{order.state}</TableCell>
                                     <TableCell className="text-right">
                                         <div className='inline-flex gap-2'>
-                                            <Button variant="outline" onClick={() => openDetailsDialog(order)}>Ver Detalles</Button>
-                                            <Button variant="outline" onClick={() => openUpdateDialog(order)}> <Pen/> </Button>
+                                            <Button variant="outline" onClick={() => openDetailsDialog(order)}>Ver
+                                                Detalles</Button>
+                                            <Button variant="outline" onClick={() => openUpdateDialog(order)}> <Pen/>
+                                            </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
