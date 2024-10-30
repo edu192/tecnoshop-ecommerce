@@ -18,10 +18,11 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.','middleware' => ['auth','backend']], function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Backend\DashboardController::class,'index'])->name('dashboard');
-    Route::get('/orders', [\App\Http\Controllers\Backend\OrderController::class,'index'])->name('orders.index');
-    Route::post('/orders/{order}', [\App\Http\Controllers\Backend\OrderController::class,'update'])->name('orders.update');
+Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware' => ['auth', 'backend']], function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Backend\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/orders', [\App\Http\Controllers\Backend\OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders/{order}', [\App\Http\Controllers\Backend\OrderController::class, 'update'])->name('orders.update');
+    Route::get('/products', [\App\Http\Controllers\Backend\ProductController::class, 'index'])->name('products.index');
 });
 
 Route::middleware('auth')->group(function () {
