@@ -55,8 +55,8 @@ const Page = ({products}: { products:ProductData[] }) => {
                     <DialogTrigger asChild></DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
-                            <DialogTitle>Estado del pedido - {updateDialog.product?.id}</DialogTitle>
-                            <DialogDescription>Pedido el {updateDialog.product?.created_at}</DialogDescription>
+                            <DialogTitle>Producto - {updateDialog.product?.id}</DialogTitle>
+                            <DialogDescription>Creado el {updateDialog.product?.created_at}</DialogDescription>
                         </DialogHeader>
                         <div>
                             <div className='mb-10'>
