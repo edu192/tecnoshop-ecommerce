@@ -76,7 +76,7 @@ const Page = ({products}: { products: ProductData[] }) => {
                                     <TableCell>S/. {product.price}</TableCell>
                                     <TableCell className="text-right">
                                         <div className='inline-flex gap-2'>
-                                            <Button variant="outline" onClick={()=>openDiscountsDialog(product)}>Ver mas</Button>
+                                            <Button variant="outline" onClick={()=>openDiscountsDialog(product)}>Descuentos</Button>
                                             <Button variant="outline" onClick={() => openUpdateDialog(product)}> <Pen/>
                                             </Button>
                                             <Button variant="outline" onClick={() => openDeleteDialog(product)}>
