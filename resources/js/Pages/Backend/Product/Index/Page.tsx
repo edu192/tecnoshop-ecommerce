@@ -6,6 +6,7 @@ import {Pen, Trash2} from "lucide-react";
 import BackendLayout from "@/Layouts/BackendLayout";
 import ProductData = App.Data.ProductData;
 import {Input} from "@/shadcn-ui/input";
+import DiscountsModal from "@/Pages/Backend/Product/Index/Partials/DiscountsModal";
 
 type PageProps = {};
 
@@ -50,40 +51,10 @@ const Page = ({products}: { products:ProductData[] }) => {
                 {/*        </div>*/}
                 {/*    </DialogContent>*/}
                 {/*</Dialog>*/}
-                <Dialog open={updateDialog.isOpen}
-                        onOpenChange={val => setUpdateDialog({ product: null, isOpen: val })}>
-                    <DialogTrigger asChild></DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle>Producto - {updateDialog.product?.id}</DialogTitle>
-                            <DialogDescription>Creado el {updateDialog.product?.created_at}</DialogDescription>
-                        </DialogHeader>
-                        <div>
-                            <div className='mb-10'>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Descripcion</label>
-                                <Input id="name" name="name" type="text" value={updateDialog.product?.name} readOnly/>
-                            </div>
-                            <div className="mb-10">
-                                <label htmlFor="name"
-                                       className="block text-sm font-medium text-gray-700">Descuento</label>
-                                <select name="state" id="state" className="w-full">
-                                    <option value="en_proceso">10%</option>
-                                    <option value="completado">20%</option>
-                                    <option value="completado">30%</option>
-                                    <option value="completado">40%</option>
-                                    <option value="completado">50%</option>
-                                    <option value="completado">60%</option>
-                                    <option value="completado">70%</option>
-                                    <option value="completado">80%</option>
-                                    <option value="completado">90%</option>
-                                    <option value="completado">99%</option>
-                                </select>
-                            </div>
-                            <Button className='w-full'>Actualizar</Button>
-                        </div>
-                        <div className="py-4"></div>
-                    </DialogContent>
-                </Dialog>
+                <DiscountsModal discountModalState={updateDialog} setDiscountModalState={setUpdateDialog}/>
+
+
+
                 <div className='flex justify-start pb-6 '>
                     <Input placeholder='Buscar por nombre o id' className='w-1/6'/>
                     <Button>Buscar</Button>
