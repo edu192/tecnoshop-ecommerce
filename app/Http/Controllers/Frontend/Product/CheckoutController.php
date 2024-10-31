@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend\Product;
 
 use App\Http\Controllers\Controller;
+use App\Rules\ValidExpiryDateRule;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -28,7 +29,8 @@ class CheckoutController extends Controller
             ],
             'expiry_date' => [
                 'required',
-                'regex:/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/'
+                'regex:/^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/',
+                new ValidExpiryDateRule,
             ],
             'cvv' => [
                 'required',
