@@ -22,6 +22,8 @@ export const useCartStore = create<CartState>((set, get) => ({
     total: 0,
     quantity: 0,
     selectedBrand: null,
+    searchInput:"",
+    currentRouteCategoryId:0,
     addProduct: (product: ProductData) => set((state) => {
         const items = get().items;
         const existingProduct = items.find(item => item.id === product.id);
@@ -41,9 +43,9 @@ export const useCartStore = create<CartState>((set, get) => ({
         const items = get().items;
         const existingProduct = items.find(item => item.id === product.id);
         let newItems;
-        if (existingProduct && existingProduct.quantity > 1) {
+        if (existingProduct && existingProduct.quantity as number > 1) {
             newItems = items.map(item =>
-                item.id === product.id ? {...item, quantity: item.quantity - 1} : item
+                item.id === product.id ? {...item, quantity: item.quantity as number - 1} : item
             );
         } else {
             newItems = items.filter(item => item.id !== product.id);
