@@ -45,4 +45,14 @@ class ProductController extends Controller
 
         return redirect()->route('mantenimiento.products.index');
     }
+
+    public function destroy(Product $product)
+    {
+        try {
+        $product->delete();
+        return redirect()->route('mantenimiento.products.index');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
 }

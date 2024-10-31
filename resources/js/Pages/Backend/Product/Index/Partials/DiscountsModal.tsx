@@ -12,7 +12,7 @@ type DiscountsModalProps = {
 const DiscountsModal = ({discountModalState,setDiscountModalState}: DiscountsModalProps) => {
     return (
         <Dialog open={discountModalState.isOpen}
-                onOpenChange={val => setDiscountModalState({product: null, isOpen: val})}>
+                onOpenChange={val => setDiscountModalState(prev=>({...prev, isOpen: val}))}>
             <DialogTrigger asChild></DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
