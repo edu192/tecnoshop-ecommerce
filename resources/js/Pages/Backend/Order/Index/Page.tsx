@@ -18,6 +18,7 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
         isOpen: false
     });
     const [selectedState, setSelectedState] = useState<string>('');
+    const [searchValue, setSearchValue] = useState('')
 
     useEffect(() => {
         if (updateDialog.order) {
@@ -42,6 +43,9 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                 state: selectedState
             });
         }
+    }
+    const handleSearch = () => {
+        router.visit(route('mantenimiento.orders.index',{'filter[id]': searchValue}));
     }
 
     return (
@@ -101,8 +105,8 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                     </DialogContent>
                 </Dialog>
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar id' className='w-1/6'/>
-                    <Button>Buscar</Button>
+                    <Input placeholder='Buscar id' className='w-1/6' value={searchValue} onChange={e=>setSearchValue(e.target.value)}/>
+                    <Button onClick={handleSearch}>Buscar</Button>
                 </div>
                 <div>
                     <Table>

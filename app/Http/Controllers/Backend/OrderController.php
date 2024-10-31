@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::all()->map(function (Order $order) {
+        $ordersQuery=QueryBuilder::for(Order::class)
+            ->allowedFilters(['id','state']);
+        $orders = $ordersQuery->get()->map(function (Order $order) {
             return OrderData::from($order);
         });
         return Inertia::render('Backend/Order/Index/Page',[
