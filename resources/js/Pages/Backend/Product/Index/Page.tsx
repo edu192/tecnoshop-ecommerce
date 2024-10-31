@@ -7,6 +7,7 @@ import {Input} from "@/shadcn-ui/input";
 import DiscountsModal from "@/Pages/Backend/Product/Index/Partials/DiscountsModal";
 import CreateProductModal from "@/Pages/Backend/Product/Index/Partials/CreateProductModal";
 import DeleteModal from "@/Pages/Backend/Product/Index/Partials/DeleteModal";
+import UpdateModal from "@/Pages/Backend/Product/Index/Partials/UpdateModal";
 import ProductData = App.Data.ProductData;
 
 type PageProps = {};
@@ -22,20 +23,27 @@ const Page = ({products}: { products: ProductData[] }) => {
             isOpen: false
         }
     )
+    const [discountsDialog, setDiscountsDialog] = useState<{ product: ProductData | null, isOpen: boolean }>({
+        product: null,
+        isOpen: false
+    });
     const [createModalIsOpen, setCreateModalIsOpen] = useState(false)
     const openUpdateDialog = (product: ProductData) => {
-        setUpdateDialog({product, isOpen: true});
+        setUpdateDialog({product:product, isOpen: true});
     };
     const openDeleteDialog = (product: ProductData) => {
         setDeleteDialog({product, isOpen: true});
+    }
+    const openDiscountsDialog = (product: ProductData) => {
+        setDiscountsDialog({product, isOpen: true});
     }
 
     return (
         <BackendLayout pageName='Productos'>
             <div className="p-6 bg-white rounded-lg shadow">
-                <DiscountsModal discountModalState={updateDialog} setDiscountModalState={setUpdateDialog}/>
+                <DiscountsModal discountModalState={discountsDialog} setDiscountModalState={setDiscountsDialog}/>
                 <DeleteModal deleteModalState={deleteDialog} setDeleteModalState={setDeleteDialog}/>
-
+                <UpdateModal updateModalState={updateDialog} setUpdateModalState={setUpdateDialog}/>
                 <div className='flex justify-start pb-6 '>
                     <Input placeholder='Buscar por nombre o id' className='w-1/6'/>
                     <Button>Buscar</Button>
@@ -68,10 +76,11 @@ const Page = ({products}: { products: ProductData[] }) => {
                                     <TableCell>S/. {product.price}</TableCell>
                                     <TableCell className="text-right">
                                         <div className='inline-flex gap-2'>
-                                            <Button variant="outline">Ver mas</Button>
+                                            <Button variant="outline" onClick={()=>openDiscountsDialog(product)}>Ver mas</Button>
                                             <Button variant="outline" onClick={() => openUpdateDialog(product)}> <Pen/>
                                             </Button>
-                                            <Button variant="outline" onClick={()=>openDeleteDialog(product)}> <Trash2/> </Button>
+                                            <Button variant="outline" onClick={() => openDeleteDialog(product)}>
+                                                <Trash2/> </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>

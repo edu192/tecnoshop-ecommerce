@@ -55,4 +55,33 @@ class ProductController extends Controller
             dd($e->getMessage());
         }
     }
+
+    public function update(Product $product, Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'brand' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'category' => 'required|exists:categories,id',
+            'image' => 'nullable|image|max:1048|mimes:jpeg,png,jpg',
+        ]);
+
+        $product->update([
+            'name' => $request->input('name'),
+            'brand' => $request->input('brand'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'stock' => $request->input('stock'),
+            'category_id' => $request->input('category'),
+        ]);
+
+        if ($request->hasFile('image')) {
+            $product->clearMediaCollection('main_image');
+            $product->addMediaFromRequest('image')->toMediaCollection('main_image');
+        }
+
+        return redirect()->route('mantenimiento.products.index');
+    }
 }
