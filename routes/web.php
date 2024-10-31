@@ -12,8 +12,8 @@ Route::get('/checkout', [\App\Http\Controllers\Frontend\Product\CheckoutControll
 Route::post('/checkout', [\App\Http\Controllers\Frontend\Product\CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/profile/orders', [\App\Http\Controllers\Frontend\OrderController::class, 'index'])->name('profile.orders')->middleware('auth');
 
-Route::post('/products/{product}/reviews', [\App\Http\Controllers\Frontend\Product\ReviewController::class, 'store'])->middleware('auth')->name('product.reviews.store');
-Route::delete('/products/{product}/reviews/{review}', [\App\Http\Controllers\Frontend\Product\ReviewController::class, 'destroy'])->middleware('auth')->name('product.reviews.destroy');
+Route::post('/products/{product}/reviews', [\App\Http\Controllers\Frontend\Product\ReviewController::class, 'store'])->name('product.reviews.store')->middleware('auth');
+Route::delete('/products/{product}/reviews/{review}', [\App\Http\Controllers\Frontend\Product\ReviewController::class, 'destroy'])->name('product.reviews.destroy')->middleware('auth');
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
