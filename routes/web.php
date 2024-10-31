@@ -30,6 +30,7 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::get('/users', [\App\Http\Controllers\Backend\UserController::class, 'index'])->name('users.index');
     Route::post('/users', [\App\Http\Controllers\Backend\UserController::class, 'store'])->name('users.store');
     Route::post('/users/{user}', [\App\Http\Controllers\Backend\UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [\App\Http\Controllers\Backend\UserController::class, 'destroy'])->name('users.destroy');
 });
 
 Route::middleware('auth')->group(function () {

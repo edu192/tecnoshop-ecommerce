@@ -7,6 +7,7 @@ import {Input} from "@/shadcn-ui/input";
 import CreateUserModal from "@/Pages/Backend/User/Index/Partials/CreateUserModal";
 import UpdateUserModal from "@/Pages/Backend/User/Index/Partials/UpdateUserModal";
 import UserData = App.Data.UserData;
+import DeleteUserModal from "@/Pages/Backend/User/Index/Partials/DeleteUserModal";
 
 type PageProps = {};
 
@@ -16,14 +17,22 @@ const Page = ({users}: { users: UserData[] }) => {
         user: UserData | null,
         isOpen: boolean
     }>({user: null, isOpen: false})
+    const [deleteUserDialog, setDeleteUserDialog] = useState<{
+        user: UserData | null,
+        isOpen: boolean
+    }>({user: null, isOpen: false})
     const handleOpenUpdateModal = (user: UserData) => {
         setUpdateUserDialog({user, isOpen: true})
+    }
+    const handleOpenDeleteModal=(user:UserData)=>{
+        setDeleteUserDialog({user,isOpen:true})
     }
     return (
         <BackendLayout pageName='Usuarios'>
             <div className="p-6 bg-white rounded-lg shadow">
                 <CreateUserModal openState={createUserDialog} setOpenState={setCreateUserDialog}/>
                 <UpdateUserModal updateModalState={updateUserDialog} setUpdateModalState={setUpdateUserDialog}/>
+                <DeleteUserModal deleteModalState={deleteUserDialog} setDeleteModalState={setDeleteUserDialog}/>
                 <div className='flex justify-start pb-6 '>
                     <Input placeholder='Buscar por nombre o email' className='w-1/6'/>
                     <Button>Buscar</Button>
@@ -55,7 +64,7 @@ const Page = ({users}: { users: UserData[] }) => {
                                     <TableCell className="text-right">
                                         <div className='inline-flex gap-2'>
                                             <Button variant="outline" onClick={()=>handleOpenUpdateModal(user)}> <Pen/> </Button>
-                                            <Button variant="outline"> <Trash2/> </Button>
+                                            <Button variant="outline" onClick={()=>handleOpenDeleteModal(user)}> <Trash2/> </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>

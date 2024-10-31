@@ -51,4 +51,14 @@ class UserController extends Controller
 
         return redirect()->route('mantenimiento.users.index');
     }
+
+    public function destroy(User $user)
+    {
+        try {
+            $user->delete();
+            return redirect()->route('mantenimiento.users.index');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+    }
 }
