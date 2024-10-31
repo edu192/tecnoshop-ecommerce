@@ -22,7 +22,7 @@ type UpdateModalProps = {
 }
 
 const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) => {
-    const {data, setData, post, processing, errors, reset} = useForm({
+    const {data, setData, post, processing, errors, reset,clearErrors} = useForm({
         name: '',
         brand: '',
         description: '',
@@ -54,6 +54,7 @@ const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) 
                 preserveScroll: true,
                 onSuccess: () => {
                     setUpdateModalState(prev => ({product: null, isOpen: false}))
+                    clearErrors()
                 }
             });
         }
