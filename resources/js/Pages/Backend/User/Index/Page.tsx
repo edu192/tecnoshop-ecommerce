@@ -4,23 +4,32 @@ import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Table
 import {Button} from "@/shadcn-ui/button";
 import {Pen, Trash2} from "lucide-react";
 import {Input} from "@/shadcn-ui/input";
-import UserData = App.Data.UserData;
 import CreateUserModal from "@/Pages/Backend/User/Index/Partials/CreateUserModal";
+import UpdateUserModal from "@/Pages/Backend/User/Index/Partials/UpdateUserModal";
+import UserData = App.Data.UserData;
 
 type PageProps = {};
 
 const Page = ({users}: { users: UserData[] }) => {
     const [createUserDialog, setCreateUserDialog] = useState(false)
+    const [updateUserDialog, setUpdateUserDialog] = useState<{
+        user: UserData | null,
+        isOpen: boolean
+    }>({user: null, isOpen: false})
+    const handleOpenUpdateModal = (user: UserData) => {
+        setUpdateUserDialog({user, isOpen: true})
+    }
     return (
         <BackendLayout pageName='Usuarios'>
             <div className="p-6 bg-white rounded-lg shadow">
                 <CreateUserModal openState={createUserDialog} setOpenState={setCreateUserDialog}/>
+                <UpdateUserModal updateModalState={updateUserDialog} setUpdateModalState={setUpdateUserDialog}/>
                 <div className='flex justify-start pb-6 '>
                     <Input placeholder='Buscar por nombre o email' className='w-1/6'/>
-                    <Button  >Buscar</Button>
+                    <Button>Buscar</Button>
                 </div>
                 <div className='flex justify-end pb-6'>
-                    <Button onClick={()=>setCreateUserDialog(true)}>Crear Usuario</Button>
+                    <Button onClick={() => setCreateUserDialog(true)}>Crear Usuario</Button>
                 </div>
                 <div>
                     <Table>
@@ -45,8 +54,7 @@ const Page = ({users}: { users: UserData[] }) => {
                                     <TableCell>{user.created_at}</TableCell>
                                     <TableCell className="text-right">
                                         <div className='inline-flex gap-2'>
-                                            <Button variant="outline">Ver mas</Button>
-                                            <Button variant="outline"> <Pen/> </Button>
+                                            <Button variant="outline" onClick={()=>handleOpenUpdateModal(user)}> <Pen/> </Button>
                                             <Button variant="outline"> <Trash2/> </Button>
                                         </div>
                                     </TableCell>

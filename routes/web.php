@@ -29,6 +29,7 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::post('/products/{product}/discounts', [\App\Http\Controllers\Backend\Product\DiscountController::class, 'store'])->name('products.discounts.store');
     Route::get('/users', [\App\Http\Controllers\Backend\UserController::class, 'index'])->name('users.index');
     Route::post('/users', [\App\Http\Controllers\Backend\UserController::class, 'store'])->name('users.store');
+    Route::post('/users/{user}', [\App\Http\Controllers\Backend\UserController::class, 'update'])->name('users.update');
 });
 
 Route::middleware('auth')->group(function () {
