@@ -12,19 +12,20 @@ class ProductData extends Data
      * @param Collection<int, ReviewData> $reviews
      */
     public function __construct(
-        public int          $id,
-        public string       $name,
-        public string       $brand,
-        public string       $description,
-        public float        $price,
-        public int          $category_id,
-        public string       $created_at,
-        public string       $updated_at,
-        public int $stock,
-        public CategoryData $category,
-        public Collection  $reviews,
-        public ?string      $image = null,
-        public ?int         $quantity = 0,
+        public int           $id,
+        public string        $name,
+        public string        $brand,
+        public string        $description,
+        public float         $price,
+        public int           $category_id,
+        public string        $created_at,
+        public string        $updated_at,
+        public int           $stock,
+        public CategoryData  $category,
+        public Collection    $reviews,
+        public ?string       $image = null,
+        public ?int          $quantity = 0,
+        public ?DiscountData $discount,
     )
     {
     }
@@ -48,6 +49,7 @@ class ProductData extends Data
             $product->reviews->map(fn($review) => ReviewData::from($review)),
             $image,
             0,
+            $product->discount()->exists() ? DiscountData::from($product->discount) : null,
         );
     }
 }
