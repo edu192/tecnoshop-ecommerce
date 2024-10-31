@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all()->map(function (User $user) {
+        $usersQuery=QueryBuilder::for(User::class)
+            ->allowedFilters(['name']);
+        $users = $usersQuery->get()->map(function (User $user) {
             return UserData::from($user);
         });
         return Inertia::render('Backend/User/Index/Page', ['users' => $users]);

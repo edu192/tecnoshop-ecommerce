@@ -6,8 +6,9 @@ import {Pen, Trash2} from "lucide-react";
 import {Input} from "@/shadcn-ui/input";
 import CreateUserModal from "@/Pages/Backend/User/Index/Partials/CreateUserModal";
 import UpdateUserModal from "@/Pages/Backend/User/Index/Partials/UpdateUserModal";
-import UserData = App.Data.UserData;
 import DeleteUserModal from "@/Pages/Backend/User/Index/Partials/DeleteUserModal";
+import {router} from "@inertiajs/react";
+import UserData = App.Data.UserData;
 
 type PageProps = {};
 
@@ -21,11 +22,15 @@ const Page = ({users}: { users: UserData[] }) => {
         user: UserData | null,
         isOpen: boolean
     }>({user: null, isOpen: false})
+    const [searchValue, setSearchValue] = useState('')
     const handleOpenUpdateModal = (user: UserData) => {
         setUpdateUserDialog({user, isOpen: true})
     }
-    const handleOpenDeleteModal=(user:UserData)=>{
-        setDeleteUserDialog({user,isOpen:true})
+    const handleOpenDeleteModal = (user: UserData) => {
+        setDeleteUserDialog({user, isOpen: true})
+    }
+    const handleSearch = () => {
+        router.visit(route('mantenimiento.users.index', {'filter[name]': searchValue}))
     }
     return (
         <BackendLayout pageName='Usuarios'>
@@ -34,8 +39,9 @@ const Page = ({users}: { users: UserData[] }) => {
                 <UpdateUserModal updateModalState={updateUserDialog} setUpdateModalState={setUpdateUserDialog}/>
                 <DeleteUserModal deleteModalState={deleteUserDialog} setDeleteModalState={setDeleteUserDialog}/>
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar por nombre o email' className='w-1/6'/>
-                    <Button>Buscar</Button>
+                    <Input placeholder='Buscar por nombre' className='w-1/6' value={searchValue}
+                           onChange={e => setSearchValue(e.target.value)}/>
+                    <Button onClick={handleSearch}>Buscar</Button>
                 </div>
                 <div className='flex justify-end pb-6'>
                     <Button onClick={() => setCreateUserDialog(true)}>Crear Usuario</Button>
@@ -63,8 +69,10 @@ const Page = ({users}: { users: UserData[] }) => {
                                     <TableCell>{user.created_at}</TableCell>
                                     <TableCell className="text-right">
                                         <div className='inline-flex gap-2'>
-                                            <Button variant="outline" onClick={()=>handleOpenUpdateModal(user)}> <Pen/> </Button>
-                                            <Button variant="outline" onClick={()=>handleOpenDeleteModal(user)}> <Trash2/> </Button>
+                                            <Button variant="outline" onClick={() => handleOpenUpdateModal(user)}>
+                                                <Pen/> </Button>
+                                            <Button variant="outline" onClick={() => handleOpenDeleteModal(user)}>
+                                                <Trash2/> </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
