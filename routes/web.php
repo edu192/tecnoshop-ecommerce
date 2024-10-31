@@ -28,6 +28,7 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::delete('/products/{product}', [\App\Http\Controllers\Backend\ProductController::class, 'destroy'])->name('products.destroy');
     Route::post('/products/{product}/discounts', [\App\Http\Controllers\Backend\Product\DiscountController::class, 'store'])->name('products.discounts.store');
     Route::get('/users', [\App\Http\Controllers\Backend\UserController::class, 'index'])->name('users.index');
+    Route::post('/users', [\App\Http\Controllers\Backend\UserController::class, 'store'])->name('users.store');
 });
 
 Route::middleware('auth')->group(function () {
