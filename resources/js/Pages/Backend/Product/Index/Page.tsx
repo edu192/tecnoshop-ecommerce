@@ -7,6 +7,7 @@ import BackendLayout from "@/Layouts/BackendLayout";
 import ProductData = App.Data.ProductData;
 import {Input} from "@/shadcn-ui/input";
 import DiscountsModal from "@/Pages/Backend/Product/Index/Partials/DiscountsModal";
+import CreateProductModal from "@/Pages/Backend/Product/Index/Partials/CreateProductModal";
 
 type PageProps = {};
 
@@ -15,44 +16,14 @@ const Page = ({products}: { products:ProductData[] }) => {
         product: null,
         isOpen: false
     });
+    const [createModalIsOpen, setCreateModalIsOpen] = useState(false)
     const openUpdateDialog = (product: ProductData) => {
         setUpdateDialog({ product, isOpen: true });
     };
     return (
         <BackendLayout pageName='Productos'>
             <div className="p-6 bg-white rounded-lg shadow">
-                {/*<Dialog open={detailsDialog.isOpen}*/}
-                {/*        onOpenChange={val => setDetailsDialog({ order: null, isOpen: val })}>*/}
-                {/*    <DialogTrigger asChild></DialogTrigger>*/}
-                {/*    <DialogContent className="sm:max-w-[425px]">*/}
-                {/*        <DialogHeader>*/}
-                {/*            <DialogTitle>Detalles del Pedido - {detailsDialog.order?.id}</DialogTitle>*/}
-                {/*            <DialogDescription>Pedido el {detailsDialog.order?.created_at}</DialogDescription>*/}
-                {/*        </DialogHeader>*/}
-                {/*        <div>*/}
-                {/*            <p><span className="font-semibold">Ciudad:</span> {detailsDialog.order?.city}</p>*/}
-                {/*            <p><span className="font-semibold">Dirección:</span> {detailsDialog.order?.address}</p>*/}
-                {/*            <p><span className="font-semibold">Departamento:</span> {detailsDialog.order?.department}</p>*/}
-                {/*            <p><span className="font-semibold">Código Postal:</span> {detailsDialog.order?.postal_code}</p>*/}
-                {/*            <p><span className="font-semibold">Metodo de pago:</span> {detailsDialog.order?.payment_method === 'credit_card' ? 'Tarjeta de Crédito' : 'Paypal'}</p>*/}
-                {/*        </div>*/}
-                {/*        <div className="py-4">*/}
-                {/*            <h4 className="font-semibold mb-2">Artículos:</h4>*/}
-                {/*            {detailsDialog.order?.details.map((detail) => (*/}
-                {/*                <div key={detail.id} className="flex justify-between mb-2">*/}
-                {/*                    <span>{detail.product_name} x {detail.quantity}</span>*/}
-                {/*                    <span>S/. {(detail.unit_price * detail.quantity).toFixed(2)}</span>*/}
-                {/*                </div>*/}
-                {/*            ))}*/}
-                {/*            <div className="flex justify-between font-semibold mt-4">*/}
-                {/*                <span>Total:</span>*/}
-                {/*                <span>S/. {parseFloat(detailsDialog.order?.total).toFixed(2)}</span>*/}
-                {/*            </div>*/}
-                {/*        </div>*/}
-                {/*    </DialogContent>*/}
-                {/*</Dialog>*/}
                 <DiscountsModal discountModalState={updateDialog} setDiscountModalState={setUpdateDialog}/>
-
 
 
                 <div className='flex justify-start pb-6 '>
@@ -60,7 +31,8 @@ const Page = ({products}: { products:ProductData[] }) => {
                     <Button>Buscar</Button>
                 </div>
                 <div className='flex justify-end pb-6'>
-                    <Button>Crear Producto</Button>
+                    <CreateProductModal openState={createModalIsOpen} setOpenState={setCreateModalIsOpen}/>
+
                 </div>
                 <div>
                     <Table>
