@@ -8,6 +8,7 @@ import DiscountsModal from "@/Pages/Backend/Product/Index/Partials/DiscountsModa
 import CreateProductModal from "@/Pages/Backend/Product/Index/Partials/CreateProductModal";
 import DeleteModal from "@/Pages/Backend/Product/Index/Partials/DeleteModal";
 import UpdateModal from "@/Pages/Backend/Product/Index/Partials/UpdateModal";
+import {router} from "@inertiajs/react";
 import ProductData = App.Data.ProductData;
 
 type PageProps = {};
@@ -28,8 +29,9 @@ const Page = ({products}: { products: ProductData[] }) => {
         isOpen: false
     });
     const [createModalIsOpen, setCreateModalIsOpen] = useState(false)
+    const [searchValue, setSearchValue] = useState('')
     const openUpdateDialog = (product: ProductData) => {
-        setUpdateDialog({product:product, isOpen: true});
+        setUpdateDialog({product: product, isOpen: true});
     };
     const openDeleteDialog = (product: ProductData) => {
         setDeleteDialog({product, isOpen: true});
@@ -37,7 +39,9 @@ const Page = ({products}: { products: ProductData[] }) => {
     const openDiscountsDialog = (product: ProductData) => {
         setDiscountsDialog({product, isOpen: true});
     }
-
+    const handleSearch = () => {
+        router.visit(route('mantenimiento.products.index', {'filter[name]': searchValue}));
+    }
     return (
         <BackendLayout pageName='Productos'>
             <div className="p-6 bg-white rounded-lg shadow">
@@ -45,8 +49,9 @@ const Page = ({products}: { products: ProductData[] }) => {
                 <DeleteModal deleteModalState={deleteDialog} setDeleteModalState={setDeleteDialog}/>
                 <UpdateModal updateModalState={updateDialog} setUpdateModalState={setUpdateDialog}/>
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar por nombre o id' className='w-1/6'/>
-                    <Button>Buscar</Button>
+                    <Input placeholder='Buscar por nombre' className='w-1/6' value={searchValue}
+                           onChange={e => setSearchValue(e.target.value)}/>
+                    <Button onClick={handleSearch}>Buscar</Button>
                 </div>
                 <div className='flex justify-end pb-6'>
                     <CreateProductModal openState={createModalIsOpen} setOpenState={setCreateModalIsOpen}/>
@@ -76,7 +81,8 @@ const Page = ({products}: { products: ProductData[] }) => {
                                     <TableCell>S/. {product.price}</TableCell>
                                     <TableCell className="text-right">
                                         <div className='inline-flex gap-2'>
-                                            <Button variant="outline" onClick={()=>openDiscountsDialog(product)}>Descuentos</Button>
+                                            <Button variant="outline"
+                                                    onClick={() => openDiscountsDialog(product)}>Descuentos</Button>
                                             <Button variant="outline" onClick={() => openUpdateDialog(product)}> <Pen/>
                                             </Button>
                                             <Button variant="outline" onClick={() => openDeleteDialog(product)}>

@@ -8,12 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('created_at', 'desc')->get()->map(function (Product $product) {
+        $productsQuery=QueryBuilder::for(Product::class)
+            ->allowedFilters(['name','brand','category_id']);
+        $products = $productsQuery->orderBy('created_at', 'desc')->get()->map(function (Product $product) {
             return ProductData::from($product);
         });
         return Inertia::render('Backend/Product/Index/Page', ['products' => $products]);
