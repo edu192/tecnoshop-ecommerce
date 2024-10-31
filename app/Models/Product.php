@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Product extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
-    protected $fillable = ['name', 'description', 'price', 'category_id'];
+    protected $fillable = ['name', 'brand','description', 'price', 'stock','category_id','image'];
 
     public function category()
     : BelongsTo
