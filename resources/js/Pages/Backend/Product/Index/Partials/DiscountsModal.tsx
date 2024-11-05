@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/shadcn-ui/dialog";
 import {Button} from "@/shadcn-ui/button";
-import {router} from "@inertiajs/react";
+import {router, usePage} from "@inertiajs/react";
 import ProductData = App.Data.ProductData;
+import {Input} from "@/shadcn-ui/input";
 
 type DiscountsModalProps = {
     discountModalState: { product: ProductData | null, isOpen: boolean }
@@ -10,7 +11,8 @@ type DiscountsModalProps = {
 }
 
 const DiscountsModal = ({discountModalState, setDiscountModalState}: DiscountsModalProps) => {
-    const [selectedDiscount, setSelectedDiscount] = useState(10)
+    const [selectedDiscount, setSelectedDiscount] = useState(0)
+    const {errors}=usePage().props
     const handleSubmit = () => {
         router.post(route('mantenimiento.products.discounts.store', {product: discountModalState.product}), {
             discount: selectedDiscount,
@@ -51,19 +53,9 @@ const DiscountsModal = ({discountModalState, setDiscountModalState}: DiscountsMo
                     <div className="mb-10">
                         <label htmlFor="name"
                                className="block text-sm font-medium text-gray-700">Descuento</label>
-                        <select name="state" id="state" className="w-full" value={selectedDiscount}
-                                onChange={(e) => setSelectedDiscount(e.target.value)}>
-                            <option value="10">10%</option>
-                            <option value="20">20%</option>
-                            <option value="30">30%</option>
-                            <option value="40">40%</option>
-                            <option value="50">50%</option>
-                            <option value="60">60%</option>
-                            <option value="70">70%</option>
-                            <option value="80">80%</option>
-                            <option value="90">90%</option>
-                            <option value="99">99%</option>
-                        </select>
+
+                        <Input type='number' value={selectedDiscount} onChange={(e) => setSelectedDiscount(parseInt(e.target.value))}/>
+                        {errors.discount && <p className='text-red-500 text-xs'>{errors.discount}</p>}
                     </div>
                     <Button className='w-full' onClick={handleSubmit}>Aplicar</Button>
                 </div>

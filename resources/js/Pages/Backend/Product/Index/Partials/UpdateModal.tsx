@@ -115,7 +115,7 @@ const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) 
                             id="price"
                             className="col-span-3"
                             value={data.price}
-                            onChange={(e) => setData('price', parseFloat(e.target.value))}
+                            onChange={(e) => setData('price', e.target.value)}
                         />
                         {errors.price && <p className="text-red-500">{errors.price}</p>}
                     </div>
