@@ -124,8 +124,19 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                             {renderStars(5)}
                             <span className="ml-2 text-gray-600">({5})</span>
                         </div>
-                        <p className="text-3xl font-bold text-red-600 mb-2">${product.price.toFixed(2)}</p>
-                        <p className="text-xl text-gray-500 line-through mb-4">S/. 99999</p>
+                        {product.discount ? (
+                            <>
+                                <div className="text-3xl font-bold text-red-600 mb-2 w-fit flex items-center">
+                                    <span>S/. {(product.price * (1 - product.discount.value / 100)).toFixed(2)}</span>
+                                    <span className='bg-red-500 text-white p-1 rounded text-base'>{'-'+product.discount.value+'%'}</span>
+                                </div>
+                                <p className="text-xl text-gray-500 line-through mb-4">S/. {product.price.toFixed(2)}</p>
+                            </>
+                        ) : (
+                            <p className="text-3xl font-bold text-red-600 mb-2">
+                                <span>S/. {product.price.toFixed(2)}</span>
+                            </p>
+                        )}
                         <p className="text-gray-700 mb-6">{product.description}</p>
                         <div className="flex items-center space-x-4 mb-6">
                             {isInCart ? (
@@ -161,29 +172,7 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                         </div>
                     </div>
                 </div>
-                {/*<div className="mt-12">*/}
-                {/*    <h2 className="text-2xl font-bold mb-4">Especificaciones del Producto</h2>*/}
-                {/*    <Table>*/}
-                {/*        <TableHeader>*/}
-                {/*            <TableRow>*/}
-                {/*                <TableHead className="w-1/3">Especificación</TableHead>*/}
-                {/*                <TableHead>Valor</TableHead>*/}
-                {/*            </TableRow>*/}
-                {/*        </TableHeader>*/}
-                {/*        <TableBody>*/}
-                {/*            /!*{product.specifications.map((spec, index) => (*!/*/}
-                {/*            /!*    <TableRow key={index}>*!/*/}
-                {/*            /!*        <TableCell className="font-medium">{spec.name}</TableCell>*!/*/}
-                {/*            /!*        <TableCell>{spec.value}</TableCell>*!/*/}
-                {/*            /!*    </TableRow>*!/*/}
-                {/*            /!*))}*!/*/}
-                {/*            <TableRow>*/}
-                {/*                <TableCell className="font-medium">Color</TableCell>*/}
-                {/*                <TableCell>Rojo</TableCell>*/}
-                {/*            </TableRow>*/}
-                {/*        </TableBody>*/}
-                {/*    </Table>*/}
-                {/*</div>*/}
+
                 <div className="mt-12">
                     <h2 className="text-2xl font-bold mb-4">Reseñas de Clientes</h2>
                     <Card className="mb-8">

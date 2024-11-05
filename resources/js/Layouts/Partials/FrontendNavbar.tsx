@@ -115,7 +115,16 @@ function FrontendNavbar() {
                                         <DropdownMenuItem key={item.id} className="flex items-center justify-between">
                                             <div>
                                                 <p className="font-medium">{item.name}</p>
-                                                <p className="text-sm text-gray-500">${item.price.toFixed(2)} x {item.quantity}</p>
+                                                <p className="text-sm text-gray-500">
+                                                    {item.discount ? (
+                                                        <>
+                                                            <span className="text-red-600">S/. {(item.price * (1 - item.discount.value / 100)).toFixed(2)}</span>
+                                                            <span className="line-through ml-2">S/. {item.price.toFixed(2)}</span>
+                                                        </>
+                                                    ) : (
+                                                        <span>S/. {item.price.toFixed(2)}</span>
+                                                    )} x {item.quantity}
+                                                </p>
                                             </div>
                                             <div className="flex items-center">
                                                 <Button variant="ghost" size="icon" onClick={() => clearProduct(item.id)}>
@@ -204,7 +213,7 @@ function FrontendNavbar() {
                                     <AccordionTrigger>Categorías</AccordionTrigger>
                                     <AccordionContent>
                                         {categories.map((category) => (
-                                            <Link key={category.id} href={`/category/${category.id}`}
+                                            <Link key={category.id} href={`/category/S/. {category.id}`}
                                                   className="block py-2">
                                                 {category.name}
                                             </Link>
@@ -223,7 +232,7 @@ function FrontendNavbar() {
                                                          className="flex justify-between items-center py-2">
                                                         <div>
                                                             <p className="font-medium">{item.name}</p>
-                                                            <p className="text-sm text-gray-500">${item.price.toFixed(2)} x {item.quantity}</p>
+                                                            <p className="text-sm text-gray-500">S/. {item.price.toFixed(2)} x {item.quantity}</p>
                                                         </div>
                                                         <Button variant="ghost" size="icon"
                                                                 onClick={() => clearProduct(item.id)}>

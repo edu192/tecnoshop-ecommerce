@@ -35,7 +35,10 @@ export const useCartStore = create<CartState>((set, get) => ({
         } else {
             newItems = [...items, {...product, quantity: 1}];
         }
-        const total = newItems.reduce((acc, item) => acc + (item.price || 0) * (item.quantity || 1), 0);
+        const total = newItems.reduce((acc, item) => {
+            const price = item.discount ? item.price * (1 - item.discount.value / 100) : item.price;
+            return acc + (price || 0) * (item.quantity || 1);
+        }, 0);
         const quantity = newItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
         return {items: newItems, total, quantity};
     }),
@@ -50,13 +53,19 @@ export const useCartStore = create<CartState>((set, get) => ({
         } else {
             newItems = items.filter(item => item.id !== product.id);
         }
-        const total = newItems.reduce((acc, item) => acc + (item.price || 0) * (item.quantity || 1), 0);
+        const total = newItems.reduce((acc, item) => {
+            const price = item.discount ? item.price * (1 - item.discount.value / 100) : item.price;
+            return acc + (price || 0) * (item.quantity || 1);
+        }, 0);
         const quantity = newItems.reduce((acc, item) => acc + (item.quantity || 1), 0);
         return {items: newItems, total, quantity};
     }),
     clearProduct: (productId: number) => set((state) => {
         const items = get().items.filter(item => item.id !== productId);
-        const total = items.reduce((acc, item) => acc + (item.price || 0) * (item.quantity || 1), 0);
+        const total = items.reduce((acc, item) => {
+            const price = item.discount ? item.price * (1 - item.discount.value / 100) : item.price;
+            return acc + (price || 0) * (item.quantity || 1);
+        }, 0);
         const quantity = items.reduce((acc, item) => acc + (item.quantity || 1), 0);
         return {items, total, quantity};
     }),
