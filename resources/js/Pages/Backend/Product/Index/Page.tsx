@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button} from "@/shadcn-ui/button";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
-import {Pen, Trash2} from "lucide-react";
+import {MoreHorizontal, Pen, Trash2} from "lucide-react";
 import BackendLayout from "@/Layouts/BackendLayout";
 import {Input} from "@/shadcn-ui/input";
 import DiscountsModal from "@/Pages/Backend/Product/Index/Partials/DiscountsModal";
@@ -10,6 +10,13 @@ import DeleteModal from "@/Pages/Backend/Product/Index/Partials/DeleteModal";
 import UpdateModal from "@/Pages/Backend/Product/Index/Partials/UpdateModal";
 import {router} from "@inertiajs/react";
 import ProductData = App.Data.ProductData;
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel, DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/shadcn-ui/dropdown-menu";
 
 type PageProps = {};
 
@@ -68,6 +75,7 @@ const Page = ({products}: { products: ProductData[] }) => {
                                 <TableHead>Categoria</TableHead>
                                 <TableHead>Stock</TableHead>
                                 <TableHead>Precio</TableHead>
+                                <TableHead className='text-center'>Acciones</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -79,14 +87,25 @@ const Page = ({products}: { products: ProductData[] }) => {
                                     <TableCell>{product.category_id}</TableCell>
                                     <TableCell>{product.stock}</TableCell>
                                     <TableCell>S/. {product.price}</TableCell>
-                                    <TableCell className="text-right">
-                                        <div className='inline-flex gap-2'>
-                                            <Button variant="outline"
-                                                    onClick={() => openDiscountsDialog(product)}>Descuentos</Button>
-                                            <Button variant="outline" onClick={() => openUpdateDialog(product)}> <Pen/>
-                                            </Button>
-                                            <Button variant="outline" onClick={() => openDeleteDialog(product)}>
-                                                <Trash2/> </Button>
+                                    <TableCell className="text-center">
+                                        <div className='inline-flex justify-center'>
+                                            <DropdownMenu>
+
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        <MoreHorizontal className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel >Acciones</DropdownMenuLabel>
+                                                    <DropdownMenuItem onClick={() => openDiscountsDialog(product)}>
+                                                        Ver descuentos
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => openUpdateDialog(product)}>Editar</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => openDeleteDialog(product)}>Eliminar</DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
                                     </TableCell>
                                 </TableRow>
