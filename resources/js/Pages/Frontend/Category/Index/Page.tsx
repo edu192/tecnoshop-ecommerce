@@ -17,6 +17,7 @@ function ProductCard({product}: { product: ProductData }) {
     const isInCart = items.some(item => item.id === product.id);
     const quantity = items.find(item => item.id === product.id)?.quantity;
     const clearProduct = useCartStore(state => state.clearProduct);
+
     return (
         <div className='bg-gray-100 shadow hover:cursor-pointer group h-fit'
              onClick={() => router.visit(route('product.show', product.id))}>
@@ -47,32 +48,38 @@ function ProductCard({product}: { product: ProductData }) {
                     )}
                 </div>
             </div>
-            <div className="flex justify-center my-2">
-                {isInCart ? (
-                    <div className="flex space-x-2 items-center">
-                        <Button variant='outline' onClick={(e) => {
-                            e.stopPropagation();
-                            removeProductFromCart(product);
-                        }}>
-                            -
-                        </Button>
-                        <span>{quantity}</span>
+            {product.stock > 0 ? (
+                <div className="flex justify-center my-2">
+                    {isInCart ? (
+                        <div className="flex space-x-2 items-center">
+                            <Button variant='outline' onClick={(e) => {
+                                e.stopPropagation();
+                                removeProductFromCart(product);
+                            }}>
+                                -
+                            </Button>
+                            <span>{quantity}</span>
+                            <Button variant='outline' onClick={(e) => {
+                                e.stopPropagation();
+                                addProductToCart(product);
+                            }}>
+                                +
+                            </Button>
+                        </div>
+                    ) : (
                         <Button variant='outline' onClick={(e) => {
                             e.stopPropagation();
                             addProductToCart(product);
                         }}>
-                            +
+                            Agregar al carrito
                         </Button>
-                    </div>
-                ) : (
-                    <Button variant='outline' onClick={(e) => {
-                        e.stopPropagation();
-                        addProductToCart(product);
-                    }}>
-                        Agregar al carrito
-                    </Button>
-                )}
-            </div>
+                    )}
+                </div>
+            ) : (
+                <div className="text-center text-red-600 my-2">
+                    Sin stock
+                </div>
+            )}
             {isInCart && (
                 <Button variant='destructive' className='w-full' onClick={(e) => {
                     e.stopPropagation();

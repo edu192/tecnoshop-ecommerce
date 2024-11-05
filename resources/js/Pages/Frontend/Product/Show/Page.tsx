@@ -122,7 +122,7 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                         <p className="text-sm text-gray-500 mb-4">Código de Producto: {product.id}</p>
                         <div className="flex items-center mb-4">
                             {renderStars(5)}
-                            <span className="ml-2 text-gray-600">({5})</span>
+                            <span className="ml-2 text-gray-600">({product.reviews.length})</span>
                         </div>
                         {product.discount ? (
                             <>
@@ -139,35 +139,41 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                         )}
                         <p className="text-gray-700 mb-6">{product.description}</p>
                         <div className="flex items-center space-x-4 mb-6">
-                            {isInCart ? (
-                                <div className="flex space-x-2 items-center">
-                                    <Button variant='outline' onClick={(e) => {
+                            {product.stock > 0 ? (
+                                isInCart ? (
+                                    <div className="flex space-x-2 items-center">
+                                        <Button variant='outline' onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDecreaseQuantity();
+                                        }}>
+                                            <Minus className="h-4 w-4"/>
+                                        </Button>
+                                        <span>{quantity}</span>
+                                        <Button variant='outline' onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleIncreaseQuantity();
+                                        }}>
+                                            <Plus className="h-4 w-4"/>
+                                        </Button>
+                                        <Button variant='destructive' className='w-full' onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleRemoveFromCart();
+                                        }}>
+                                            Eliminar del carrito
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <Button className='w-full' onClick={(e) => {
                                         e.stopPropagation();
-                                        handleDecreaseQuantity();
+                                        handleAddToCart();
                                     }}>
-                                        <Minus className="h-4 w-4"/>
+                                        Añadir al carrito
                                     </Button>
-                                    <span>{quantity}</span>
-                                    <Button variant='outline' onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleIncreaseQuantity();
-                                    }}>
-                                        <Plus className="h-4 w-4"/>
-                                    </Button>
-                                    <Button variant='destructive' className='w-full' onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleRemoveFromCart();
-                                    }}>
-                                        Eliminar del carrito
-                                    </Button>
-                                </div>
+                                )
                             ) : (
-                                <Button className='w-full' onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleAddToCart();
-                                }}>
-                                    Añadir al carrito
-                                </Button>
+                                <div className="text-center text-red-600">
+                                    Sin stock
+                                </div>
                             )}
                         </div>
                     </div>
