@@ -66,7 +66,7 @@ const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) 
 
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogTitle>Editar producto</DialogTitle>
                     <DialogDescription>
                         Editar un producto y guardar los cambios en la base de datos
                     </DialogDescription>
@@ -74,7 +74,7 @@ const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) 
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
                     <div className=" items-center">
                         <Label htmlFor="name" className="text-right">
-                            Name
+                            Nombre
                         </Label>
                         <Input
                             id="name"
@@ -109,7 +109,7 @@ const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) 
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
                     <div className=" items-center">
                         <Label htmlFor="price" className="text-right">
-                            Price
+                            Precio
                         </Label>
                         <Input
                             id="price"
@@ -135,7 +135,7 @@ const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) 
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
                     <div className="col-span-2 items-center">
                         <Label htmlFor="category" className="text-right">
-                            Category
+                            Categoria
                         </Label>
                         <Select value={String(data.category).trim()} onValueChange={(e) => setData('category', e)}>
                             <SelectTrigger className="w-full">
@@ -144,7 +144,7 @@ const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) 
 
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectLabel>Categories</SelectLabel>
+                                    <SelectLabel>Categorias</SelectLabel>
                                     <SelectItem value="1">Smartphones</SelectItem>
                                     <SelectItem value="2">Laptops</SelectItem>
                                     <SelectItem value="3">Televisores</SelectItem>
@@ -169,7 +169,7 @@ const UpdateModal = ({updateModalState, setUpdateModalState}: UpdateModalProps) 
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={handleSubmit}>Save changes</Button>
+                    <Button onClick={handleSubmit}>Guardar cambios</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>

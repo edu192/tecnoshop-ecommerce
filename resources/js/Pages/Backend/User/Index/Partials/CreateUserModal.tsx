@@ -46,7 +46,7 @@ const CreateUserModal = ({openState, setOpenState}: CreateUserModalProps) => {
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
                     <div className=" items-center">
                         <Label htmlFor="name" className="text-right">
-                            Name
+                            Nombre
                         </Label>
                         <Input
                             id="name"

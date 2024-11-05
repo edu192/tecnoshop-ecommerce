@@ -48,7 +48,7 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogTitle>Crear producto</DialogTitle>
                     <DialogDescription>
                         Crear un producto y almacenarlo en la base de datos
                     </DialogDescription>
@@ -56,7 +56,7 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
                     <div className=" items-center">
                         <Label htmlFor="name" className="text-right">
-                            Name
+                            Nombre
                         </Label>
                         <Input
                             id="name"
@@ -90,7 +90,7 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
                     <div className=" items-center">
                         <Label htmlFor="price" className="text-right">
-                            Price
+                            Precio
                         </Label>
                         <Input
                             id="price"
@@ -115,15 +115,15 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
                     <div className="col-span-2 items-center">
                         <Label htmlFor="category" className="text-right">
-                            Category
+                            Categoria
                         </Label>
                         <Select value={data.category} onValueChange={(e) => setData('category', e)}>
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Select a fruit"/>
+                                <SelectValue placeholder="Selecciona una categoria"/>
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectLabel>Fruits</SelectLabel>
+                                    <SelectLabel>Categorias</SelectLabel>
                                     <SelectItem value="1">Smartphones</SelectItem>
                                     <SelectItem value="2">Laptops</SelectItem>
                                     <SelectItem value="3">Televisores</SelectItem>
@@ -148,7 +148,7 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={handleSubmit}>Save changes</Button>
+                    <Button onClick={handleSubmit}>Crear</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
