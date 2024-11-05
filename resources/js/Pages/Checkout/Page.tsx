@@ -14,7 +14,7 @@ import {AlertCircle} from "lucide-react";
 
 export default function CheckoutPage() {
     const cartItems = useCartStore(state => state.items)
-    const {errors}=usePage().props
+    const {errors} = usePage().props
     const [shippingInfo, setShippingInfo] = useState({
         address: '',
         city: '',
@@ -47,7 +47,10 @@ export default function CheckoutPage() {
             })
     }
 
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+    const subtotal = cartItems.reduce((sum, item) => {
+        const price = item.discount ? item.price * (1 - item.discount.value / 100) : item.price
+        return sum + price * item.quantity
+    }, 0)
     const shipping = 10 // Tarifa plana de envío para este ejemplo
     const total = subtotal + shipping
 
@@ -57,12 +60,12 @@ export default function CheckoutPage() {
                 <h1 className="text-3xl font-bold mb-8">Finalizar Compra</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        {errors.cartItems&&
+                        {errors.cartItems &&
                             <Alert variant="destructive">
                                 <AlertCircle className="h-4 w-4" />
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
-                                   El carrito esta vacio
+                                    El carrito esta vacio
                                 </AlertDescription>
                             </Alert>
                         }
@@ -170,22 +173,22 @@ export default function CheckoutPage() {
                                 {cartItems.map((item) => (
                                     <div key={item.id} className="flex justify-between py-2">
                                         <span>{item.name} x {item.quantity}</span>
-                                        <span>${(item.price * item.quantity).toFixed(2)}</span>
+                                        <span>S/. {((item.discount ? item.price * (1 - item.discount.value / 100) : item.price) * item.quantity).toFixed(2)}</span>
                                     </div>
                                 ))}
                                 <Separator className="my-4"/>
                                 <div className="flex justify-between py-2">
                                     <span>Subtotal</span>
-                                    <span>${subtotal.toFixed(2)}</span>
+                                    <span>S/. {subtotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between py-2">
                                     <span>Envío</span>
-                                    <span>${shipping.toFixed(2)}</span>
+                                    <span>S/. {shipping.toFixed(2)}</span>
                                 </div>
                                 <Separator className="my-4"/>
                                 <div className="flex justify-between py-2 font-bold">
                                     <span>Total</span>
-                                    <span>${total.toFixed(2)}</span>
+                                    <span>S/. {total.toFixed(2)}</span>
                                 </div>
                             </CardContent>
                             <CardFooter>

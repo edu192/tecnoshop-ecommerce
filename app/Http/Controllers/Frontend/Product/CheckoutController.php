@@ -49,14 +49,25 @@ class CheckoutController extends Controller
         ]);
 
         foreach ($request->cartItems as $item) {
+            $unit_price = $item['discount'] ? $item['price'] * (1 - $item['discount']['value'] / 100) : $item['price'];
             $order->order_details()->create([
                 'product_id' => $item['id'],
                 'quantity' => $item['quantity'],
-                'unit_price' => $item['price'],
+                'unit_price' => $unit_price,
             ]);
+
+            // Update product stock
+            $product = \App\Models\Product::find($item['id']);
+            if ($product) {
+                $product->stock -= $item['quantity'];
+                $product->save();
+            }
         }
+
         $order->update([
-            'total' => $order->order_details->sum('unit_price'),
+            'total' => $order->order_details->sum(function ($detail) {
+                return $detail->unit_price * $detail->quantity;
+            }),
             'state' => 'en proceso'
         ]);
 
