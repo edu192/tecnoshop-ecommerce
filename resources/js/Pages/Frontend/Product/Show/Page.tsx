@@ -188,6 +188,7 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
                                 <span className="mr-2">Tu Calificación:</span>
                                 {renderStars(0, true)}
                             </div>
+                            {errors.stars && <p className='text-red-500'>{errors.stars}</p>}
                             <Textarea value={formReview} onChange={(e) => setFormReview(e.target.value)}
                                       placeholder="Escribe tu reseña aquí..." className="mb-4"/>
                             {errors.comment && <p className='text-red-500'>{errors.comment}</p>}
