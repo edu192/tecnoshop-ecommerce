@@ -99,6 +99,9 @@ const Page = ({products}: { products: ProductData[] }) => {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel >Acciones</DropdownMenuLabel>
+                                                    <DropdownMenuItem onClick={() => { router.visit(route('product.show',{product:product})) }  }>
+                                                        Ver producto
+                                                    </DropdownMenuItem>
                                                     <DropdownMenuItem onClick={() => openDiscountsDialog(product)}>
                                                         Ver descuentos
                                                     </DropdownMenuItem>
