@@ -6,6 +6,7 @@
 /storage/*.key
 /database/data/*
 /lang/*
+.pnpm-store/*
 /resources/js/types/generated.d.ts
 /vendor
 .env
