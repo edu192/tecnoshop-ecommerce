@@ -39,7 +39,7 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
         category: ''
     })
     const handleSubmit = () => {
-        post(route('mantenimiento.products.store'))
+        post(route('mantenimiento.products.store'),{onSuccess:()=>setOpenState(false)});
     }
     return (
         <Dialog open={openState} onOpenChange={setOpenState}>
