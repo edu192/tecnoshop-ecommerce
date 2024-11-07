@@ -42,7 +42,6 @@ const StarRating = ({rating, setRating}: {
     );
 };
 export default function ProductPage({product}: { product: App.Data.ProductData }) {
-    const user: User | null = usePage().props.auth.user ?? null;
     const [mainImage, setMainImage] = useState(product.image);
     const quantity = useCartStore().items.find(item => item.id === product.id)?.quantity;
     const {addProduct, removeProduct, clearProduct, items: cartItems} = useCartStore();
