@@ -5,10 +5,12 @@ import { Button } from "@/shadcn-ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/shadcn-ui/dialog";
 import OrderData = App.Data.OrderData;
 import { Pen } from "lucide-react";
-import { router } from "@inertiajs/react";
+import {router, usePage} from "@inertiajs/react";
 import {Input} from "@/shadcn-ui/input";
+import {toast} from "sonner";
 
 const Page = ({ orders }: { orders: OrderData[] }) => {
+    const {props:{flash}}=usePage()
     const [detailsDialog, setDetailsDialog] = useState<{ order: OrderData | null, isOpen: boolean }>({
         order: null,
         isOpen: false
@@ -41,13 +43,21 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
         if (updateDialog.order) {
             router.post(route('mantenimiento.orders.update', updateDialog.order.id), {
                 state: selectedState
+            },{
+                onSuccess: () => {
+                    setUpdateDialog({order: null, isOpen: false});
+                }
             });
         }
     }
     const handleSearch = () => {
         router.visit(route('mantenimiento.orders.index',{'filter[id]': searchValue}));
     }
-
+    useEffect(() => {
+        if (flash) {
+            toast[flash?.type](flash?.body);
+        }
+    }, [flash])
     return (
         <BackendLayout pageName='Ordenes'>
             <div className="p-6 bg-white rounded-lg shadow">

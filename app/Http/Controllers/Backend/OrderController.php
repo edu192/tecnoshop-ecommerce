@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Data\OrderData;
+use App\FlashNotificationType;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -30,6 +31,6 @@ class OrderController extends Controller
         ]);
         $order->state = $request->state;
         $order->save();
-        return redirect()->route('mantenimiento.orders.index')->with('success', 'Orden actualizada correctamente');
+        return redirect()->route('mantenimiento.orders.index')->flash(FlashNotificationType::Success, 'Orden actualizada correctamente');
     }
 }
