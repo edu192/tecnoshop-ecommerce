@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from "@/shadcn-ui/button";
+import { Button } from "@/shadcn-ui/button";
 import {
     Dialog,
     DialogContent,
@@ -9,9 +9,9 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/shadcn-ui/dialog";
-import {Label} from "@/shadcn-ui/label";
-import {Input} from "@/shadcn-ui/input";
-import {Textarea} from "@/shadcn-ui/textarea";
+import { Label } from "@/shadcn-ui/label";
+import { Input } from "@/shadcn-ui/input";
+import { Textarea } from "@/shadcn-ui/textarea";
 import {
     Select,
     SelectContent,
@@ -21,15 +21,16 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/shadcn-ui/select";
-import {useForm} from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
+import { toast } from "sonner";
 
 type CreateProductModalProps = {
-    openState: boolean
-    setOpenState: React.Dispatch<React.SetStateAction<boolean>>
+    openState: boolean;
+    setOpenState: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) => {
-    const {data, setData, post, processing, errors} = useForm({
+const CreateProductModal = ({ openState, setOpenState }: CreateProductModalProps) => {
+    const { data, setData, post, processing, errors } = useForm({
         name: '',
         brand: '',
         description: '',
@@ -37,10 +38,19 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
         stock: 0,
         image: '',
         category: ''
-    })
+    });
+
+    const { props } = usePage();
+
     const handleSubmit = () => {
-        post(route('mantenimiento.products.store'),{onSuccess:()=>setOpenState(false)});
-    }
+        post(route('mantenimiento.products.store'), {
+            onSuccess: () => {
+                setOpenState(false);
+
+            }
+        });
+    };
+
     return (
         <Dialog open={openState} onOpenChange={setOpenState}>
             <DialogTrigger asChild>
@@ -54,7 +64,7 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
-                    <div className=" items-center">
+                    <div className="items-center">
                         <Label htmlFor="name" className="text-right">
                             Nombre
                         </Label>
@@ -84,11 +94,11 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
                         <Label htmlFor="description" className="text-right">
                             Descripcion
                         </Label>
-                        <Textarea id='description' value={data.description} onChange={(e)=>setData('description',e.target.value)} />
+                        <Textarea id='description' value={data.description} onChange={(e) => setData('description', e.target.value)} />
                     </div>
                 </div>
                 <div className="grid lg:grid-cols-2 gap-4 py-2">
-                    <div className=" items-center">
+                    <div className="items-center">
                         <Label htmlFor="price" className="text-right">
                             Precio
                         </Label>
@@ -119,7 +129,7 @@ const CreateProductModal = ({openState, setOpenState}: CreateProductModalProps) 
                         </Label>
                         <Select value={data.category} onValueChange={(e) => setData('category', e)}>
                             <SelectTrigger className="w-full">
-                                <SelectValue placeholder="Selecciona una categoria"/>
+                                <SelectValue placeholder="Selecciona una categoria" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>

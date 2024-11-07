@@ -46,14 +46,14 @@ class ProductController extends Controller
             $product->addMediaFromRequest('image')->toMediaCollection('main_image');
         }
 
-        return redirect()->route('mantenimiento.products.index')->flash(FlashNotificationType::Success, 'Product created successfully');
+        return redirect()->route('mantenimiento.products.index')->flash(FlashNotificationType::Success, 'Producto creado correctamente');
     }
 
     public function destroy(Product $product)
     {
         try {
             $product->delete();
-            return redirect()->route('mantenimiento.products.index');
+            return redirect()->route('mantenimiento.products.index')->flash(FlashNotificationType::Success, 'Producto eliminado correctamente');
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -85,6 +85,6 @@ class ProductController extends Controller
             $product->addMediaFromRequest('image')->toMediaCollection('main_image');
         }
 
-        return redirect()->route('mantenimiento.products.index');
+        return redirect()->route('mantenimiento.products.index')->flash(FlashNotificationType::Success, 'Producto actualizado correctamente');
     }
 }

@@ -1,26 +1,28 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from "@/shadcn-ui/button";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
-import {MoreHorizontal, Pen, Trash2} from "lucide-react";
+import {MoreHorizontal} from "lucide-react";
 import BackendLayout from "@/Layouts/BackendLayout";
 import {Input} from "@/shadcn-ui/input";
 import DiscountsModal from "@/Pages/Backend/Product/Index/Partials/DiscountsModal";
 import CreateProductModal from "@/Pages/Backend/Product/Index/Partials/CreateProductModal";
 import DeleteModal from "@/Pages/Backend/Product/Index/Partials/DeleteModal";
 import UpdateModal from "@/Pages/Backend/Product/Index/Partials/UpdateModal";
-import {router} from "@inertiajs/react";
-import ProductData = App.Data.ProductData;
+import {router, usePage} from "@inertiajs/react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel, DropdownMenuSeparator,
+    DropdownMenuLabel,
     DropdownMenuTrigger
 } from "@/shadcn-ui/dropdown-menu";
+import {toast} from "sonner";
+import ProductData = App.Data.ProductData;
 
 type PageProps = {};
 
 const Page = ({products}: { products: ProductData[] }) => {
+    const {props: {flash}} = usePage()
     const [updateDialog, setUpdateDialog] = useState<{ product: ProductData | null, isOpen: boolean }>({
         product: null,
         isOpen: false
@@ -37,6 +39,7 @@ const Page = ({products}: { products: ProductData[] }) => {
     });
     const [createModalIsOpen, setCreateModalIsOpen] = useState(false)
     const [searchValue, setSearchValue] = useState('')
+
     const openUpdateDialog = (product: ProductData) => {
         setUpdateDialog({product: product, isOpen: true});
     };
@@ -49,6 +52,11 @@ const Page = ({products}: { products: ProductData[] }) => {
     const handleSearch = () => {
         router.visit(route('mantenimiento.products.index', {'filter[name]': searchValue}));
     }
+    useEffect(() => {
+        if (flash) {
+            toast[flash?.type](flash?.body);
+        }
+    }, [flash])
     return (
         <BackendLayout pageName='Productos'>
             <div className="p-6 bg-white rounded-lg shadow">
@@ -89,24 +97,28 @@ const Page = ({products}: { products: ProductData[] }) => {
                                     <TableCell>S/. {product.price}</TableCell>
                                     <TableCell className="text-center">
                                         <div className='inline-flex justify-center'>
-                                            <DropdownMenu>
+                                            <DropdownMenu modal={false}>
 
                                                 <DropdownMenuTrigger asChild>
                                                     <Button variant="ghost" className="h-8 w-8 p-0">
                                                         <span className="sr-only">Open menu</span>
-                                                        <MoreHorizontal className="h-4 w-4" />
+                                                        <MoreHorizontal className="h-4 w-4"/>
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
-                                                    <DropdownMenuLabel >Acciones</DropdownMenuLabel>
-                                                    <DropdownMenuItem onClick={() => { router.visit(route('product.show',{product:product})) }  }>
+                                                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                                    <DropdownMenuItem onClick={() => {
+                                                        router.visit(route('product.show', {product: product}))
+                                                    }}>
                                                         Ver producto
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem onClick={() => openDiscountsDialog(product)}>
                                                         Ver descuentos
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => openUpdateDialog(product)}>Editar</DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => openDeleteDialog(product)}>Eliminar</DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => openUpdateDialog(product)}>Editar</DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => openDeleteDialog(product)}>Eliminar</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </div>
