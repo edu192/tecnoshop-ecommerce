@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import BackendLayout from "@/Layouts/BackendLayout";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
 import {Button} from "@/shadcn-ui/button";
@@ -7,12 +7,14 @@ import {Input} from "@/shadcn-ui/input";
 import CreateUserModal from "@/Pages/Backend/User/Index/Partials/CreateUserModal";
 import UpdateUserModal from "@/Pages/Backend/User/Index/Partials/UpdateUserModal";
 import DeleteUserModal from "@/Pages/Backend/User/Index/Partials/DeleteUserModal";
-import {router} from "@inertiajs/react";
+import {router, usePage} from "@inertiajs/react";
 import UserData = App.Data.UserData;
+import {toast} from "sonner";
 
 type PageProps = {};
 
 const Page = ({users}: { users: UserData[] }) => {
+    const {props:{flash}}=usePage()
     const [createUserDialog, setCreateUserDialog] = useState(false)
     const [updateUserDialog, setUpdateUserDialog] = useState<{
         user: UserData | null,
@@ -32,6 +34,11 @@ const Page = ({users}: { users: UserData[] }) => {
     const handleSearch = () => {
         router.visit(route('mantenimiento.users.index', {'filter[name]': searchValue}))
     }
+    useEffect(() => {
+        if (flash) {
+            toast[flash?.type](flash?.body);
+        }
+    }, [flash])
     return (
         <BackendLayout pageName='Usuarios'>
             <div className="p-6 bg-white rounded-lg shadow">

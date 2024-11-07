@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Data\UserData;
+use App\FlashNotificationType;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class UserController extends Controller
             'type' => 'required|string|in:user,admin',
         ]);
         User::create($request->all());
-        return redirect()->route('mantenimiento.users.index');
+        return redirect()->route('mantenimiento.users.index')->flash(FlashNotificationType::Success, 'Usuario creado correctamente');
     }
 
     public function update(User $user, Request $request)
@@ -52,14 +53,14 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('mantenimiento.users.index');
+        return redirect()->route('mantenimiento.users.index')->flash(FlashNotificationType::Success, 'Usuario actualizado correctamente');
     }
 
     public function destroy(User $user)
     {
         try {
             $user->delete();
-            return redirect()->route('mantenimiento.users.index');
+            return redirect()->route('mantenimiento.users.index')->flash(FlashNotificationType::Success, 'Usuario eliminado correctamente');
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
