@@ -1,5 +1,5 @@
 
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button} from "@/shadcn-ui/button"
 import {Card, CardContent, CardDescription,  CardHeader, CardTitle} from "@/shadcn-ui/card"
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shadcn-ui/tabs"
@@ -7,11 +7,18 @@ import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Table
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,} from "@/shadcn-ui/dialog"
 import FrontendLayout from "@/Layouts/FrontendLayout";
 import OrderData = App.Data.OrderData;
+import {usePage} from "@inertiajs/react";
+import {toast} from "sonner";
 
 
 export default function UserManagementPage({orders}:{orders:OrderData[]}) {
+    const {props:{flash}}=usePage()
     const [selectedOrder, setSelectedOrder] = useState<null|OrderData>(null)
-
+    useEffect(() => {
+        if (flash) {
+            toast[flash?.type](flash?.body);
+        }
+    }, [flash])
     return (
         <FrontendLayout>
             <div className="container mx-auto px-4 py-8">

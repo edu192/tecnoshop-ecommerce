@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Product;
 
+use App\FlashNotificationType;
 use App\Http\Controllers\Controller;
 use App\Rules\ValidExpiryDateRule;
 use Illuminate\Http\Request;
@@ -71,6 +72,6 @@ class CheckoutController extends Controller
             'state' => 'en proceso'
         ]);
 
-        return redirect()->route('home')->with('success', 'Orden creada con éxito.');
+        return redirect()->route('profile.orders')->flash(FlashNotificationType::Success, 'Compra realizada correctamente');
     }
 }
