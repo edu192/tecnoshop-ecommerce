@@ -84,7 +84,7 @@ const Page = ({products}: { products: ProductData[] }) => {
                                     <TableCell className="font-medium">{product.id}</TableCell>
                                     <TableCell>{product.name}</TableCell>
                                     <TableCell>{product.brand}</TableCell>
-                                    <TableCell>{product.category_id}</TableCell>
+                                    <TableCell>{product.category.name}</TableCell>
                                     <TableCell>{product.stock}</TableCell>
                                     <TableCell>S/. {product.price}</TableCell>
                                     <TableCell className="text-center">

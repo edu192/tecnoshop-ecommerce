@@ -27,7 +27,7 @@ type User = {
 }
 
 function FrontendNavbar() {
-    const user: User | null = usePage().props.auth.user ?? null;
+    const user = usePage().props.user;
     const {
         items: cartItems,
         searchInput,
@@ -118,8 +118,10 @@ function FrontendNavbar() {
                                                 <p className="text-sm text-gray-500">
                                                     {item.discount ? (
                                                         <>
-                                                            <span className="text-red-600">S/. {(item.price * (1 - item.discount.value / 100)).toFixed(2)}</span>
-                                                            <span className="line-through ml-2">S/. {item.price.toFixed(2)}</span>
+                                                            <span
+                                                                className="text-red-600">S/. {(item.price * (1 - item.discount.value / 100)).toFixed(2)}</span>
+                                                            <span
+                                                                className="line-through ml-2">S/. {item.price.toFixed(2)}</span>
                                                         </>
                                                     ) : (
                                                         <span>S/. {item.price.toFixed(2)}</span>
@@ -127,7 +129,8 @@ function FrontendNavbar() {
                                                 </p>
                                             </div>
                                             <div className="flex items-center">
-                                                <Button variant="ghost" size="icon" onClick={() => clearProduct(item.id)}>
+                                                <Button variant="ghost" size="icon"
+                                                        onClick={() => clearProduct(item.id)}>
                                                     <Trash2 className="h-4 w-4"/>
                                                 </Button>
                                             </div>
@@ -141,7 +144,8 @@ function FrontendNavbar() {
                                         </div>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
-                                        <Button className="w-full" onClick={()=>router.visit(route('checkout'))}>Pagar</Button>
+                                        <Button className="w-full"
+                                                onClick={() => router.visit(route('checkout'))}>Pagar</Button>
                                     </DropdownMenuItem>
                                 </>
                             ) : (
@@ -179,9 +183,11 @@ function FrontendNavbar() {
                                         onClick={() => router.visit(route('dashboard'))}>Dashboard</DropdownMenuItem>
                                     <DropdownMenuItem
                                         onClick={() => router.visit(route('profile.edit'))}>Perfil</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={()=>router.visit(route('profile.orders'))}>Pedidos</DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        onClick={() => router.visit(route('profile.orders'))}>Pedidos</DropdownMenuItem>
                                     <DropdownMenuSeparator/>
-                                    <DropdownMenuItem onClick={() => router.post(route('logout'))}>Cerrar sesión</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => router.post(route('logout'))}>Cerrar
+                                        sesión</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </>
