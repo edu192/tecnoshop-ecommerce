@@ -18,7 +18,7 @@ import {
     Menu, MessageCircle,
     NotebookText,
     PackageOpen,
-    ShoppingBasket,
+    ShoppingBasket, Speech,
     User,
     Users
 } from 'lucide-react'
@@ -82,8 +82,16 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
             <li>
                 <Link href={route('mantenimiento.review.index')}
                       className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
-                    <MessageCircle size={20} />
+                    <MessageCircle size={20}/>
                     <span>Reseñas</span>
+
+                </Link>
+            </li>
+            <li>
+                <Link href={route('mantenimiento.advertising.index')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <Speech size={20} />
+                    <span>Publicidad</span>
 
                 </Link>
             </li>
