@@ -3,7 +3,6 @@ import {Button} from "@/shadcn-ui/button"
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/shadcn-ui/card"
 import {Input} from "@/shadcn-ui/input"
 import {Label} from "@/shadcn-ui/label"
-import {RadioGroup, RadioGroupItem} from "@/shadcn-ui/radio-group"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/shadcn-ui/select"
 import {Separator} from "@/shadcn-ui/separator"
 import {useCartStore} from "@/store/store"
@@ -11,6 +10,7 @@ import {router, usePage} from "@inertiajs/react";
 import FrontendLayout from "@/Layouts/FrontendLayout";
 import {Alert, AlertDescription, AlertTitle} from "@/shadcn-ui/alert";
 import {AlertCircle} from "lucide-react";
+import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/shadcn-ui/tabs";
 import DepartmentData = App.Data.DepartmentData;
 
 export default function CheckoutPage({departments}:{departments:DepartmentData[]}) {
@@ -23,7 +23,8 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
         postal_code: '',
         credit_card: '',
         expiry_date: '',
-        cvv: ''
+        cvv: '',
+        paypal_email: ''
     })
     console.log(errors)
     const [paymentMethod, setPaymentMethod] = useState('credit_card')
@@ -130,33 +131,72 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
                                 <CardTitle>Método de Pago</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="credit_card" id="credit_card"/>
-                                        <Label htmlFor="credit_card">Tarjeta de Crédito</Label>
-                                    </div>
-                                </RadioGroup>
-                                {paymentMethod === 'credit_card' && (
-                                    <div className="mt-4 space-y-4">
-                                        <div>
-                                            <Label htmlFor="credit_card">Número de Tarjeta</Label>
-                                            <Input id="credit_card" name="credit_card" onChange={handleShippingInfoChange} value={shippingInfo.credit_card}/>
-                                            {errors.credit_card && <p className="text-red-500 text-sm">{errors.credit_card}</p>}
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-4">
+                                <Tabs value={paymentMethod} onValueChange={setPaymentMethod}>
+                                    <TabsList>
+                                        <TabsTrigger value="credit_card">Tarjeta de Crédito</TabsTrigger>
+                                        <TabsTrigger value="yape">Yape</TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value="credit_card">
+                                        <div className="mt-4 space-y-4">
                                             <div>
-                                                <Label htmlFor="expiry_date">Fecha de Expiración</Label>
-                                                <Input id="expiry_date" name="expiry_date" onChange={handleShippingInfoChange} value={shippingInfo.expiry_date}/>
-                                                {errors.expiry_date  && <p className="text-red-500 text-sm">{errors.expiry_date}</p>}
+                                                <Label htmlFor="credit_card">Número de Tarjeta</Label>
+                                                <Input id="credit_card" name="credit_card" onChange={handleShippingInfoChange} value={shippingInfo.credit_card}/>
+                                                {errors.credit_card && <p className="text-red-500 text-sm">{errors.credit_card}</p>}
                                             </div>
-                                            <div>
-                                                <Label htmlFor="cvv">CVV</Label>
-                                                <Input id="cvv" name="cvv" type='number'  onChange={handleShippingInfoChange} value={shippingInfo.cvv}/>
-                                                {errors.cvv && <p className="text-red-500 text-sm">{errors.cvv}</p>}
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <Label htmlFor="expiry_date">Fecha de Expiración</Label>
+                                                    <Input id="expiry_date" name="expiry_date" onChange={handleShippingInfoChange} value={shippingInfo.expiry_date}/>
+                                                    {errors.expiry_date  && <p className="text-red-500 text-sm">{errors.expiry_date}</p>}
+                                                </div>
+                                                <div>
+                                                    <Label htmlFor="cvv">CVV</Label>
+                                                    <Input id="cvv" name="cvv" type='number'  onChange={handleShippingInfoChange} value={shippingInfo.cvv}/>
+                                                    {errors.cvv && <p className="text-red-500 text-sm">{errors.cvv}</p>}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                )}
+                                    </TabsContent>
+                                    <TabsContent value="yape">
+                                        <Card className="max-w-md mx-auto p-4">
+                                            <CardHeader>
+                                                <CardTitle className="text-xl font-bold">Pago con Yape</CardTitle>
+                                            </CardHeader>
+                                            <CardContent className="space-y-4">
+                                                <div>
+                                                    <Label>Información de YAPE</Label>
+                                                    <div className="flex justify-between text-sm">
+                                                        <span>Nombre: TecnoShop</span>
+                                                        <span>Celular: 98986457</span>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <Label htmlFor="nombre">Nombre Completo</Label>
+                                                    <Input id="nombre" placeholder="Nombre Completo" />
+                                                </div>
+                                                <div>
+                                                    <Label htmlFor="celular">Numero de Celular</Label>
+                                                    <Input id="celular" placeholder="Numero de Celular" />
+                                                </div>
+                                                <div>
+                                                    <Label htmlFor="monto">Monto a Pagar</Label>
+                                                    <Input id="monto" placeholder="S/. 1000.00" />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label>Pasos para realizar el pago:</Label>
+                                                    <ol className="list-decimal list-inside text-sm">
+                                                        <li>Abre tu app de YAPE</li>
+                                                        <li>Selecciona la opción "Yapear"</li>
+                                                        <li>Ingresa el número 989888777</li>
+                                                        <li>Ingresa el monto exacto</li>
+                                                        <li>Completa la transferencia</li>
+                                                    </ol>
+                                                </div>
+                                                <Button className="w-full">Generar Código QR de Yapero</Button>
+                                            </CardContent>
+                                        </Card>
+                                    </TabsContent>
+                                </Tabs>
                             </CardContent>
                         </Card>
                     </div>
