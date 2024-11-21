@@ -15,7 +15,7 @@ import {
     FileText,
     LayoutGrid,
     LogOut,
-    Menu,
+    Menu, MessageCircle,
     NotebookText,
     PackageOpen,
     ShoppingBasket,
@@ -74,8 +74,16 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
             <li>
                 <Link href={route('mantenimiento.category.index')}
                       className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
-                    <NotebookText size={20} />
+                    <NotebookText size={20}/>
                     <span>Categorias</span>
+
+                </Link>
+            </li>
+            <li>
+                <Link href={route('mantenimiento.review.index')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <MessageCircle size={20} />
+                    <span>Reseñas</span>
 
                 </Link>
             </li>
