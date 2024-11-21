@@ -10,7 +10,7 @@ import {
     DropdownMenuTrigger
 } from "@/shadcn-ui/dropdown-menu"
 import {Sheet, SheetContent, SheetTrigger} from "@/shadcn-ui/sheet"
-import {BarChart, FileText, LayoutGrid, LogOut, Menu, ShoppingBasket, User, Users} from 'lucide-react'
+import {BarChart, FileText, LayoutGrid, LogOut, Menu, PackageOpen, ShoppingBasket, User, Users} from 'lucide-react'
 import {Link, router, usePage} from '@inertiajs/react'
 
 export default function BackendLayout({children, pageName = 'Page'}: { children: ReactNode, pageName?: string }) {
@@ -49,6 +49,14 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
                       className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
                     <Users size={20}/>
                     <span>Usuarios</span>
+
+                </Link>
+            </li>
+            <li>
+                <Link href={route('mantenimiento.stock.index')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <PackageOpen size={20} />
+                    <span>Stock</span>
 
                 </Link>
             </li>
