@@ -18,7 +18,7 @@ import {
     Menu,
     MessageCircle,
     NotebookText,
-    PackageOpen,
+    PackageOpen, Percent,
     ShoppingBasket,
     Speech,
     User,
@@ -100,8 +100,15 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
             <li>
                 <Link href={route('mantenimiento.banner.index')}
                       className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
-                    <Image />
+                    <Image size={20} />
                     <span>Banners</span>
+
+                </Link>
+            </li><li>
+                <Link href={route('mantenimiento.discount.index')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <Percent size={20} />
+                    <span>Descuentos</span>
 
                 </Link>
             </li>
