@@ -11,8 +11,9 @@ import {router, usePage} from "@inertiajs/react";
 import FrontendLayout from "@/Layouts/FrontendLayout";
 import {Alert, AlertDescription, AlertTitle} from "@/shadcn-ui/alert";
 import {AlertCircle} from "lucide-react";
+import DepartmentData = App.Data.DepartmentData;
 
-export default function CheckoutPage() {
+export default function CheckoutPage({departments}:{departments:DepartmentData[]}) {
     const cartItems = useCartStore(state => state.items)
     const {errors} = usePage().props
     const [shippingInfo, setShippingInfo] = useState({
@@ -105,10 +106,9 @@ export default function CheckoutPage() {
                                                 <SelectValue placeholder="Seleccionar departamento"/>
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="Lima">Lima</SelectItem>
-                                                <SelectItem value="Arequipa">Arequipa</SelectItem>
-                                                <SelectItem value="Cusco">Cusco</SelectItem>
-                                                <SelectItem value="Puno">Puno</SelectItem>
+                                                {departments.map(department => (
+                                                    <SelectItem key={department.id} value={department.id.toString()}>{department.name}</SelectItem>
+                                                ))}
                                             </SelectContent>
                                         </Select>
                                     </div>

@@ -21,9 +21,10 @@ class OrderData extends Data
         public Collection $details,
         public string     $address,
         public string     $city,
-        public string     $department,
+        public ?string     $department,
         public string     $postal_code,
         public string     $payment_method,
+        public int $department_id,
     )
     {
     }
@@ -44,6 +45,7 @@ class OrderData extends Data
             department: $order->department,
             postal_code: $order->postal_code,
             payment_method: $order->payment_method,
+            department_id: $order->department_id
         );
     }
 }

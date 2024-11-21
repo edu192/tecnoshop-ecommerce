@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend\Product;
 
+use App\Data\DepartmentData;
 use App\FlashNotificationType;
 use App\Http\Controllers\Controller;
 use App\Rules\ValidExpiryDateRule;
@@ -12,7 +13,7 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Checkout/Page');
+        return Inertia::render('Checkout/Page',['departments' =>DepartmentData::collect(\App\Models\Department::all())]);
     }
 
     public function store(Request $request)
@@ -20,7 +21,7 @@ class CheckoutController extends Controller
         $request->validate([
             'address' => 'required|string',
             'city' => 'required|string',
-            'department' => 'required|string',
+            'department' => 'required|int|exists:departments,id',
             'postal_code' => 'required|string',
             'payment_method' => 'required|string',
             'cartItems' => 'required|array',
@@ -42,7 +43,7 @@ class CheckoutController extends Controller
         $order = auth()->user()->orders()->create([
             'address' => $request->address,
             'city' => $request->city,
-            'department' => $request->department,
+            'department_id' => $request->department,
             'postal_code' => $request->postal_code,
             'payment_method' => $request->payment_method,
             'state' => 'pending',

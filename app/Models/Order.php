@@ -17,6 +17,7 @@ class Order extends Model
         'department',
         'postal_code',
         'payment_method',
+        'department_id',
     ];
 
     public function user()
