@@ -12,13 +12,15 @@ import {
 import {Sheet, SheetContent, SheetTrigger} from "@/shadcn-ui/sheet"
 import {
     BarChart,
-    FileText,
+    FileText, Image,
     LayoutGrid,
     LogOut,
-    Menu, MessageCircle,
+    Menu,
+    MessageCircle,
     NotebookText,
     PackageOpen,
-    ShoppingBasket, Speech,
+    ShoppingBasket,
+    Speech,
     User,
     Users
 } from 'lucide-react'
@@ -90,8 +92,16 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
             <li>
                 <Link href={route('mantenimiento.advertising.index')}
                       className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
-                    <Speech size={20} />
+                    <Speech size={20}/>
                     <span>Publicidad</span>
+
+                </Link>
+            </li>
+            <li>
+                <Link href={route('mantenimiento.banner.index')}
+                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
+                    <Image />
+                    <span>Banners</span>
 
                 </Link>
             </li>
