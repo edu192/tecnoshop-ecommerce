@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     : void
     {
+        // Poblar la tabla departamentos
+        $this->call(DepartmentSeeder::class);
         //Poblar la tabla usuarios con un usuario admin
         User::firstOrCreate([
             'name' => 'admin',
