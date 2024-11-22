@@ -3,9 +3,20 @@ import BackendLayout from "@/Layouts/BackendLayout";
 import {Input} from "@/shadcn-ui/input";
 import {Button} from "@/shadcn-ui/button";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
-import {Check, File, Pen, Trash2} from "lucide-react";
+import {Check, File, MoreHorizontal, Pen, Trash2} from "lucide-react";
+import ProductData = App.Data.ProductData;
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger
+} from "@/shadcn-ui/dropdown-menu";
+import {router} from "@inertiajs/react";
 
-type PageProps = {};
+type PageProps = {
+    product:ProductData;
+};
 type Review={
     id:number;
     product:string;
@@ -163,9 +174,9 @@ const reviews: Review[] = [
     }
 ];
 
-const Page = ({}: PageProps) => {
+const Page = ({product}: PageProps) => {
     return (
-        <BackendLayout pageName='Reseña de productos'>
+        <BackendLayout pageName={`Reseñas de producto: ${product.name}`}>
             <div className="p-6 bg-white rounded-lg shadow">
                 <div className='flex justify-start pb-6 '>
                     <Input placeholder='Buscar por id de producto' className='w-1/6'/>
@@ -177,7 +188,6 @@ const Page = ({}: PageProps) => {
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[100px]">ID</TableHead>
-                                <TableHead>Product</TableHead>
                                 <TableHead>Usuario</TableHead>
                                 <TableHead>Valoracion</TableHead>
                                 <TableHead>Comentario</TableHead>
@@ -188,14 +198,27 @@ const Page = ({}: PageProps) => {
                             {reviews.map((review) => (
                                 <TableRow key={review.id}>
                                     <TableCell className="font-medium">{review.id}</TableCell>
-                                    <TableCell>{review.product}</TableCell>
                                     <TableCell>{review.user}</TableCell>
                                     <TableCell>{review.rating}</TableCell>
                                     <TableCell>{review.comment}</TableCell>
                                     <TableCell className="text-center">
-                                        <div className='inline-flex justify-center gap-2'>
-                                            <Button><Check /></Button>
-                                            <Button><Trash2/></Button>
+                                        <div className='inline-flex justify-center'>
+                                            <DropdownMenu modal={false}>
+
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        <MoreHorizontal className="h-4 w-4"/>
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                                    <DropdownMenuItem
+                                                        >Aprobar</DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        >Eliminar</DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
                                     </TableCell>
                                 </TableRow>

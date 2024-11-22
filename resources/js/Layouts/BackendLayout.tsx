@@ -81,14 +81,14 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
 
                 </Link>
             </li>
-            <li>
-                <Link href={route('mantenimiento.review.index')}
-                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
-                    <MessageCircle size={20}/>
-                    <span>Reseñas</span>
+            {/*<li>*/}
+            {/*    <Link href={route('mantenimiento.review.index')}*/}
+            {/*          className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">*/}
+            {/*        <MessageCircle size={20}/>*/}
+            {/*        <span>Reseñas</span>*/}
 
-                </Link>
-            </li>
+            {/*    </Link>*/}
+            {/*</li>*/}
             <li>
                 <Link href={route('mantenimiento.advertising.index')}
                       className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
