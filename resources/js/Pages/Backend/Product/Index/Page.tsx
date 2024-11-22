@@ -108,6 +108,16 @@ const Page = ({products}: { products: ProductData[] }) => {
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                                                     <DropdownMenuItem onClick={() => {
+                                                        router.visit(route('mantenimiento.stock.index', {product: product}))
+                                                    }}>
+                                                        Ver lotes
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => {
+                                                        router.visit(route('mantenimiento.review.index', {product: product}))
+                                                    }}>
+                                                        Ver reseñas
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => {
                                                         router.visit(route('product.show', {product: product}))
                                                     }}>
                                                         Ver producto

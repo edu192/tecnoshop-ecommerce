@@ -1,11 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import BackendLayout from "@/Layouts/BackendLayout";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
 import {Button} from "@/shadcn-ui/button";
-import {File, Pen} from "lucide-react";
+import {MoreHorizontal} from "lucide-react";
 import {Input} from "@/shadcn-ui/input";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger
+} from "@/shadcn-ui/dropdown-menu";
+import ProductData = App.Data.ProductData;
+import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/shadcn-ui/dialog";
+import {Label} from "@/shadcn-ui/label";
+import {Checkbox} from "@/shadcn-ui/checkbox";
 
-type PageProps = {};
+type PageProps = {
+    product: ProductData
+};
 type ProductType = {
     id: number;
     provider: string;
@@ -119,16 +132,117 @@ const product_stock: ProductType[] = [
     }
 ];
 
-const Page = ({}: PageProps) => {
+const Page = ({product}: PageProps) => {
+    const [editDialog, setEditDialog] = useState(false)
     return (
-        <BackendLayout pageName='Stock de productos'>
+        <BackendLayout pageName={`Gestion de lotes de producto: ${product.name} (${product.id})`}>
             <div className="p-6 bg-white rounded-lg shadow">
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar por id de producto' className='w-1/6'/>
+                    <Input placeholder='Buscar por codigo de lote' className='w-1/6'/>
                     <Button>Buscar</Button>
                 </div>
                 <div className='flex justify-end'>
-                    <Button className="mt-4">Agregar entrada</Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline">Nuevo Lote</Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Nuevo lote</DialogTitle>
+                            </DialogHeader>
+                            <form className="grid gap-4 py-4">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <Label htmlFor="product">Produto</Label>
+                                        <Input
+                                            id="product"
+                                            defaultValue={product.name}
+                                            readOnly
+                                            className="bg-muted"
+                                            disabled
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="product">Produto</Label>
+                                        <Input
+                                            id="product"
+                                            defaultValue="Proveedor"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <Label htmlFor="provider">Cantidad</Label>
+                                        <Input id="provider"/>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="date">Data do vale</Label>
+                                        <Input id="date" type="date"/>
+                                    </div>
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="voucher">Comprobante</Label>
+                                    <Input id="voucher" type='file'/>
+                                </div>
+                            </form>
+                            <DialogFooter>
+                                <Button type="button" variant="outline">
+                                    Cancelar
+                                </Button>
+                                <Button type="submit">Guardar</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                </div>
+                <div className='flex justify-end'>
+                    <Dialog modal={true} open={editDialog} onOpenChange={(v)=>setEditDialog(v)}>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Nuevo lote</DialogTitle>
+                            </DialogHeader>
+                            <form className="grid gap-4 py-4">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <Label htmlFor="product">Produto</Label>
+                                        <Input
+                                            id="product"
+                                            defaultValue={product.name}
+                                            readOnly
+                                            className="bg-muted"
+                                            disabled
+                                        />
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="product">Produto</Label>
+                                        <Input
+                                            id="product"
+                                            defaultValue="Proveedor"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <Label htmlFor="provider">Cantidad</Label>
+                                        <Input id="provider"/>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="date">Data do vale</Label>
+                                        <Input id="date" type="date"/>
+                                    </div>
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="voucher">Comprobante</Label>
+                                    <Input id="voucher" type='file'/>
+                                </div>
+                            </form>
+                            <DialogFooter>
+                                <Button type="button" variant="outline">
+                                    Cancelar
+                                </Button>
+                                <Button type="submit">Guardar</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
                 <div>
                     <Table>
@@ -137,7 +251,6 @@ const Page = ({}: PageProps) => {
                             <TableRow>
                                 <TableHead className="w-[100px]">ID</TableHead>
                                 <TableHead>Proveedor</TableHead>
-                                <TableHead>Producto</TableHead>
                                 <TableHead>Cantidad</TableHead>
                                 <TableHead>Precio Unidad</TableHead>
                                 <TableHead className='text-center'>Acciones</TableHead>
@@ -148,13 +261,26 @@ const Page = ({}: PageProps) => {
                                 <TableRow key={product.id}>
                                     <TableCell className="font-medium">{product.id}</TableCell>
                                     <TableCell>{product.provider}</TableCell>
-                                    <TableCell>{product.product.name}</TableCell>
                                     <TableCell>{product.quantity}</TableCell>
                                     <TableCell>S/. {product.price_unit}</TableCell>
                                     <TableCell className="text-center">
-                                        <div className='inline-flex justify-center gap-2'>
-                                            <Button><File/></Button>
-                                            <Button><Pen/></Button>
+                                        <div className='inline-flex justify-center'>
+                                            <DropdownMenu modal={false}>
+
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        <MoreHorizontal className="h-4 w-4"/>
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                                    <DropdownMenuItem
+                                                    >Ver comprobante</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={()=>setEditDialog(true)}
+                                                    >Editar lote</DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
                                     </TableCell>
                                 </TableRow>

@@ -65,14 +65,14 @@ export default function BackendLayout({children, pageName = 'Page'}: { children:
 
                 </Link>
             </li>
-            <li>
-                <Link href={route('mantenimiento.stock.index')}
-                      className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
-                    <PackageOpen size={20}/>
-                    <span>Stock</span>
+            {/*<li>*/}
+            {/*    <Link href={route('mantenimiento.stock.index')}*/}
+            {/*          className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">*/}
+            {/*        <PackageOpen size={20}/>*/}
+            {/*        <span>Stock</span>*/}
 
-                </Link>
-            </li>
+            {/*    </Link>*/}
+            {/*</li>*/}
             <li>
                 <Link href={route('mantenimiento.category.index')}
                       className="flex items-center space-x-2 p-2 hover:bg-[#2A3D47] rounded">
