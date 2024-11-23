@@ -27,6 +27,7 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
     Route::get('/reviews/{product}', [\App\Http\Controllers\ReviewController::class, 'index'])->name('review.index');
     Route::get('/advertising', [\App\Http\Controllers\AdvertisingController::class, 'index'])->name('advertising.index');
+    Route::get('/advertising/create', [\App\Http\Controllers\AdvertisingController::class, 'create'])->name('advertising.create');
     Route::get('/banners', [\App\Http\Controllers\BannerController::class, 'index'])->name('banner.index');
     Route::get('/discounts', [\App\Http\Controllers\GeneralDiscountController::class, 'index'])->name('discount.index');
     Route::post('/products', [\App\Http\Controllers\Backend\ProductController::class, 'store'])->name('products.store');
