@@ -2,15 +2,24 @@ import React from 'react';
 import {Input} from "@/shadcn-ui/input";
 import {Button} from "@/shadcn-ui/button";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
-import {File, Pen, Trash2} from "lucide-react";
+import {MoreHorizontal, Pen, Trash2} from "lucide-react";
 import BackendLayout from "@/Layouts/BackendLayout";
+import {Label} from "@/shadcn-ui/label";
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/shadcn-ui/dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger
+} from "@/shadcn-ui/dropdown-menu";
 
 type PageProps = {};
-type Banner={
-    id:number;
-    name:string;
-    image:string;
-    link:string;
+type Banner = {
+    id: number;
+    name: string;
+    image: string;
+    link: string;
 }
 const banners: Banner[] = [
     {
@@ -83,7 +92,38 @@ const Page = ({}: PageProps) => {
                     <Button>Buscar</Button>
                 </div>
                 <div className='flex justify-end'>
-                    <Button className="mt-4">Agregar banner</Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline">Agregar Banner</Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Agregar Banner</DialogTitle>
+                            </DialogHeader>
+                            <form className="grid gap-4 py-4">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="name">Nombre Banner</Label>
+                                    <Input id="name"/>
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="link">Link de Productos</Label>
+                                    <div className="flex gap-2">
+                                        <Input id="link" className="flex-1"/>
+
+                                    </div>
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label>Agregar Imagen</Label>
+                                    <Input
+                                        type="file"
+                                        accept="image/*"
+                                        id="image-upload"
+                                    />
+                                </div>
+                                <Button className="w-full mt-4">Guardar Banner</Button>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
                 </div>
                 <div>
                     <Table>
@@ -107,9 +147,23 @@ const Page = ({}: PageProps) => {
                                         <a href="" className='text-blue-500'>{banner.link}</a>
                                     </TableCell>
                                     <TableCell className="text-center">
-                                        <div className='inline-flex justify-center gap-2'>
-                                            <Button><Pen/></Button>
-                                            <Button><Trash2/></Button>
+                                        <div className='inline-flex justify-center'>
+                                            <DropdownMenu modal={false}>
+
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        <MoreHorizontal className="h-4 w-4"/>
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                                    <DropdownMenuItem
+                                                    >Editar banner</DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                    >Borrar banner</DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
                                     </TableCell>
                                 </TableRow>
