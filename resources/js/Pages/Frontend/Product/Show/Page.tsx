@@ -48,6 +48,7 @@ export default function ProductPage({product}: { product: App.Data.ProductData }
     const [formReview, setFormReview] = useState('')
     const [formStars, setFormStars] = useState(0)
     const {errors}=usePage().props
+    const {user}=usePage().props
     console.log(errors)
 
     const renderStars = (rating: number, interactive: boolean = false) => {
