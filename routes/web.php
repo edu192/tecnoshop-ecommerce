@@ -30,6 +30,7 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::get('/advertising/create', [\App\Http\Controllers\AdvertisingController::class, 'create'])->name('advertising.create');
     Route::get('/banners', [\App\Http\Controllers\BannerController::class, 'index'])->name('banner.index');
     Route::get('/discounts', [\App\Http\Controllers\GeneralDiscountController::class, 'index'])->name('discount.index');
+    Route::get('/discounts/create', [\App\Http\Controllers\GeneralDiscountController::class, 'create'])->name('discount.create');
     Route::post('/products', [\App\Http\Controllers\Backend\ProductController::class, 'store'])->name('products.store');
     Route::post('/products/{product}', [\App\Http\Controllers\Backend\ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [\App\Http\Controllers\Backend\ProductController::class, 'destroy'])->name('products.destroy');

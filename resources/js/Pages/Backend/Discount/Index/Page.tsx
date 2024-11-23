@@ -2,19 +2,27 @@ import React from 'react';
 import {Input} from "@/shadcn-ui/input";
 import {Button} from "@/shadcn-ui/button";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
-import {Eye, File, Pen, Trash2} from "lucide-react";
+import {MoreHorizontal} from "lucide-react";
 import BackendLayout from "@/Layouts/BackendLayout";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger
+} from "@/shadcn-ui/dropdown-menu";
+import {router} from "@inertiajs/react";
 
 type PageProps = {};
-type Discount={
-    id:number;
-    name:string;
-    product_quantity:number;
-    discount:number;
-    start_date:string;
-    end_date:string;
-    max_uses:number;
-    actual_uses:number;
+type Discount = {
+    id: number;
+    name: string;
+    product_quantity: number;
+    discount: number;
+    start_date: string;
+    end_date: string;
+    max_uses: number;
+    actual_uses: number;
 }
 const discounts: Discount[] = [
     {
@@ -127,7 +135,7 @@ const Page = ({}: PageProps) => {
                     <Button>Buscar</Button>
                 </div>
                 <div className='flex justify-end'>
-                    <Button className="mt-4">Agregar descuento</Button>
+                    <Button className="mt-4" onClick={()=>router.visit(route('mantenimiento.discount.create'))}>Agregar descuento</Button>
                 </div>
                 <div>
                     <Table>
@@ -157,10 +165,23 @@ const Page = ({}: PageProps) => {
                                     <TableCell>{discount.max_uses}</TableCell>
                                     <TableCell>{discount.actual_uses}</TableCell>
                                     <TableCell className="text-center">
-                                        <div className='inline-flex justify-center gap-2'>
-                                            <Button><Eye /></Button>
-                                            <Button><Pen/></Button>
-                                            <Button><Trash2/></Button>
+                                        <div className='inline-flex justify-center'>
+                                            <DropdownMenu modal={false}>
+
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        <MoreHorizontal className="h-4 w-4"/>
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                                    <DropdownMenuItem
+                                                    >Editar descuento</DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                    >Eliminar</DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
                                         </div>
                                     </TableCell>
                                 </TableRow>
