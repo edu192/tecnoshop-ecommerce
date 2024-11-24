@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
+            'type' => 'admin',
         ]);
         //Poblar la tabla productos y categorias con los datos de los archivos JSON
         if (File::exists(database_path('data'))) {
@@ -62,5 +63,6 @@ class DatabaseSeeder extends Seeder
         }
         //Poblar la tabla reviews
         $this->call(ReviewSeeder::class);
+        $this->call(OrderSeeder::class);
     }
 }
