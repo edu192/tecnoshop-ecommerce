@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
                 $brand = Brand::create($brandData);
             }
         }
-
+        //Poblar la tabla reviews
+        $this->call(ReviewSeeder::class);
     }
 }
