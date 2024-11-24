@@ -14,4 +14,10 @@ class Department extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function cities()
+    : HasMany
+    {
+        return $this->hasMany(City::class, 'department_id');
+    }
 }
