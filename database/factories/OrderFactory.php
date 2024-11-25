@@ -21,6 +21,7 @@ class OrderFactory extends Factory
             'updated_at' => Carbon::now(),
             'address' => $this->faker->address(),
             'city' => $this->faker->city(),
+            'city_id'=> 0,
             'department' => '',
             'postal_code' => $this->faker->postcode(),
             'payment_method' => 'credit_card',

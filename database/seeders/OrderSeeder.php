@@ -24,6 +24,7 @@ class OrderSeeder extends Seeder
             Order::factory()->count($orderCount)->create([
                 'user_id' => $user->id,
                 'department_id' => $departments->random()->id,
+                'city_id' => $departments->random()->cities->random()->id, // Assign a random city_id
             ])->each(function ($order) use ($products, $faker) {
                 $productCount = $faker->numberBetween(1, 10);
                 $total = 0;
