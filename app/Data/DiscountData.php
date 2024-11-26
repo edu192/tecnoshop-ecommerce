@@ -9,24 +9,21 @@ class DiscountData extends Data
 {
     public function __construct(
         public string $id,
-        public string $code,
-        public string $type,
         public float  $value,
         public string $start_date,
         public string $end_date,
         public int    $max_uses,
         public int    $actual_uses,
-
+        public ?int   $products_count = null,
     )
     {
     }
 
     public static function fromModel(Discount $discount)
+    : self
     {
         return new self(
             $discount->id,
-            $discount->code,
-            $discount->type,
             $discount->value,
             $discount->start_date,
             $discount->end_date,

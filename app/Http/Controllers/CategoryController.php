@@ -28,15 +28,15 @@ class CategoryController extends Controller
             'description' => 'required|string',
             'image' => 'required|image|max:1048|mimes:jpeg,png,jpg',
         ]);
-        $product = Category::create([
+        $category = Category::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
         ]);
         if ($request->hasFile('image')) {
-            $product->addMediaFromRequest('image')->toMediaCollection('main_image');
+            $category->addMediaFromRequest('image')->toMediaCollection('main_image');
         }
 
-        return redirect()->route('mantenimiento.products.index')->flash(FlashNotificationType::Success, 'Categoria creado correctamente');
+        return redirect()->route('mantenimiento.category.index')->flash(FlashNotificationType::Success, 'Categoria creado correctamente');
 
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Data;
 
+use App\Models\DiscountGroup;
 use App\Models\Product;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
@@ -25,7 +26,7 @@ class ProductData extends Data
         public Collection    $reviews,
         public ?string       $image = null,
         public ?int          $quantity = 0,
-        public ?DiscountData $discount,
+        public ?DiscountGroupData $discount,
     )
     {
     }
@@ -34,7 +35,9 @@ class ProductData extends Data
     : self
     {
         $image = $product->getFirstMediaUrl('main_image') ?: null;
-
+        $discountGroup=DiscountGroup::whereHas('discounts', function ($query) use ($product) {
+            $query->where('product_id', $product->id);
+        })->first();
         return new self(
             $product->id,
             $product->name,
@@ -49,7 +52,7 @@ class ProductData extends Data
             $product->reviews->map(fn($review) => ReviewData::from($review)),
             $image,
             0,
-            $product->discount()->exists() ? DiscountData::from($product->discount) : null,
+            $discountGroup ? DiscountGroupData::from($discountGroup) : null,
         );
     }
 }

@@ -36,8 +36,11 @@ class Product extends Model implements HasMedia
     }
 
     public function discount()
-    : MorphOne
     {
-        return $this->morphOne(Discount::class, 'discountable');
+        return $this->hasOne(Discount::class);
+    }
+    public function discountGroup()
+    {
+        return $this->hasOneThrough(DiscountGroup::class, Discount::class, 'product_id', 'id', 'id', 'discount_group_id');
     }
 }

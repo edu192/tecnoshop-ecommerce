@@ -28,9 +28,11 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');
     Route::post('/categories/{category}/update', [\App\Http\Controllers\CategoryController::class, 'update'])->name('category.update');
     Route::delete('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->name('category.destroy');
+    // reseñas
     Route::get('/{product}/reviews/', [\App\Http\Controllers\ReviewController::class, 'index'])->name('review.index');
     Route::post('/{product}/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'update'])->name('review.update');
     Route::delete('/{product}/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'delete'])->name('review.delete');
+    //reseñas
     Route::get('/advertising', [\App\Http\Controllers\AdvertisingController::class, 'index'])->name('advertising.index');
     Route::get('/advertising/create', [\App\Http\Controllers\AdvertisingController::class, 'create'])->name('advertising.create');
     Route::post('/advertising/create', [\App\Http\Controllers\AdvertisingController::class, 'store'])->name('advertising.store');
@@ -41,6 +43,8 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::delete('/banners/{banner}', [\App\Http\Controllers\BannerController::class, 'destroy'])->name('banner.destroy');
     Route::get('/discounts', [\App\Http\Controllers\GeneralDiscountController::class, 'index'])->name('discount.index');
     Route::get('/discounts/create', [\App\Http\Controllers\GeneralDiscountController::class, 'create'])->name('discount.create');
+    Route::post('/discounts/create', [\App\Http\Controllers\GeneralDiscountController::class, 'store'])->name('discount.store');
+    Route::delete('/discounts/{discountGroup}', [\App\Http\Controllers\GeneralDiscountController::class, 'delete'])->name('discount.delete');
     Route::post('/products', [\App\Http\Controllers\Backend\ProductController::class, 'store'])->name('products.store');
     Route::post('/products/{product}', [\App\Http\Controllers\Backend\ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [\App\Http\Controllers\Backend\ProductController::class, 'destroy'])->name('products.destroy');
