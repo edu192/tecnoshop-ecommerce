@@ -20,6 +20,7 @@ class Order extends Model
         'postal_code',
         'payment_method',
         'department_id',
+        'city_id'
     ];
 
     public function user()

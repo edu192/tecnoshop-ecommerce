@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button} from "@/shadcn-ui/button"
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/shadcn-ui/card"
 import {Input} from "@/shadcn-ui/input"
@@ -10,10 +10,12 @@ import {router, usePage} from "@inertiajs/react";
 import FrontendLayout from "@/Layouts/FrontendLayout";
 import {Alert, AlertDescription, AlertTitle} from "@/shadcn-ui/alert";
 import {AlertCircle} from "lucide-react";
-import {Tabs, TabsList, TabsTrigger, TabsContent} from "@/shadcn-ui/tabs";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/shadcn-ui/tabs";
+import FakeQR from '../../../img/yape-test-fake.png'
 import DepartmentData = App.Data.DepartmentData;
+import CityData = App.Data.CityData;
 
-export default function CheckoutPage({departments}:{departments:DepartmentData[]}) {
+export default function CheckoutPage({departments, cities}: { departments: DepartmentData[], cities: CityData[] }) {
     const cartItems = useCartStore(state => state.items)
     const {errors} = usePage().props
     const [shippingInfo, setShippingInfo] = useState({
@@ -26,17 +28,24 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
         cvv: '',
         paypal_email: ''
     })
-    console.log(errors)
+    const [filteredCities, setFilteredCities] = useState<CityData[]>([])
     const [paymentMethod, setPaymentMethod] = useState('credit_card')
     const {clearCart} = useCartStore()
 
-    const handleShippingInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+        if (shippingInfo.department) {
+            setFilteredCities(cities.filter(city => city.department_id === parseInt(shippingInfo.department)))
+        } else {
+            setFilteredCities([])
+        }
+    }, [shippingInfo.department, cities])
+
+    const handleShippingInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setShippingInfo({...shippingInfo, [e.target.name]: e.target.value})
     }
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        console.log('Pedido enviado', {shippingInfo, paymentMethod, cartItems})
         router.post(route('checkout.store'), {
                 ...shippingInfo,
                 cartItems: cartItems,
@@ -64,7 +73,7 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
                     <div>
                         {errors.cartItems &&
                             <Alert variant="destructive">
-                                <AlertCircle className="h-4 w-4" />
+                                <AlertCircle className="h-4 w-4"/>
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
                                     El carrito esta vacio
@@ -88,18 +97,8 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
                                         {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
                                     </div>
                                     <div>
-                                        <Label htmlFor="city">Ciudad</Label>
-                                        <Input
-                                            id="city"
-                                            name="city"
-                                            value={shippingInfo.city}
-                                            onChange={handleShippingInfoChange}
-                                        />
-                                        {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="country">Departamento</Label>
-                                        <Select name="country" onValueChange={(value) => setShippingInfo({
+                                        <Label htmlFor="department">Departamento</Label>
+                                        <Select name="department" onValueChange={(value) => setShippingInfo({
                                             ...shippingInfo,
                                             department: value
                                         })}>
@@ -108,10 +107,29 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {departments.map(department => (
-                                                    <SelectItem key={department.id} value={department.id.toString()}>{department.name}</SelectItem>
+                                                    <SelectItem key={department.id}
+                                                                value={department.id.toString()}>{department.name}</SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>
+                                    </div>
+                                    <div>
+                                        <Label htmlFor="city">Ciudad</Label>
+                                        <Select name="city" onValueChange={(value) => setShippingInfo({
+                                            ...shippingInfo,
+                                            city: value
+                                        })}>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Seleccionar ciudad"/>
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {filteredCities.map(city => (
+                                                    <SelectItem key={city.id}
+                                                                value={city.id.toString()}>{city.name}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
                                     </div>
                                     <div>
                                         <Label htmlFor="postal_code">Código Postal</Label>
@@ -121,7 +139,8 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
                                             value={shippingInfo.postal_code}
                                             onChange={handleShippingInfoChange}
                                         />
-                                        {errors.postal_code && <p className="text-red-500 text-sm">{errors.postal_code}</p>}
+                                        {errors.postal_code &&
+                                            <p className="text-red-500 text-sm">{errors.postal_code}</p>}
                                     </div>
                                 </form>
                             </CardContent>
@@ -140,18 +159,26 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
                                         <div className="mt-4 space-y-4">
                                             <div>
                                                 <Label htmlFor="credit_card">Número de Tarjeta</Label>
-                                                <Input id="credit_card" name="credit_card" onChange={handleShippingInfoChange} value={shippingInfo.credit_card}/>
-                                                {errors.credit_card && <p className="text-red-500 text-sm">{errors.credit_card}</p>}
+                                                <Input id="credit_card" name="credit_card"
+                                                       onChange={handleShippingInfoChange}
+                                                       value={shippingInfo.credit_card}/>
+                                                {errors.credit_card &&
+                                                    <p className="text-red-500 text-sm">{errors.credit_card}</p>}
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
                                                     <Label htmlFor="expiry_date">Fecha de Expiración</Label>
-                                                    <Input id="expiry_date" name="expiry_date" onChange={handleShippingInfoChange} value={shippingInfo.expiry_date}/>
-                                                    {errors.expiry_date  && <p className="text-red-500 text-sm">{errors.expiry_date}</p>}
+                                                    <Input id="expiry_date" name="expiry_date"
+                                                           onChange={handleShippingInfoChange}
+                                                           value={shippingInfo.expiry_date}/>
+                                                    {errors.expiry_date &&
+                                                        <p className="text-red-500 text-sm">{errors.expiry_date}</p>}
                                                 </div>
                                                 <div>
                                                     <Label htmlFor="cvv">CVV</Label>
-                                                    <Input id="cvv" name="cvv" type='number'  onChange={handleShippingInfoChange} value={shippingInfo.cvv}/>
+                                                    <Input id="cvv" name="cvv" type='number'
+                                                           onChange={handleShippingInfoChange}
+                                                           value={shippingInfo.cvv}/>
                                                     {errors.cvv && <p className="text-red-500 text-sm">{errors.cvv}</p>}
                                                 </div>
                                             </div>
@@ -171,16 +198,8 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <Label htmlFor="nombre">Nombre Completo</Label>
-                                                    <Input id="nombre" placeholder="Nombre Completo" />
-                                                </div>
-                                                <div>
-                                                    <Label htmlFor="celular">Numero de Celular</Label>
-                                                    <Input id="celular" placeholder="Numero de Celular" />
-                                                </div>
-                                                <div>
                                                     <Label htmlFor="monto">Monto a Pagar</Label>
-                                                    <Input id="monto" placeholder="S/. 1000.00" />
+                                                    <Input id="monto" placeholder={`S/. ${total.toFixed(2)}`} disabled/>
                                                 </div>
                                                 <div className="space-y-2">
                                                     <Label>Pasos para realizar el pago:</Label>
@@ -192,7 +211,9 @@ export default function CheckoutPage({departments}:{departments:DepartmentData[]
                                                         <li>Completa la transferencia</li>
                                                     </ol>
                                                 </div>
-                                                <Button className="w-full">Generar Código QR de Yapero</Button>
+                                                <div>
+                                                    <img src={FakeQR as string} alt=""/>
+                                                </div>
                                             </CardContent>
                                         </Card>
                                     </TabsContent>
