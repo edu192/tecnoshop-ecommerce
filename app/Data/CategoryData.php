@@ -15,11 +15,13 @@ class CategoryData extends Data
         public ?string   $image = null,
         public ?DateTime $created_at = null,
         public ?DateTime $updated_at = null,
+        public ?int $products_count = null,
     )
     {
     }
 
-    public static function fromModel(Category $category): self
+    public static function fromModel(Category $category)
+    : self
     {
         $image = $category->getFirstMediaUrl('main_image') ?: null;
         return new self(
@@ -28,7 +30,8 @@ class CategoryData extends Data
             $category->description,
             $image,
             $category->created_at,
-            $category->updated_at
+            $category->updated_at,
+            products_count: $category->products_count,
         );
     }
 }

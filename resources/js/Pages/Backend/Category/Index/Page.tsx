@@ -1,87 +1,37 @@
-import React from 'react';
+import React,{useState} from 'react';
 import BackendLayout from "@/Layouts/BackendLayout";
 import {Input} from "@/shadcn-ui/input";
 import {Button} from "@/shadcn-ui/button";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
-import {File, Pen, Trash2} from "lucide-react";
+import {Pen, Trash2} from "lucide-react";
+import {PaginatedModelData} from "@/types";
 import CategoryData = App.Data.CategoryData;
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink, PaginationNext,
+    PaginationPrevious
+} from "@/shadcn-ui/pagination";
+import {router} from "@inertiajs/react";
 
-type PageProps = {};
-type Category={
-    id:number;
-    name:string;
-    description:string;
-    product_quantity:number;
-}
-const categories:Category[]=[
-    {
-        id:1,
-        name:"Laptops",
-        description:"Laptops de ultima generacion",
-        product_quantity:110
-    },
-    {
-        id:2,
-        name:"Smartphones",
-        description:"Smartphones de ultima generacion",
-        product_quantity:60
-    },
-    {
-        id:3,
-        name:"Monitores",
-        description:"Monitores de ultima generacion",
-        product_quantity:40
-    },
-    {
-        id:4,
-        name:"Mouse",
-        description:"Mouse de ultima generacion",
-        product_quantity:180
-    },
-    {
-        id:5,
-        name:"Teclados",
-        description:"Teclados de ultima generacion",
-        product_quantity:20
-    },
-    {
-        id:6,
-        name:"Parlantes",
-        description:"Parlantes de ultima generacion",
-        product_quantity:70
-    },
-    {
-        id:7,
-        name:"Impresoras",
-        description:"Impresoras de ultima generacion",
-        product_quantity:60
-    },
-    {
-        id:8,
-        name:"Camaras",
-        description:"Camaras de ultima generacion",
-        product_quantity:50
-    },
-    {
-        id:9,
-        name:"Proyectores",
-        description:"Proyectores de ultima generacion",
-        product_quantity:80
-    },
-    {
-        id:10,
-        name:"Accesorios",
-        description:"Accesorios de ultima generacion",
-        product_quantity:10
-    },
-]
-const Page = ({}: PageProps) => {
+type PageProps = {
+    paginated_collection: PaginatedModelData<CategoryData>
+};
+
+const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) => {
+    const [searchValue, setSearchValue] = useState('')
+    const handleSearch = () => {
+        router.visit(route('mantenimiento.category.index', {'filter[name]': searchValue}))
+    }
     return (
         <BackendLayout pageName="Categorias">
             <div className="p-6 bg-white rounded-lg shadow">
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar por id de categoria' className='w-1/6'/>
-                    <Button>Buscar</Button>
+                    <Input placeholder='Buscar por nombre de categoria' className='w-1/6' value={searchValue}
+                           onChange={e => setSearchValue(e.target.value)}/>
+                    <Button onClick={handleSearch}>Buscar</Button>
                 </div>
                 <div className='flex justify-end'>
                     <Button className="mt-4">Agregar categoria</Button>
@@ -99,16 +49,16 @@ const Page = ({}: PageProps) => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {categories.map((category) => (
+                            {paginated_data.map((category) => (
                                 <TableRow key={category.id}>
                                     <TableCell className="font-medium">{category.id}</TableCell>
                                     <TableCell>{category.name}</TableCell>
                                     <TableCell>{category.description}</TableCell>
-                                    <TableCell>{category.product_quantity}</TableCell>
+                                    <TableCell>{category.products_count}</TableCell>
                                     <TableCell className="text-center">
                                         <div className='inline-flex justify-center gap-2'>
                                             <Button><Pen/></Button>
-                                            <Button><Trash2 /></Button>
+                                            <Button><Trash2/></Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -116,6 +66,31 @@ const Page = ({}: PageProps) => {
                         </TableBody>
                     </Table>
                 </div>
+                <Pagination>
+                    <PaginationContent>
+                        {links.length > 0 && (
+                            <PaginationItem>
+                                <PaginationPrevious href={links[0].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                        {links.slice(1, -1).map((link, index) => (
+                            <PaginationItem key={index}>
+                                {link.url ? (
+                                    <PaginationLink href={link.url} isActive={link.active}>
+                                        {link.label}
+                                    </PaginationLink>
+                                ) : (
+                                    <PaginationEllipsis/>
+                                )}
+                            </PaginationItem>
+                        ))}
+                        {links.length > 1 && (
+                            <PaginationItem>
+                                <PaginationNext href={links[links.length - 1].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                    </PaginationContent>
+                </Pagination>
             </div>
         </BackendLayout>
     );
