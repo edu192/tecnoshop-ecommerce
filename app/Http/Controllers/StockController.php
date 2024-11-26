@@ -37,6 +37,10 @@ class StockController extends Controller
                 $productBatch->addMedia($request->file('voucher'))->toMediaCollection('voucher');
             }
 
+            // Update the product's stock column
+            $product->stock += $request->input('quantity');
+            $product->save();
+
             return redirect()->route('mantenimiento.stock.index', $product)
                 ->with('success', 'Stock entry created successfully.');
         } catch (\Exception $e) {
