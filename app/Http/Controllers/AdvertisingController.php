@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Data\AdvertisingData;
 use App\Data\UserData;
+use App\Events\AdvertisingUserEvent;
 use App\FlashNotificationType;
 use App\Models\Advertising;
 use App\Models\User;
@@ -54,6 +55,7 @@ class AdvertisingController extends Controller
         if ($request->hasFile('image')) {
             $advertising->addMediaFromRequest('image')->toMediaCollection('main_image');
         }
+        event(new AdvertisingUserEvent($advertising));
         return redirect()->route('mantenimiento.advertising.index')->flash(FlashNotificationType::Success, 'Publicidad creada correctamente');
     }
 
