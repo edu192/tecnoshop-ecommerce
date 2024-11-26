@@ -8,18 +8,17 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $usersQuery=QueryBuilder::for(User::class)
+        $usersQuery = QueryBuilder::for(User::class)
             ->allowedFilters(['name']);
-        $users = $usersQuery->get()->map(function (User $user) {
-            return UserData::from($user);
-        });
-        return Inertia::render('Backend/User/Index/Page', ['users' => $users]);
+        $users = UserData::collect($usersQuery->paginate(10), PaginatedDataCollection::class)->wrap('paginated_data');
+        return Inertia::render('Backend/User/Index/Page', ['paginated_collection' => $users]);
     }
 
     public function store(Request $request)

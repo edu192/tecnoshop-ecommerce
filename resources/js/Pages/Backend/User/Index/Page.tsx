@@ -10,10 +10,19 @@ import DeleteUserModal from "@/Pages/Backend/User/Index/Partials/DeleteUserModal
 import {router, usePage} from "@inertiajs/react";
 import UserData = App.Data.UserData;
 import {toast} from "sonner";
+import {PaginatedModelData} from "@/types";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink, PaginationNext,
+    PaginationPrevious
+} from "@/shadcn-ui/pagination";
 
 type PageProps = {};
 
-const Page = ({users}: { users: UserData[] }) => {
+const Page = ({paginated_collection:{paginated_data:users,meta,links}}: { paginated_collection:PaginatedModelData<UserData> }) => {
     const {props:{flash}}=usePage()
     const [createUserDialog, setCreateUserDialog] = useState(false)
     const [updateUserDialog, setUpdateUserDialog] = useState<{
@@ -87,6 +96,31 @@ const Page = ({users}: { users: UserData[] }) => {
                         </TableBody>
                     </Table>
                 </div>
+                <Pagination>
+                    <PaginationContent>
+                        {links.length > 0 && (
+                            <PaginationItem>
+                                <PaginationPrevious href={links[0].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                        {links.slice(1, -1).map((link, index) => (
+                            <PaginationItem key={index}>
+                                {link.url ? (
+                                    <PaginationLink href={link.url} isActive={link.active}>
+                                        {link.label}
+                                    </PaginationLink>
+                                ) : (
+                                    <PaginationEllipsis/>
+                                )}
+                            </PaginationItem>
+                        ))}
+                        {links.length > 1 && (
+                            <PaginationItem>
+                                <PaginationNext href={links[links.length - 1].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                    </PaginationContent>
+                </Pagination>
             </div>
         </BackendLayout>
     );
