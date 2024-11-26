@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class OrderController extends Controller
@@ -16,11 +17,9 @@ class OrderController extends Controller
     {
         $ordersQuery=QueryBuilder::for(Order::class)
             ->allowedFilters(['id','state']);
-        $orders = $ordersQuery->get()->map(function (Order $order) {
-            return OrderData::from($order);
-        });
+        $orders=OrderData::collect($ordersQuery->paginate(10),PaginatedDataCollection::class)->wrap('paginated_data');
         return Inertia::render('Backend/Order/Index/Page',[
-            'orders' => $orders,
+            'paginated_collection' => $orders,
         ]);
     }
 

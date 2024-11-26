@@ -1,16 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import BackendLayout from "@/Layouts/BackendLayout";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/shadcn-ui/table";
-import { Button } from "@/shadcn-ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/shadcn-ui/dialog";
-import OrderData = App.Data.OrderData;
-import { Pen } from "lucide-react";
+import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
+import {Button} from "@/shadcn-ui/button";
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "@/shadcn-ui/dialog";
+import {Pen} from "lucide-react";
 import {router, usePage} from "@inertiajs/react";
 import {Input} from "@/shadcn-ui/input";
 import {toast} from "sonner";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious
+} from "@/shadcn-ui/pagination";
+import {PaginatedModelData} from "@/types";
+import OrderData = App.Data.OrderData;
 
-const Page = ({ orders }: { orders: OrderData[] }) => {
-    const {props:{flash}}=usePage()
+type Link = {
+    url: string | null;
+    label: string;
+    active: boolean;
+};
+type Meta = {
+    current_page: number;
+    first_page_url: string;
+    from: number;
+    last_page: number;
+    last_page_url: string;
+    next_page_url: string;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number;
+    total: number;
+};
+type PaginatedData = {
+    paginated_data: OrderData[];
+    links: Link[];
+    meta: Meta;
+};
+const Page = ({paginated_collection: {paginated_data, meta, links}}: {
+    paginated_collection: PaginatedModelData<OrderData>
+}) => {
+    const {props: {flash}} = usePage()
     const [detailsDialog, setDetailsDialog] = useState<{ order: OrderData | null, isOpen: boolean }>({
         order: null,
         isOpen: false
@@ -29,11 +64,11 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
     }, [updateDialog.order]);
 
     const openDetailsDialog = (order: OrderData) => {
-        setDetailsDialog({ order, isOpen: true });
+        setDetailsDialog({order, isOpen: true});
     };
 
     const openUpdateDialog = (order: OrderData) => {
-        setUpdateDialog({ order, isOpen: true });
+        setUpdateDialog({order, isOpen: true});
     };
 
     const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -43,7 +78,7 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
         if (updateDialog.order) {
             router.post(route('mantenimiento.orders.update', updateDialog.order.id), {
                 state: selectedState
-            },{
+            }, {
                 onSuccess: () => {
                     setUpdateDialog({order: null, isOpen: false});
                 }
@@ -51,7 +86,7 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
         }
     }
     const handleSearch = () => {
-        router.visit(route('mantenimiento.orders.index',{'filter[id]': searchValue}));
+        router.visit(route('mantenimiento.orders.index', {'filter[id]': searchValue}));
     }
     useEffect(() => {
         if (flash) {
@@ -90,7 +125,7 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                             ))}
                             <div className="flex justify-between font-semibold mt-4">
                                 <span>Total:</span>
-                                <span>S/. {parseFloat(detailsDialog.order?.total).toFixed(2)}</span>
+                                <span>S/. {parseFloat(detailsDialog.order?.total as string).toFixed(2)}</span>
                             </div>
                         </div>
                     </DialogContent>
@@ -115,7 +150,8 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                     </DialogContent>
                 </Dialog>
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar id' className='w-1/6' value={searchValue} onChange={e=>setSearchValue(e.target.value)}/>
+                    <Input placeholder='Buscar id' className='w-1/6' value={searchValue}
+                           onChange={e => setSearchValue(e.target.value)}/>
                     <Button onClick={handleSearch}>Buscar</Button>
                 </div>
                 <div>
@@ -131,7 +167,7 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {orders.map((order) => (
+                            {paginated_data.map((order) => (
                                 <TableRow key={order.id}>
                                     <TableCell className="font-medium">{order.id}</TableCell>
                                     <TableCell>{order.created_at}</TableCell>
@@ -150,6 +186,31 @@ const Page = ({ orders }: { orders: OrderData[] }) => {
                         </TableBody>
                     </Table>
                 </div>
+                <Pagination>
+                    <PaginationContent>
+                        {links.length > 0 && (
+                            <PaginationItem>
+                                <PaginationPrevious href={links[0].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                        {links.slice(1, -1).map((link, index) => (
+                            <PaginationItem key={index}>
+                                {link.url ? (
+                                    <PaginationLink href={link.url} isActive={link.active}>
+                                        {link.label}
+                                    </PaginationLink>
+                                ) : (
+                                    <PaginationEllipsis/>
+                                )}
+                            </PaginationItem>
+                        ))}
+                        {links.length > 1 && (
+                            <PaginationItem>
+                                <PaginationNext href={links[links.length - 1].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                    </PaginationContent>
+                </Pagination>
             </div>
         </BackendLayout>
     );
