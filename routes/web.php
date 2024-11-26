@@ -33,6 +33,7 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::delete('/{product}/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'delete'])->name('review.delete');
     Route::get('/advertising', [\App\Http\Controllers\AdvertisingController::class, 'index'])->name('advertising.index');
     Route::get('/advertising/create', [\App\Http\Controllers\AdvertisingController::class, 'create'])->name('advertising.create');
+    Route::post('/advertising/create', [\App\Http\Controllers\AdvertisingController::class, 'store'])->name('advertising.store');
     Route::get('/banners', [\App\Http\Controllers\BannerController::class, 'index'])->name('banner.index');
     Route::post('/banners', [\App\Http\Controllers\BannerController::class, 'store'])->name('banner.store');
     Route::post('/banners/{banner}', [\App\Http\Controllers\BannerController::class, 'update'])->name('banner.update');
