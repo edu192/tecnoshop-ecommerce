@@ -17,11 +17,23 @@ import {
     DropdownMenuTrigger
 } from "@/shadcn-ui/dropdown-menu";
 import {toast} from "sonner";
+import {PaginatedModelData} from "@/types";
 import ProductData = App.Data.ProductData;
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink, PaginationNext,
+    PaginationPrevious
+} from "@/shadcn-ui/pagination";
 
 type PageProps = {};
 
-const Page = ({products}: { products: ProductData[] }) => {
+const Page = ({paginated_collection: {paginated_data, meta, links}}: {
+    paginated_collection: PaginatedModelData<ProductData>
+}) => {
+
     const {props: {flash}} = usePage()
     const [updateDialog, setUpdateDialog] = useState<{ product: ProductData | null, isOpen: boolean }>({
         product: null,
@@ -87,7 +99,7 @@ const Page = ({products}: { products: ProductData[] }) => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {products.map((product) => (
+                            {paginated_data.map((product) => (
                                 <TableRow key={product.id}>
                                     <TableCell className="font-medium">{product.id}</TableCell>
                                     <TableCell>{product.name}</TableCell>
@@ -138,6 +150,31 @@ const Page = ({products}: { products: ProductData[] }) => {
                         </TableBody>
                     </Table>
                 </div>
+                <Pagination>
+                    <PaginationContent>
+                        {links.length > 0 && (
+                            <PaginationItem>
+                                <PaginationPrevious href={links[0].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                        {links.slice(1, -1).map((link, index) => (
+                            <PaginationItem key={index}>
+                                {link.url ? (
+                                    <PaginationLink href={link.url} isActive={link.active}>
+                                        {link.label}
+                                    </PaginationLink>
+                                ) : (
+                                    <PaginationEllipsis/>
+                                )}
+                            </PaginationItem>
+                        ))}
+                        {links.length > 1 && (
+                            <PaginationItem>
+                                <PaginationNext href={links[links.length - 1].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                    </PaginationContent>
+                </Pagination>
             </div>
         </BackendLayout>
     );

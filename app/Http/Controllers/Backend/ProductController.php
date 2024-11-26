@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\LaravelData\PaginatedDataCollection;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductController extends Controller
@@ -16,10 +17,8 @@ class ProductController extends Controller
     {
         $productsQuery = QueryBuilder::for(Product::class)
             ->allowedFilters(['name', 'brand', 'category_id']);
-        $products = $productsQuery->orderBy('created_at', 'desc')->get()->map(function (Product $product) {
-            return ProductData::from($product);
-        });
-        return Inertia::render('Backend/Product/Index/Page', ['products' => $products]);
+        $products=ProductData::collect($productsQuery->paginate(10),PaginatedDataCollection::class)->wrap('paginated_data');
+        return Inertia::render('Backend/Product/Index/Page', ['paginated_collection' => $products]);
     }
 
     public function store(Request $request)
