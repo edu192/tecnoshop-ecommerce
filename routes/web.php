@@ -25,6 +25,9 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::get('/products', [\App\Http\Controllers\Backend\ProductController::class, 'index'])->name('products.index');
     Route::get('/stock/{product}', [\App\Http\Controllers\StockController::class, 'index'])->name('stock.index');
     Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
+    Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');
+    Route::post('/categories/{category}/update', [\App\Http\Controllers\CategoryController::class, 'update'])->name('category.update');
+    Route::delete('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->name('category.destroy');
     Route::get('/reviews/{product}', [\App\Http\Controllers\ReviewController::class, 'index'])->name('review.index');
     Route::get('/advertising', [\App\Http\Controllers\AdvertisingController::class, 'index'])->name('advertising.index');
     Route::get('/advertising/create', [\App\Http\Controllers\AdvertisingController::class, 'create'])->name('advertising.create');
