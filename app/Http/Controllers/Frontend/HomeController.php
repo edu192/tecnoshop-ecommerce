@@ -9,6 +9,7 @@ class HomeController extends Controller
 {
     public function __invoke()
     {
-        return Inertia::render('Frontend/Home',['categories'=>\App\Data\CategoryData::collect(\App\Models\Category::all())]);
+        return Inertia::render('Frontend/Home', ['categories' => \App\Data\CategoryData::collect(\App\Models\Category::all()),
+            'banners' => \App\Data\BannerData::collect(\App\Models\Banner::all())]);
     }
 }
