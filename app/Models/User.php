@@ -18,9 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name', 'lastname', 'email', 'email_verified_at', 'password', 'type', 'remember_token','created_at'
     ];
 
     /**
@@ -38,7 +36,8 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected function casts()
+    : array
     {
         return [
             'email_verified_at' => 'datetime',
