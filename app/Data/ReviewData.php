@@ -13,6 +13,7 @@ class ReviewData extends Data
         public int $user_id,
         public int $product_id,
         public int $stars,
+        public bool $status,
         public string $comment,
         public string $created_at,
         public string $updated_at
@@ -29,6 +30,7 @@ class ReviewData extends Data
             user_id: $model->user_id,
             product_id: $model->product_id,
             stars: $model->stars,
+            status: $model->status,
             comment: $model->comment,
             created_at: $model->created_at,
             updated_at: $model->updated_at

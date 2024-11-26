@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import BackendLayout from "@/Layouts/BackendLayout";
 import {Input} from "@/shadcn-ui/input";
 import {Button} from "@/shadcn-ui/button";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
-import {Check, File, MoreHorizontal, Pen, Trash2} from "lucide-react";
-import ProductData = App.Data.ProductData;
+import {MoreHorizontal} from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,175 +11,55 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger
 } from "@/shadcn-ui/dropdown-menu";
+import {PaginatedModelData} from "@/types";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious
+} from "@/shadcn-ui/pagination";
 import {router} from "@inertiajs/react";
+import DeleteModal from "@/Pages/Backend/Review/Partials/DeleteModal";
+import ProductData = App.Data.ProductData;
+import ReviewData = App.Data.ReviewData;
 
 type PageProps = {
-    product:ProductData;
+    product: ProductData;
+    paginated_collection: PaginatedModelData<ReviewData>
 };
-type Review={
-    id:number;
-    product:string;
-    user:string;
-    rating:number;
-    comment:string;
-}
-const reviews: Review[] = [
-    {
-        id: 1,
-        product: "Laptop Pro 15",
-        user: "Eduardo",
-        rating: 5,
-        comment: "Excelente producto, muy recomendado."
-    },
-    {
-        id: 2,
-        product: "Smartphone X",
-        user: "Maria",
-        rating: 4,
-        comment: "Muy buen teléfono, pero la batería podría durar más."
-    },
-    {
-        id: 3,
-        product: "4K Monitor",
-        user: "Carlos",
-        rating: 5,
-        comment: "La calidad de imagen es impresionante."
-    },
-    {
-        id: 4,
-        product: "Wireless Mouse",
-        user: "Ana",
-        rating: 3,
-        comment: "Funciona bien, pero a veces pierde conexión."
-    },
-    {
-        id: 5,
-        product: "Bluetooth Headphones",
-        user: "Luis",
-        rating: 5,
-        comment: "Sonido excelente y muy cómodos."
-    },
-    {
-        id: 6,
-        product: "Gaming Keyboard",
-        user: "Sofia",
-        rating: 4,
-        comment: "Muy buen teclado, pero un poco ruidoso."
-    },
-    {
-        id: 7,
-        product: "External SSD 1TB",
-        user: "Jorge",
-        rating: 5,
-        comment: "Muy rápido y con gran capacidad."
-    },
-    {
-        id: 8,
-        product: "Smartwatch Series 5",
-        user: "Lucia",
-        rating: 4,
-        comment: "Muy útil, pero la batería dura poco."
-    },
-    {
-        id: 9,
-        product: "VR Headset",
-        user: "Miguel",
-        rating: 5,
-        comment: "Experiencia de realidad virtual increíble."
-    },
-    {
-        id: 10,
-        product: "Portable Charger",
-        user: "Elena",
-        rating: 4,
-        comment: "Carga rápido, pero es un poco pesado."
-    },
-    {
-        id: 11,
-        product: "Laptop Pro 15",
-        user: "Pedro",
-        rating: 5,
-        comment: "Excelente rendimiento y diseño."
-    },
-    {
-        id: 12,
-        product: "Smartphone X",
-        user: "Laura",
-        rating: 3,
-        comment: "Buen teléfono, pero la cámara no es la mejor."
-    },
-    {
-        id: 13,
-        product: "4K Monitor",
-        user: "Diego",
-        rating: 5,
-        comment: "Perfecto para trabajar y jugar."
-    },
-    {
-        id: 14,
-        product: "Wireless Mouse",
-        user: "Marta",
-        rating: 4,
-        comment: "Muy cómodo y fácil de usar."
-    },
-    {
-        id: 15,
-        product: "Bluetooth Headphones",
-        user: "Raul",
-        rating: 5,
-        comment: "Calidad de sonido impresionante."
-    },
-    {
-        id: 16,
-        product: "Gaming Keyboard",
-        user: "Sara",
-        rating: 4,
-        comment: "Muy buen teclado, pero las teclas son un poco duras."
-    },
-    {
-        id: 17,
-        product: "External SSD 1TB",
-        user: "Alberto",
-        rating: 5,
-        comment: "Gran capacidad y velocidad."
-    },
-    {
-        id: 18,
-        product: "Smartwatch Series 5",
-        user: "Isabel",
-        rating: 4,
-        comment: "Muy útil, pero la pantalla es pequeña."
-    },
-    {
-        id: 19,
-        product: "VR Headset",
-        user: "Pablo",
-        rating: 5,
-        comment: "Experiencia de juego increíble."
-    },
-    {
-        id: 20,
-        product: "Portable Charger",
-        user: "Carmen",
-        rating: 4,
-        comment: "Muy útil, pero tarda en cargar."
-    },
-    {
-        id: 21,
-        product: "Laptop Pro 15",
-        user: "Fernando",
-        rating: 5,
-        comment: "Muy buen producto, recomendado."
-    }
-];
 
-const Page = ({product}: PageProps) => {
+
+const Page = ({product, paginated_collection: {paginated_data, meta, links}}: PageProps) => {
+    const [deleteModalState, setDeleteModalState] = useState<{
+        isOpen: boolean,
+        review: ReviewData | null,
+    }>({
+        isOpen: false,
+        review: null,
+    })
+    const [searchValue, setSearchValue] = useState('')
+    const handleSubmit = (review: ReviewData) => {
+        router.post(route('mantenimiento.review.update', {product, review}), {
+            status: !review.status,
+        },)
+    }
+    const handleSearch = () => {
+        router.visit(route('mantenimiento.review.index', {product, 'filter[comment]': searchValue,}))
+    }
     return (
         <BackendLayout pageName={`Reseñas de producto: ${product.name}`}>
             <div className="p-6 bg-white rounded-lg shadow">
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar por id de producto' className='w-1/6'/>
-                    <Button>Buscar</Button>
+                    <Input placeholder='Buscar por id de producto' className='w-1/6' value={searchValue}
+                           onChange={e => setSearchValue(e.target.value)}/>
+                    <Button onClick={handleSearch}>Buscar</Button>
+                </div>
+                <div>
+                    <DeleteModal deleteModalState={deleteModalState} setDeleteModalState={setDeleteModalState}
+                                 product={product}/>
                 </div>
                 <div>
                     <Table>
@@ -191,16 +70,18 @@ const Page = ({product}: PageProps) => {
                                 <TableHead>Usuario</TableHead>
                                 <TableHead>Valoracion</TableHead>
                                 <TableHead>Comentario</TableHead>
+                                <TableHead>Estado</TableHead>
                                 <TableHead className='text-center'>Acciones</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {reviews.map((review) => (
+                            {paginated_data.map((review) => (
                                 <TableRow key={review.id}>
                                     <TableCell className="font-medium">{review.id}</TableCell>
-                                    <TableCell>{review.user}</TableCell>
-                                    <TableCell>{review.rating}</TableCell>
+                                    <TableCell>{review.user_name}</TableCell>
+                                    <TableCell>{review.stars}</TableCell>
                                     <TableCell>{review.comment}</TableCell>
+                                    <TableCell>{review.status ? 'Aprobado' : 'Desaprobado'}</TableCell>
                                     <TableCell className="text-center">
                                         <div className='inline-flex justify-center'>
                                             <DropdownMenu modal={false}>
@@ -213,10 +94,13 @@ const Page = ({product}: PageProps) => {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                                    <DropdownMenuItem
-                                                        >Aprobar</DropdownMenuItem>
-                                                    <DropdownMenuItem
-                                                        >Eliminar</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => handleSubmit(review)}
+                                                    >{review.status ? 'Desaprobar' : 'Aprobar'}</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => setDeleteModalState(prev => ({
+                                                        review,
+                                                        isOpen: true
+                                                    }))}
+                                                    >Eliminar</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </div>
@@ -226,6 +110,31 @@ const Page = ({product}: PageProps) => {
                         </TableBody>
                     </Table>
                 </div>
+                <Pagination>
+                    <PaginationContent>
+                        {links.length > 0 && (
+                            <PaginationItem>
+                                <PaginationPrevious href={links[0].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                        {links.slice(1, -1).map((link, index) => (
+                            <PaginationItem key={index}>
+                                {link.url ? (
+                                    <PaginationLink href={link.url} isActive={link.active}>
+                                        {link.label}
+                                    </PaginationLink>
+                                ) : (
+                                    <PaginationEllipsis/>
+                                )}
+                            </PaginationItem>
+                        ))}
+                        {links.length > 1 && (
+                            <PaginationItem>
+                                <PaginationNext href={links[links.length - 1].url || '#'}/>
+                            </PaginationItem>
+                        )}
+                    </PaginationContent>
+                </Pagination>
             </div>
         </BackendLayout>
     );

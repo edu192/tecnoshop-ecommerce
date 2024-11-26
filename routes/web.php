@@ -28,7 +28,9 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');
     Route::post('/categories/{category}/update', [\App\Http\Controllers\CategoryController::class, 'update'])->name('category.update');
     Route::delete('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->name('category.destroy');
-    Route::get('/reviews/{product}', [\App\Http\Controllers\ReviewController::class, 'index'])->name('review.index');
+    Route::get('/{product}/reviews/', [\App\Http\Controllers\ReviewController::class, 'index'])->name('review.index');
+    Route::post('/{product}/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'update'])->name('review.update');
+    Route::delete('/{product}/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'delete'])->name('review.delete');
     Route::get('/advertising', [\App\Http\Controllers\AdvertisingController::class, 'index'])->name('advertising.index');
     Route::get('/advertising/create', [\App\Http\Controllers\AdvertisingController::class, 'create'])->name('advertising.create');
     Route::get('/banners', [\App\Http\Controllers\BannerController::class, 'index'])->name('banner.index');
