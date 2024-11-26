@@ -16,6 +16,7 @@ import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/
 import {Label} from "@/shadcn-ui/label";
 import {Textarea} from "@/shadcn-ui/textarea";
 import {PaginatedModelData} from "@/types";
+import DeleteModal from "@/Pages/Backend/Advertising/Partials/DeleteModal";
 import AdvertisingData = App.Data.AdvertisingData;
 
 type PageProps = {
@@ -24,6 +25,13 @@ type PageProps = {
 
 const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) => {
     const [resumeDialog, setResumeDialog] = useState(false)
+    const [deleteModalState, setDeleteModalState] = useState<{
+        isOpen: boolean,
+        advertising: AdvertisingData | null,
+    }>({
+        isOpen: false,
+        advertising: null,
+    })
     return (
         <BackendLayout pageName='Publicidad'>
             <div className="p-6 bg-white rounded-lg shadow">
@@ -31,14 +39,10 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) 
                     <Input placeholder='Buscar por id de publicidad' className='w-1/6'/>
                     <Button>Buscar</Button>
                 </div>
-                <div>
-                    <form action="">
-
-                    </form>
-                </div>
                 <div className='flex justify-end'>
                     <Button onClick={() => router.visit(route('mantenimiento.advertising.create'))}>Crear
                         publicidad</Button>
+                    <DeleteModal deleteModalState={deleteModalState} setDeleteModalState={setDeleteModalState}/>
                 </div>
                 <div className='flex justify-end'>
                     <div className='flex justify-end'>
@@ -107,7 +111,10 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) 
                                                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                                                     <DropdownMenuItem onClick={() => setResumeDialog(true)}
                                                     >Ver registro</DropdownMenuItem>
-                                                    <DropdownMenuItem
+                                                    <DropdownMenuItem onClick={() => setDeleteModalState(prev => ({
+                                                        advertising: el,
+                                                        isOpen: true
+                                                    }))}
                                                     >Eliminar</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>

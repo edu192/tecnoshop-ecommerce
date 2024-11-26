@@ -57,4 +57,10 @@ class AdvertisingController extends Controller
         return redirect()->route('mantenimiento.advertising.index')->flash(FlashNotificationType::Success, 'Publicidad creada correctamente');
     }
 
+    public function delete(Request $request, Advertising $advertising)
+    {
+        $advertising->delete();
+        return redirect()->route('mantenimiento.advertising.index')->flash(FlashNotificationType::Success, 'Publicidad eliminada correctamente');
+    }
+
 }
