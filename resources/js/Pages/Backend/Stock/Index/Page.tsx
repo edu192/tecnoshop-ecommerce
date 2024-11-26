@@ -11,129 +11,50 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger
 } from "@/shadcn-ui/dropdown-menu";
-import ProductData = App.Data.ProductData;
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/shadcn-ui/dialog";
 import {Label} from "@/shadcn-ui/label";
-import {Checkbox} from "@/shadcn-ui/checkbox";
+import {useForm} from "@inertiajs/react";
+import ProductData = App.Data.ProductData;
+import ProductBatchData = App.Data.ProductBatchData;
 
 type PageProps = {
-    product: ProductData
+    product: ProductData,
+    batches:ProductBatchData[]
 };
-type ProductType = {
-    id: number;
-    provider: string;
-    product: {
-        id: number;
-        name: string;
-    };
-    quantity: number;
-    price_unit: number;
-}
-const product_stock: ProductType[] = [
-    {
-        id: 1,
-        provider: "TechCorp",
-        product: {
-            id: 101,
-            name: "Laptop Pro 15"
-        },
-        quantity: 50,
-        price_unit: 1200.99
-    },
-    {
-        id: 2,
-        provider: "GadgetWorld",
-        product: {
-            id: 102,
-            name: "Smartphone X"
-        },
-        quantity: 200,
-        price_unit: 899.99
-    },
-    {
-        id: 3,
-        provider: "DeviceHub",
-        product: {
-            id: 103,
-            name: "4K Monitor"
-        },
-        quantity: 75,
-        price_unit: 450.00
-    },
-    {
-        id: 4,
-        provider: "TechCorp",
-        product: {
-            id: 104,
-            name: "Wireless Mouse"
-        },
-        quantity: 300,
-        price_unit: 25.99
-    },
-    {
-        id: 5,
-        provider: "GadgetWorld",
-        product: {
-            id: 105,
-            name: "Bluetooth Headphones"
-        },
-        quantity: 150,
-        price_unit: 79.99
-    },
-    {
-        id: 6,
-        provider: "DeviceHub",
-        product: {
-            id: 106,
-            name: "Gaming Keyboard"
-        },
-        quantity: 100,
-        price_unit: 99.99
-    },
-    {
-        id: 7,
-        provider: "TechCorp",
-        product: {
-            id: 107,
-            name: "External SSD 1TB"
-        },
-        quantity: 80,
-        price_unit: 150.00
-    },
-    {
-        id: 8,
-        provider: "GadgetWorld",
-        product: {
-            id: 108,
-            name: "Smartwatch Series 5"
-        },
-        quantity: 120,
-        price_unit: 299.99
-    },
-    {
-        id: 9,
-        provider: "DeviceHub",
-        product: {
-            id: 109,
-            name: "VR Headset"
-        },
-        quantity: 60,
-        price_unit: 399.99
-    },
-    {
-        id: 10,
-        provider: "TechCorp",
-        product: {
-            id: 110,
-            name: "Portable Charger"
-        },
-        quantity: 250,
-        price_unit: 49.99
-    }
-];
 
-const Page = ({product}: PageProps) => {
-    const [editDialog, setEditDialog] = useState(false)
+
+const Page = ({product,batches}: PageProps) => {
+    const [editDialog, setEditDialog] = useState(false);
+    const [createDialog, setCreateDialog] = useState(false)
+    const {data, setData, errors, clearErrors, reset, post} = useForm({
+        provider: '',
+        quantity: 0,
+        price_unit: 0,
+        voucher: ''
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.type === 'file') {
+            setData(e.target.id, e.target.files ? e.target.files[0] : null);
+        } else {
+            setData(e.target.id, e.target.value);
+        }
+    };
+
+    const handleSubmit = () => {
+        const formData = new FormData();
+        Object.keys(data).forEach(key => {
+            formData.append(key, data[key]);
+        });
+        post(route('mantenimiento.stock.store', product), {
+            onSuccess: () => {
+                reset();
+                clearErrors();
+                setCreateDialog(false);
+            }
+        });
+    };
+
     return (
         <BackendLayout pageName={`Gestion de lotes de producto: ${product.name} (${product.id})`}>
             <div className="p-6 bg-white rounded-lg shadow">
@@ -142,7 +63,7 @@ const Page = ({product}: PageProps) => {
                     <Button>Buscar</Button>
                 </div>
                 <div className='flex justify-end'>
-                    <Dialog>
+                    <Dialog open={createDialog} onOpenChange={v => setCreateDialog(v)}>
                         <DialogTrigger asChild>
                             <Button variant="outline">Nuevo Lote</Button>
                         </DialogTrigger>
@@ -163,39 +84,54 @@ const Page = ({product}: PageProps) => {
                                         />
                                     </div>
                                     <div>
-                                        <Label htmlFor="product">Produto</Label>
+                                        <Label htmlFor="provider">Proveedor</Label>
                                         <Input
-                                            id="product"
-                                            defaultValue="Proveedor"
+                                            id="provider"
+                                            value={data.provider}
+                                            onChange={handleChange}
                                         />
+                                        {errors.provider && <p className="text-red-500 text-xs">{errors.provider}</p>}
+
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                     <div>
-                                        <Label htmlFor="provider">Cantidad</Label>
-                                        <Input id="provider"/>
+                                        <Label htmlFor="quantity">Cantidad</Label>
+                                        <Input
+                                            id="quantity"
+                                            value={data.quantity}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.quantity && <p className="text-red-500 text-xs">{errors.quantity}</p>}
                                     </div>
                                     <div>
-                                        <Label htmlFor="date">Data do vale</Label>
-                                        <Input id="date" type="date"/>
+                                        <Label htmlFor="price_unit">Precio Unidad</Label>
+                                        <Input
+                                            id="price_unit"
+                                            value={data.price_unit}
+                                            onChange={handleChange}
+                                        />
+                                        {errors.price_unit &&
+                                            <p className="text-red-500 text-xs">{errors.price_unit}</p>}
                                     </div>
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="voucher">Comprobante</Label>
-                                    <Input id="voucher" type='file'/>
+                                    <Input id="voucher" type='file' onChange={handleChange}/>
+                                    {errors.voucher && <p className="text-red-500 text-xs">{errors.voucher}</p>}
                                 </div>
                             </form>
                             <DialogFooter>
                                 <Button type="button" variant="outline">
                                     Cancelar
                                 </Button>
-                                <Button type="submit">Guardar</Button>
+                                <Button type="submit" onClick={handleSubmit}>Guardar</Button>
                             </DialogFooter>
                         </DialogContent>
                     </Dialog>
                 </div>
                 <div className='flex justify-end'>
-                    <Dialog modal={true} open={editDialog} onOpenChange={(v)=>setEditDialog(v)}>
+                    <Dialog modal={true} open={editDialog} onOpenChange={(v) => setEditDialog(v)}>
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
                                 <DialogTitle>Nuevo lote</DialogTitle>
@@ -213,26 +149,35 @@ const Page = ({product}: PageProps) => {
                                         />
                                     </div>
                                     <div>
-                                        <Label htmlFor="product">Produto</Label>
+                                        <Label htmlFor="provider">Proveedor</Label>
                                         <Input
-                                            id="product"
-                                            defaultValue="Proveedor"
+                                            id="provider"
+                                            value={data.provider}
+                                            onChange={handleChange}
                                         />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-2">
                                     <div>
-                                        <Label htmlFor="provider">Cantidad</Label>
-                                        <Input id="provider"/>
+                                        <Label htmlFor="quantity">Cantidad</Label>
+                                        <Input
+                                            id="quantity"
+                                            value={data.quantity}
+                                            onChange={handleChange}
+                                        />
                                     </div>
                                     <div>
-                                        <Label htmlFor="date">Data do vale</Label>
-                                        <Input id="date" type="date"/>
+                                        <Label htmlFor="price_unit">Precio Unidad</Label>
+                                        <Input
+                                            id="price_unit"
+                                            value={data.price_unit}
+                                            onChange={handleChange}
+                                        />
                                     </div>
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="voucher">Comprobante</Label>
-                                    <Input id="voucher" type='file'/>
+                                    <Input id="voucher" type='file' onChange={handleChange}/>
                                 </div>
                             </form>
                             <DialogFooter>
@@ -257,16 +202,15 @@ const Page = ({product}: PageProps) => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {product_stock.map((product) => (
+                            {batches.map((product) => (
                                 <TableRow key={product.id}>
                                     <TableCell className="font-medium">{product.id}</TableCell>
                                     <TableCell>{product.provider}</TableCell>
                                     <TableCell>{product.quantity}</TableCell>
-                                    <TableCell>S/. {product.price_unit}</TableCell>
+                                    <TableCell>S/. {product.unit_price}</TableCell>
                                     <TableCell className="text-center">
                                         <div className='inline-flex justify-center'>
                                             <DropdownMenu modal={false}>
-
                                                 <DropdownMenuTrigger asChild>
                                                     <Button variant="ghost" className="h-8 w-8 p-0">
                                                         <span className="sr-only">Open menu</span>
@@ -275,10 +219,9 @@ const Page = ({product}: PageProps) => {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                                    <DropdownMenuItem
-                                                    >Ver comprobante</DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={()=>setEditDialog(true)}
-                                                    >Editar lote</DropdownMenuItem>
+                                                    <DropdownMenuItem>Ver comprobante</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => setEditDialog(true)}>Editar
+                                                        lote</DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </div>

@@ -23,7 +23,10 @@ Route::group(['prefix' => 'mantenimiento', 'as' => 'mantenimiento.', 'middleware
     Route::get('/orders', [\App\Http\Controllers\Backend\OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/{order}', [\App\Http\Controllers\Backend\OrderController::class, 'update'])->name('orders.update');
     Route::get('/products', [\App\Http\Controllers\Backend\ProductController::class, 'index'])->name('products.index');
+    //
     Route::get('/stock/{product}', [\App\Http\Controllers\StockController::class, 'index'])->name('stock.index');
+    Route::post('/stock/{product}', [\App\Http\Controllers\StockController::class, 'store'])->name('stock.store');
+    //
     Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
     Route::post('/categories', [\App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');
     Route::post('/categories/{category}/update', [\App\Http\Controllers\CategoryController::class, 'update'])->name('category.update');
