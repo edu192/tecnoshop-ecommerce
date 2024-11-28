@@ -15,7 +15,7 @@ import {router} from "@inertiajs/react";
 import {PaginatedModelData} from "@/types";
 import DeleteModal from "@/Pages/Backend/Discount/Partials/DeleteModal";
 import DiscountGroupData = App.Data.DiscountGroupData;
-
+import dayjs from "dayjs";
 type PageProps = {
     paginated_collection: PaginatedModelData<DiscountGroupData>
 };
@@ -65,8 +65,8 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) 
                                     <TableCell>{discount.name}</TableCell>
                                     <TableCell>{discount.discounts_count}</TableCell>
                                     <TableCell>{discount.value}%</TableCell>
-                                    <TableCell>{discount.start_date}</TableCell>
-                                    <TableCell>{discount.end_date}</TableCell>
+                                    <TableCell>{dayjs(discount.start_date).format('DD/MM/YYYY')}</TableCell>
+                                    <TableCell>{dayjs(discount.end_date).format('DD/MM/YYYY')}</TableCell>
                                     <TableCell>{discount.max_uses}</TableCell>
                                     <TableCell>{discount.actual_uses}</TableCell>
                                     <TableCell className="text-center">

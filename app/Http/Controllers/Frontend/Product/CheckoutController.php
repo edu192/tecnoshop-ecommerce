@@ -62,6 +62,13 @@ class CheckoutController extends Controller
         ]);
 
         foreach ($request->cartItems as $item) {
+            $product = \App\Models\Product::find($item['id']);
+            $discountGroup = $product->discountGroup;
+
+            if ($discountGroup && $discountGroup->actual_uses >= $discountGroup->max_uses) {
+                return redirect()->back()->withErrors(['discount' => 'El descuento ha alcanzado su límite de usos.']);
+            }
+
             $unit_price = $item['discount'] ? $item['price'] * (1 - $item['discount']['value'] / 100) : $item['price'];
             $order->order_details()->create([
                 'product_id' => $item['id'],
@@ -70,10 +77,14 @@ class CheckoutController extends Controller
             ]);
 
             // Update product stock
-            $product = \App\Models\Product::find($item['id']);
             if ($product) {
                 $product->stock -= $item['quantity'];
                 $product->save();
+            }
+
+            // Update discount actual uses
+            if ($discountGroup) {
+                $discountGroup->increment('actual_uses');
             }
         }
 
