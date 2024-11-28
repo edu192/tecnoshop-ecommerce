@@ -43,6 +43,15 @@ class GeneralDiscountController extends Controller
             'allProductsSelected' => 'required|boolean',
         ]);
 
+        $productIds = $request->input('allProductsSelected') ? Product::pluck('id')->toArray() : $request->input('selectedProducts');
+
+        foreach ($productIds as $productId) {
+            $product = Product::find($productId);
+            if ($product->discount()->exists()) {
+                return redirect()->back()->withErrors(['selectedProducts' => 'Uno o más productos seleccionados ya tienen un descuento asignado']);
+            }
+        }
+
         try {
             $discount = DiscountGroup::create([
                 'name' => $request->input('name'),
@@ -53,8 +62,6 @@ class GeneralDiscountController extends Controller
                 'actual_uses' => 0,
             ]);
 
-            $productIds = $request->input('allProductsSelected') ? Product::pluck('id')->toArray() : $request->input('selectedProducts');
-
             foreach ($productIds as $productId) {
                 $discount->discounts()->create([
                     'product_id' => $productId,
@@ -62,7 +69,7 @@ class GeneralDiscountController extends Controller
             }
             return redirect()->route('mantenimiento.discount.index')->flash(FlashNotificationType::Success, 'Descuento creado correctamente');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 

@@ -95,10 +95,19 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) 
         router.visit(route('mantenimiento.advertising.create', {'filter[email]': searchValue}));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         router.post(route('mantenimiento.advertising.store'), {
             ...data,
             allUsersSelected: selectAll,
+        }, {
+            onSuccess: () => {
+                setUsers(users.map(user => ({ ...user, selected: false })));
+                setSelectAll(false);
+                setData('users', []);
+                localStorage.removeItem('selectedUsers');
+                localStorage.removeItem('selectAll');
+            }
         });
     };
 

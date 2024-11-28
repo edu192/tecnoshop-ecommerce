@@ -7,6 +7,7 @@ use App\Data\UserData;
 use App\Events\AdvertisingUserEvent;
 use App\FlashNotificationType;
 use App\Models\Advertising;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
