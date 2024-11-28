@@ -13,7 +13,7 @@ import {
 } from "@/shadcn-ui/dropdown-menu";
 import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from "@/shadcn-ui/dialog";
 import {Label} from "@/shadcn-ui/label";
-import {useForm} from "@inertiajs/react";
+import {router, useForm} from "@inertiajs/react";
 import ProductData = App.Data.ProductData;
 import ProductBatchData = App.Data.ProductBatchData;
 
@@ -162,9 +162,8 @@ const Page = ({product,batches}: PageProps) => {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                                    <DropdownMenuItem>Ver comprobante</DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => setEditDialog(true)}>Editar
-                                                        lote</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => window.open(product.voucher?.original_url, '_blank')}>Ver comprobante</DropdownMenuItem>
+
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </div>
