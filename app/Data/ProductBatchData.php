@@ -22,10 +22,7 @@ class ProductBatchData extends Data
     public static function fromModel(ProductBatch $batch)
     : self
     {
-        $voucher = Lazy::when(
-            fn() => $batch->hasMedia('voucher'),
-            fn() => MediaData::fromModel($batch->getFirstMedia('voucher'))
-        );
+
 
         return new self(
             id: $batch->id,
@@ -33,7 +30,7 @@ class ProductBatchData extends Data
             quantity: $batch->quantity,
             unit_price: $batch->unit_price,
             product_id: $batch->product_id,
-            voucher: $voucher
+            voucher: Lazy::whenLoaded('voucher', $batch, fn() => MediaData::from($batch->voucher->first()))
         );
     }
 }

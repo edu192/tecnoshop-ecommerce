@@ -13,8 +13,8 @@ class StockController extends Controller
     public function index(Product $product)
     {
 
-        $batches = ProductBatchData::collect(ProductBatch::where('product_id', $product->id)->get()->map(fn($batch) => ProductBatchData::fromModel($batch)));
-        return Inertia::render('Backend/Stock/Index/Page', ['product' => $product,'batches' => $batches]);
+        $batches = ProductBatchData::collect(ProductBatch::with('voucher')->where('product_id', $product->id)->get());
+        return Inertia::render('Backend/Stock/Index/Page', ['product' => $product, 'batches' => $batches]);
     }
 
     public function store(Product $product, Request $request)
