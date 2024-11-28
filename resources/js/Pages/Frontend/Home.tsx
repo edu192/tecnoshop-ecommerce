@@ -16,7 +16,7 @@ function CarouselSection({banners}: { banners: BannerData[] }) {
                         <CarouselItem>
                             <Link href={banner.link}>
                                 <img src={banner.image as string} alt=""
-                                     style={{width: '300px', height: '200px', objectFit: 'cover'}}/>
+                                     className='w-full object-cover'/>
                             </Link>
                         </CarouselItem>
                     ))}
