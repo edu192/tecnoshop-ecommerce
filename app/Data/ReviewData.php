@@ -3,6 +3,7 @@
 namespace App\Data;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 
 class ReviewData extends Data
@@ -15,8 +16,8 @@ class ReviewData extends Data
         public int $stars,
         public bool $status,
         public string $comment,
-        public string $created_at,
-        public string $updated_at
+        public ?Carbon $created_at,
+        public ?Carbon $updated_at
     ) {
         $user= User::find($user_id);
         $this->user_name = $user->name;

@@ -29,6 +29,8 @@ class GeneralSeeder extends Seeder
                 $mainImagePath = database_path('/data/images/main/' . $productData['image']);
                 if (File::exists($mainImagePath)) {
                     $product->addMedia($mainImagePath)->toMediaCollection('main_image');
+                } else {
+                    \Log::warning("File {$mainImagePath} does not exist.");
                 }
             }
 
@@ -40,6 +42,8 @@ class GeneralSeeder extends Seeder
                 $mainImagePath = database_path('/data/images/main/' . $categoryData['image']);
                 if (File::exists($mainImagePath)) {
                     $category->addMedia($mainImagePath)->toMediaCollection('main_image');
+                } else {
+                    \Log::warning("File {$mainImagePath} does not exist.");
                 }
             }
 
@@ -52,5 +56,6 @@ class GeneralSeeder extends Seeder
         //Poblar la tabla reviews
         $this->call(OrderSeeder::class);
         $this->call(OrderDetailSeeder::class);
+        $this->call(ReviewSeeder::class);
     }
 }
