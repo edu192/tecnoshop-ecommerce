@@ -27,11 +27,12 @@ import {
     PaginationLink, PaginationNext,
     PaginationPrevious
 } from "@/shadcn-ui/pagination";
+import CategoryData = App.Data.CategoryData;
 
 type PageProps = {};
 
-const Page = ({paginated_collection: {paginated_data, meta, links}}: {
-    paginated_collection: PaginatedModelData<ProductData>
+const Page = ({paginated_collection: {paginated_data, meta, links},categories}: {
+    paginated_collection: PaginatedModelData<ProductData>,categories:CategoryData[]
 }) => {
 
     const {props: {flash}} = usePage()
@@ -81,7 +82,7 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: {
                     <Button onClick={handleSearch}>Buscar</Button>
                 </div>
                 <div className='flex justify-end pb-6'>
-                    <CreateProductModal openState={createModalIsOpen} setOpenState={setCreateModalIsOpen}/>
+                    <CreateProductModal categories={categories} openState={createModalIsOpen} setOpenState={setCreateModalIsOpen}/>
 
                 </div>
                 <div>

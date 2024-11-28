@@ -23,13 +23,15 @@ import {
 } from "@/shadcn-ui/select";
 import { useForm, usePage } from "@inertiajs/react";
 import { toast } from "sonner";
+import CategoryData = App.Data.CategoryData;
 
 type CreateProductModalProps = {
     openState: boolean;
     setOpenState: React.Dispatch<React.SetStateAction<boolean>>;
+    categories:CategoryData[]
 };
 
-const CreateProductModal = ({ openState, setOpenState }: CreateProductModalProps) => {
+const CreateProductModal = ({ openState, setOpenState, categories }: CreateProductModalProps) => {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         brand: '',
@@ -46,7 +48,6 @@ const CreateProductModal = ({ openState, setOpenState }: CreateProductModalProps
         post(route('mantenimiento.products.store'), {
             onSuccess: () => {
                 setOpenState(false);
-
             }
         });
     };
@@ -134,10 +135,9 @@ const CreateProductModal = ({ openState, setOpenState }: CreateProductModalProps
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Categorias</SelectLabel>
-                                    <SelectItem value="1">Smartphones</SelectItem>
-                                    <SelectItem value="2">Laptops</SelectItem>
-                                    <SelectItem value="3">Televisores</SelectItem>
-                                    <SelectItem value="4">Camaras</SelectItem>
+                                    {categories.map(category => (
+                                        <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                                    ))}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Data\CategoryData;
 use App\Data\ProductData;
 use App\FlashNotificationType;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -18,7 +20,8 @@ class ProductController extends Controller
         $productsQuery = QueryBuilder::for(Product::class)
             ->allowedFilters(['name', 'brand', 'category_id']);
         $products=ProductData::collect($productsQuery->paginate(10),PaginatedDataCollection::class)->wrap('paginated_data');
-        return Inertia::render('Backend/Product/Index/Page', ['paginated_collection' => $products]);
+        $categories=CategoryData::collect(Category::all());
+        return Inertia::render('Backend/Product/Index/Page', ['paginated_collection' => $products,'categories'=>$categories]);
     }
 
     public function store(Request $request)
