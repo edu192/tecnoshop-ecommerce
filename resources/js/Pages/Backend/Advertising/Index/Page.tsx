@@ -24,6 +24,7 @@ type PageProps = {
 };
 
 const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) => {
+    const [searchValue, setSearchValue] = useState()
     const [resumeDialog, setResumeDialog] = useState(false)
     const [deleteModalState, setDeleteModalState] = useState<{
         isOpen: boolean,
@@ -32,12 +33,16 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) 
         isOpen: false,
         advertising: null,
     })
+    const handleSearch = () => {
+        router.visit(route('mantenimiento.advertising.index', {'filter[name]': searchValue}));
+    };
     return (
         <BackendLayout pageName='Publicidad'>
             <div className="p-6 bg-white rounded-lg shadow">
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar por id de publicidad' className='w-1/6'/>
-                    <Button>Buscar</Button>
+                    <Input placeholder='Buscar por nombre' className='w-1/6' value={searchValue}
+                           onChange={e => setSearchValue(e.target.value)}/>
+                    <Button onClick={handleSearch}>Buscar</Button>
                 </div>
                 <div className='flex justify-end'>
                     <Button onClick={() => router.visit(route('mantenimiento.advertising.create'))}>Crear
@@ -78,7 +83,7 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) 
                 </div>
                 <div>
                     <Table>
-                        <TableCaption>Lista de todas las entradas de productos del sistema.</TableCaption>
+                        <TableCaption>Lista de todas las publicidades enviadas a los usuarios del sistema.</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[100px]">ID</TableHead>
