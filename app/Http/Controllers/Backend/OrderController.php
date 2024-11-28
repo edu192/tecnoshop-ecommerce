@@ -15,7 +15,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $ordersQuery=QueryBuilder::for(Order::class)
+        $ordersQuery=QueryBuilder::for(Order::class)->with('order_details')
             ->allowedFilters(['id','state']);
         $orders=OrderData::collect($ordersQuery->paginate(10),PaginatedDataCollection::class)->wrap('paginated_data');
         return Inertia::render('Backend/Order/Index/Page',[
