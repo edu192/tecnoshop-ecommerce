@@ -18,33 +18,11 @@ import {
 } from "@/shadcn-ui/pagination";
 import {PaginatedModelData} from "@/types";
 import OrderData = App.Data.OrderData;
-
-type Link = {
-    url: string | null;
-    label: string;
-    active: boolean;
-};
-type Meta = {
-    current_page: number;
-    first_page_url: string;
-    from: number;
-    last_page: number;
-    last_page_url: string;
-    next_page_url: string;
-    path: string;
-    per_page: number;
-    prev_page_url: string | null;
-    to: number;
-    total: number;
-};
-type PaginatedData = {
-    paginated_data: OrderData[];
-    links: Link[];
-    meta: Meta;
-};
+import dayjs from "dayjs";
 const Page = ({paginated_collection: {paginated_data, meta, links}}: {
     paginated_collection: PaginatedModelData<OrderData>
 }) => {
+
     const {props: {flash}} = usePage()
     const [detailsDialog, setDetailsDialog] = useState<{ order: OrderData | null, isOpen: boolean }>({
         order: null,
@@ -102,7 +80,7 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: {
                     <DialogContent className="sm:max-w-[425px]">
                         <DialogHeader>
                             <DialogTitle>Detalles del Pedido - {detailsDialog.order?.id}</DialogTitle>
-                            <DialogDescription>Pedido el {detailsDialog.order?.created_at}</DialogDescription>
+                            <DialogDescription>Pedido el {dayjs(detailsDialog.order?.created_at).format('DD/MM/YYYY')} {dayjs(detailsDialog.order?.created_at).diff(detailsDialog.order?.updated_at,"day")}</DialogDescription>
                         </DialogHeader>
                         <div>
                             <p><span className="font-semibold">Ciudad:</span> {detailsDialog.order?.city}</p>
@@ -117,7 +95,7 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: {
                         </div>
                         <div className="py-4">
                             <h4 className="font-semibold mb-2">Artículos:</h4>
-                            {detailsDialog.order?.details.map((detail) => (
+                            {detailsDialog.order?.details?.map((detail) => (
                                 <div key={detail.id} className="flex justify-between mb-2">
                                     <span>{detail.product_name} x {detail.quantity}</span>
                                     <span>S/. {(detail.unit_price * detail.quantity).toFixed(2)}</span>
@@ -170,7 +148,7 @@ const Page = ({paginated_collection: {paginated_data, meta, links}}: {
                             {paginated_data.map((order) => (
                                 <TableRow key={order.id}>
                                     <TableCell className="font-medium">{order.id}</TableCell>
-                                    <TableCell>{order.created_at}</TableCell>
+                                    <TableCell>{dayjs(order.created_at).format('DD/MM/YYYY')}</TableCell>
                                     <TableCell>S/. {order.total}</TableCell>
                                     <TableCell className="text-right">{order.state}</TableCell>
                                     <TableCell className="text-right">

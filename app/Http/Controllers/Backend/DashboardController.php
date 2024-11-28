@@ -13,9 +13,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $orders = Order::all()->map(function (Order $order) {
-            return OrderData::from($order);
-        });
+        $orders =OrderData::collect(Order::with('order_details')->latest()->limit(5)->get());
         $usersCount = User::count();
         $productsCount = Product::count();
         $ordersCount = Order::count();
