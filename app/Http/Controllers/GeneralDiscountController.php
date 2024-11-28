@@ -17,7 +17,7 @@ class GeneralDiscountController extends Controller
     public function index()
     {
         $discountsGroupsQuery = QueryBuilder::for(DiscountGroup::class)->withCount('discounts')
-            ->allowedFilters(['id']);
+            ->allowedFilters(['name']);
         $discountGroups = DiscountGroupData::collect($discountsGroupsQuery->paginate(10), PaginatedDataCollection::class)->wrap('paginated_data');
         return Inertia::render('Backend/Discount/Index/Page', ['paginated_collection' => $discountGroups]);
     }

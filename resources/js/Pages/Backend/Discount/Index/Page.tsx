@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Input} from "@/shadcn-ui/input";
 import {Button} from "@/shadcn-ui/button";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/shadcn-ui/table";
@@ -21,16 +21,21 @@ type PageProps = {
 };
 
 const Page = ({paginated_collection: {paginated_data, meta, links}}: PageProps) => {
+    const [searchValue, setSearchValue] = useState('')
     const [deleteModalState, setDeleteModalState] = React.useState<{
         isOpen: boolean,
         discount_group: DiscountGroupData | null,
     }>({isOpen: false, discount_group: null});
+    const handleSearch = () => {
+        router.visit(route('mantenimiento.discount.index', {'filter[name]': searchValue}));
+    }
     return (
         <BackendLayout pageName='Descuentos de productos'>
             <div className="p-6 bg-white rounded-lg shadow">
                 <div className='flex justify-start pb-6 '>
-                    <Input placeholder='Buscar por id de descuento' className='w-1/6'/>
-                    <Button>Buscar</Button>
+                    <Input placeholder='Buscar por nombre' className='w-1/6' value={searchValue}
+                           onChange={e => setSearchValue(e.target.value)}/>
+                    <Button onClick={handleSearch}>Buscar</Button>
                 </div>
                 <div className='flex justify-end'>
                     <Button className="mt-4" onClick={() => router.visit(route('mantenimiento.discount.create'))}>Agregar
